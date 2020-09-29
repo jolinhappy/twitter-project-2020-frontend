@@ -1,9 +1,5 @@
 <template>
   <div class="tweets-list">
-    <!-- <TweetReplyModal
-      v-if="replyModal"
-      @after-click-close-reply="closeReplyModal"
-    /> -->
     <a href="#" class="user-tweet">
       <div class="tweet-list-container">
         <div class="profile-image">
