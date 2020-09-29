@@ -227,11 +227,12 @@ export default {
 .profile-image {
   width: 70px;
   height: 120px;
+  display: flex;
+  justify-content: center;
 }
 .user-img {
   width: 50px;
   height: 50px;
-  margin-left: 15px;
   border-radius: 50%;
 }
 </style>

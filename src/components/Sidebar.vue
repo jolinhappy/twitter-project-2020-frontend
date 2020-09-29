@@ -1,34 +1,30 @@
 <template>
   <div class="sidebar">
-    <!-- <TweetCreateModal
-      v-if="createModal"
-      @after-click-close-create="closeCreateModal"
-    /> -->
     <div class="sidebar-container">
       <img src="https://i.imgur.com/v5wdZG6.png" class="logo" alt="logo" />
       <div class="sidebar-list">
-        <div class="sidebar-item selected">
-          <a href="" class="sidebar-link sidebar-home">
+        <div class="sidebar-item">
+          <router-link to="/tweets" class="sidebar-link sidebar-home">
             <img
               src="https://i.imgur.com/WnH29Ya.png"
               class="option"
               alt="home"
             />
             <span>首頁</span>
-          </a>
+          </router-link>
         </div>
         <div class="sidebar-item">
-          <a href="" class="sidebar-link sidebar-info">
+          <router-link to="/tweets/:id" class="sidebar-link sidebar-info">
             <img
               src="https://i.imgur.com/I8IlDOt.png"
               class="option"
               alt="user-info"
             />
             <span>個人資料</span>
-          </a>
+          </router-link>
         </div>
         <div class="sidebar-item">
-          <a href="" class="sidebar-link sidebar-option">
+          <a href="/setting" class="sidebar-link sidebar-option">
             <img
               src="https://i.imgur.com/64D9EP9.png"
               class="option"

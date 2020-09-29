@@ -56,12 +56,14 @@
             </div>
             <div class="detail-edit">
               <div class="form-label-group">
-                <label for="name" class="form-label">名稱名稱</label>
+                <label for="name" class="name-label form-label">名稱</label>
                 <input type="text" class="form-input name-input" required />
               </div>
               <div class="name-word-count">1/50</div>
               <div class="form-label-group">
-                <label for="discription" class="form-label">自我介紹</label>
+                <label for="discription" class="discpription-label form-label"
+                  >自我介紹</label
+                >
                 <input
                   type="text"
                   class="form-input description-input"
@@ -238,6 +240,9 @@ export default {
   position: absolute;
   top: 6%;
   left: 2%;
+}
+.name-label {
+  margin-top: 5px;
 }
 .description-input {
   height: 150px;

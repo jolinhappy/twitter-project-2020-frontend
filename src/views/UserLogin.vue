@@ -57,8 +57,8 @@ form {
 }
 .form-input {
   width: 530px;
-  height: 35px;
-  border-bottom: 1px solid #657786;
+  height: 50px;
+  border-bottom: 2px solid #657786;
   border-top: 0px;
   border-left: 0px;
   border-right: 0px;

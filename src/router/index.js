@@ -22,6 +22,11 @@ const routes = [
 
   },
   {
+    path: '/setting',
+    name: 'account-setting',
+    component: () => import('../views/UserAccountSetting.vue')
+  },
+  {
     path: '/tweets',
     name: 'tweets-home',
     component: () => import('../views/home.vue')
