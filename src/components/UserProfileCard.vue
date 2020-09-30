@@ -51,8 +51,14 @@
           <div class="discription">唱跳天后蔡依林，怪美的呸姐</div>
         </div>
         <div class="follow-info">
-          <div class="followings"><strong>20個</strong>追蹤中</div>
-          <div class="followers"><strong>30位</strong>追蹤者</div>
+          <router-link to="/users/:id/followings" class="followings-link"
+            ><div class="followings">
+              <strong>20個</strong>追蹤中
+            </div></router-link
+          >
+          <a href="#" class="followers-link"
+            ><div class="followers"><strong>30位</strong>追蹤者</div></a
+          >
         </div>
       </div>
 

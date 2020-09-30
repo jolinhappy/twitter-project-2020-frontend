@@ -24,14 +24,14 @@
           </router-link>
         </div>
         <div class="sidebar-item">
-          <a href="/setting" class="sidebar-link sidebar-option">
+          <router-link to="/setting" class="sidebar-link sidebar-option">
             <img
               src="https://i.imgur.com/64D9EP9.png"
               class="option"
               alt="option"
             />
             <span>設定</span>
-          </a>
+          </router-link>
         </div>
         <button class="show-tweet-modal" @click="showCreateModal">推文</button>
       </div>
@@ -62,7 +62,7 @@ export default {
 <style scoped>
 /* sidebar */
 .sidebar {
-  width: 378px;
+  width: 450px;
   height: 100%;
 }
 
@@ -84,6 +84,7 @@ export default {
   width: 235px;
   height: 1196px;
   margin: 0 auto;
+  padding-left: 50px;
 }
 
 .sidebar-list {

@@ -9,11 +9,13 @@
         </div>
         <div class="tweet-create-container">
           <div class="profile-image">
-            <img
-              src="https://i.imgur.com/W2nxio3.png"
-              class="user-img"
-              alt=""
-            />
+            <router-link to="/users/:id">
+              <img
+                src="https://i.imgur.com/W2nxio3.png"
+                class="user-img"
+                alt=""
+              />
+            </router-link>
           </div>
           <div class="tweet-input">
             <textarea

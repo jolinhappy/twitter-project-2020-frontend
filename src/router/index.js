@@ -37,11 +37,6 @@ const routes = [
     component: () => import('../views/UserAccountSetting.vue')
   },
   {
-    path: '/users/:id',
-    name: 'user-profile',
-    component: () => import('../views/UserProfile.vue')
-  },
-  {
     path: '/users/:id/replies',
     name: 'user-replies',
     component: () => import('../views/UserProfileReply')
@@ -50,6 +45,26 @@ const routes = [
     path: '/users/:id/likes',
     name: 'user-likes',
     component: () => import('../views/UserProfileLike.vue')
+  },
+  {
+    path: '/users/:id',
+    name: 'user-profile',
+    component: () => import('../views/UserProfile.vue')
+  },
+  {
+    path: '/users/:id/followings',
+    name: 'user-followings',
+    component: () => import('../views/UserFollowings.vue')
+  },
+  {
+    path: '/users/:id/followers',
+    name: 'user-followings',
+    component: () => import('../views/UserFollowers.vue')
+  },
+  {
+    path: '/users/admin/login',
+    name: 'admin-login',
+    component: () => import('../views/AdminLogin.vue')
   },
 ]
 
