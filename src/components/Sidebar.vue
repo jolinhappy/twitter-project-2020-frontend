@@ -14,7 +14,7 @@
           </router-link>
         </div>
         <div class="sidebar-item">
-          <router-link to="/tweets/:id" class="sidebar-link sidebar-info">
+          <router-link to="/users/:id" class="sidebar-link sidebar-info">
             <img
               src="https://i.imgur.com/I8IlDOt.png"
               class="option"

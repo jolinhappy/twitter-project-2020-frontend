@@ -1,17 +1,17 @@
 <template>
   <ul class="tweets-nav-tab">
     <li class="tab-item">
-      <router-link to="/tweets/:id" class="tab-link user-tweets"
+      <router-link to="/users/:id" class="tab-link user-tweets"
         >推文</router-link
       >
     </li>
     <li class="tab-item">
-      <router-link to="/tweets/:id/replies" class="tab-link user-replies"
+      <router-link to="/users/:id/replies" class="tab-link user-replies"
         >推文與回覆</router-link
       >
     </li>
     <li class="tab-item">
-      <router-link to="/tweets/:id/likes" class="tab-link user-likes"
+      <router-link to="/users/:id/likes" class="tab-link user-likes"
         >喜歡的內容</router-link
       >
     </li>

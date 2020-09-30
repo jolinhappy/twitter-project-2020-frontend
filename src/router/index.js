@@ -22,27 +22,32 @@ const routes = [
 
   },
   {
+    path: '/tweets',
+    name: 'tweets-home',
+    component: () => import('../views/Home.vue')
+  },
+  {
+    path: '/tweets/:id',
+    name: 'tweet',
+    component: () => import('../views/Tweet.vue')
+  },
+  {
     path: '/setting',
     name: 'account-setting',
     component: () => import('../views/UserAccountSetting.vue')
   },
   {
-    path: '/tweets',
-    name: 'tweets-home',
-    component: () => import('../views/home.vue')
-  },
-  {
-    path: '/tweets/:id',
+    path: '/users/:id',
     name: 'user-profile',
     component: () => import('../views/UserProfile.vue')
   },
   {
-    path: '/tweets/:id/replies',
+    path: '/users/:id/replies',
     name: 'user-replies',
     component: () => import('../views/UserProfileReply')
   },
   {
-    path: '/tweets/:id/likes',
+    path: '/users/:id/likes',
     name: 'user-likes',
     component: () => import('../views/UserProfileLike.vue')
   },

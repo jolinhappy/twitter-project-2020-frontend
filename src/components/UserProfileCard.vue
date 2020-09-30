@@ -100,6 +100,9 @@ export default {
   border: 1px solid #e6ecf0;
   display: flex;
 }
+.title-content {
+  margin-left: 25px;
+}
 
 .profile-image {
   width: 70px;
