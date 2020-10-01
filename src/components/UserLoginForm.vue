@@ -5,26 +5,12 @@
       <input type="text" class="form-input" required />
     </div>
     <div class="form-label-group">
-      <label for="name" class="form-label">名稱</label>
-      <input type="text" class="form-input" required />
-    </div>
-    <div class="form-label-group">
-      <label for="account" class="form-label">Email</label>
-      <input type="email" class="form-input" required />
-    </div>
-    <div class="form-label-group">
       <label for="password" class="form-label">密碼</label>
       <input type="text" class="form-input" required />
     </div>
-    <div class="form-label-group">
-      <label for="password-check" class="form-label">密碼確認</label>
-      <input type="text" class="form-input" required />
-    </div>
-    <button type="submit" class="btn login-btn">註冊</button>
+    <button type="submit" class="btn login-btn">登入</button>
   </form>
 </template>
-
-
 
 <style scoped>
 form {
@@ -70,7 +56,6 @@ form {
   font-size: 18px;
   margin-top: 10px;
 }
-
 .btn:hover {
   background-color: #f75000;
 }

@@ -28,11 +28,17 @@
               </div>
               <div class="tweet-content">
                 jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
+                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o
                 jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
-                jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
+                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 2r
+                ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k
+                opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 2r ij2oij ri2j
+                roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k opt42okt;
+                k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 4 k2;okt;o2 k;t4k2 ;otk;24o
+                2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k
+                opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk 2r ij2oij ri2j
+                roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k opt42okt;
+                k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o
               </div>
               <div class="reply-for">
                 <p>回覆</p>
@@ -126,6 +132,7 @@ export default {
 
 .tweet-input {
   width: 500px;
+  height: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -133,13 +140,14 @@ export default {
 }
 .tweet-input-content {
   width: 500px;
-  height: 180px;
+  height: 100%;
   resize: none;
   border: none;
   margin-top: 10px;
   font-size: 18px;
   font-weight: 500;
   color: #9197a3;
+  overflow: hidden;
 }
 .tweet-input-content:focus {
   color: black;
@@ -148,6 +156,8 @@ export default {
 .tweet-reply-btn {
   width: 64px;
   height: 40px;
+  margin-bottom: 15px;
+  margin-top: 10px;
   background-color: #ff6000;
   border-radius: 50px;
   color: #f5f8fa;
@@ -219,5 +229,15 @@ export default {
 .reply-user-account {
   color: #ff6000;
   font-size: 13px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  width: 10px;
+  height: 5px;
+  background: gray;
+  border-radius: 50px;
 }
 </style>

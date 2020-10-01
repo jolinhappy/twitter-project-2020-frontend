@@ -44,7 +44,7 @@
           <div class="user-reply-count"><strong>20</strong>回覆</div>
           <div class="user-like-count"><strong>3000</strong>喜歡次數</div>
         </div>
-        <div class="main-tweet-action">
+        <div class="main-tweet-action" @click="showReplyModal">
           <div class="tweet-reply">
             <img
               src="https://i.imgur.com/SaR8cz3.png"

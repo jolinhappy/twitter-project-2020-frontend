@@ -236,6 +236,10 @@ export default {
   line-height: 21px;
   margin: auto 0;
 }
+
+.reply:hover {
+  transform: scale(1.5, 1.5);
+}
 .like-count,
 .reply-count {
   font-size: 13px;

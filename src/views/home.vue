@@ -153,4 +153,7 @@ export default {
   font-size: 18px;
   margin-top: 25px;
 }
+.tweet-create-btn:hover {
+  background-color: #f75000;
+}
 </style>

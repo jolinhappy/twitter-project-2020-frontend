@@ -23,12 +23,15 @@
                 />
                 <input type="file" id="cover-upload-input" />
               </label>
-              <a href="" class="delete"
-                ><img
-                  src="https://i.imgur.com/VElvsCz.png"
-                  class="delete-icon"
-                  alt=""
-              /></a>
+
+              <label for="cover-delete-input">
+                <a href="" class="delete"
+                  ><img
+                    src="https://i.imgur.com/VElvsCz.png"
+                    class="delete-icon"
+                    alt=""
+                /></a>
+              </label>
             </div>
             <div class="cover-part">
               <img
@@ -189,6 +192,18 @@ export default {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+.upload-photo-icon:hover {
+  transform: scale(1.2, 1.2);
+}
+
+.delete-icon:hover {
+  transform: scale(1.4, 1.4);
+}
+
+.photo-icon:hover {
+  transform: scale(1.4, 1.4);
 }
 .delete-icon {
   margin-left: 30px;

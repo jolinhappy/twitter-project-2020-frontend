@@ -1,9 +1,9 @@
 <template>
   <div class="user-info">
     <div class="info-title">
-      <a href="#" class="back-button"
-        ><img src="https://i.imgur.com/aPVTDn2.png" class="back-img" alt="" />
-      </a>
+      <button class="back-button" @click="$router.back()">
+        <img src="https://i.imgur.com/aPVTDn2.png" class="back-img" alt="" />
+      </button>
       <div class="title-content">
         <div class="name">Jolin</div>
         <div class="tweets-count">25推文</div>
@@ -56,8 +56,10 @@
               <strong>20個</strong>追蹤中
             </div></router-link
           >
-          <a href="#" class="followers-link"
-            ><div class="followers"><strong>30位</strong>追蹤者</div></a
+          <router-link to="/users/:id/followers" class="followers-link"
+            ><div class="followers">
+              <strong>30位</strong>追蹤者
+            </div></router-link
           >
         </div>
       </div>
@@ -96,7 +98,7 @@ export default {
   height: 24px;
   display: inline;
   margin: auto 15px;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 .info-title {
   font-size: 18px;

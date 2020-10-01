@@ -88,11 +88,14 @@ input:invalid {
 
 #twitter {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
 }
 
 .main {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 /* #app {

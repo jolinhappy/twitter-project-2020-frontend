@@ -128,6 +128,9 @@
   height: 70px;
   border-bottom: 1px solid #e6ecf0;
 }
+.follow-top-user:hover {
+  background: #e6ece2;
+}
 .top-user-info {
   width: 150px;
 }

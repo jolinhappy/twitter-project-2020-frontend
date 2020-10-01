@@ -2,10 +2,10 @@
   <div class="container">
     <!-- sidebar -->
     <Sidebar @showCreateModal="showCreateModal" />
-    <div class="main-tweets">
-      <div class="tweet-create">
-        <div class="tweet-title">
-          <p>首頁</p>
+    <div class="account-setting">
+      <div class="account-setting-container">
+        <div class="setting-title">
+          <p>帳號設定</p>
         </div>
         <div class="form-part">
           <form action="" class="login-form">
@@ -74,20 +74,20 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.main-tweets {
+.account-setting {
   width: auto;
   height: 100%;
   flex: 1;
 }
 
-.tweet-title {
+.setting-title {
   font-size: 18px;
   font-weight: 700;
   width: auto;
   height: 55px;
   border: 1px solid #e6ecf0;
 }
-.tweet-title p {
+.setting-title p {
   line-height: 55px;
   margin-left: 15px;
 }
