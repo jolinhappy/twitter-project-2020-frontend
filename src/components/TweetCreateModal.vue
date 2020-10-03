@@ -91,7 +91,7 @@ export default {
       };
       this.isAuthenticated = dummyUser.isAuthenticated;
     },
-    //用出現滾輪的欄高判斷是否調整textarea大小
+    //用出現滾輪的欄高判斷是否調整textarea高
     autoTextAreaHeight(e) {
       //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高
       if (e.currentTarget.scrollHeight > e.currentTarget.clientHeight) {
@@ -100,8 +100,6 @@ export default {
     },
   },
 };
-
-//textarea自動增加欄高
 </script>
 
 <style scoped>
@@ -109,7 +107,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
 }

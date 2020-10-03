@@ -29,7 +29,11 @@
               </div>
               <div class="reply-for">
                 <p>回覆</p>
-                <a href="#" class="reply-user-account">@username</a>
+                <router-link
+                  :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
+                  class="reply-user-account"
+                  >{{ tweet.User.account }}</router-link
+                >
               </div>
             </div>
           </div>
@@ -41,7 +45,7 @@
                 alt=""
               />
             </div>
-            <div class="tweet-input">
+            <form class="tweet-input" @submit.stop.prevent="handleReplySubmit">
               <textarea
                 name="tweet-input-area"
                 class="tweet-input-content"
@@ -49,9 +53,11 @@
                 cols="30"
                 rows="10"
                 placeholder="推你的回覆"
+                v-model="replyComment"
+                @keydown="autoTextAreaHeight"
               ></textarea>
               <button type="submit" class="tweet-reply-btn">回覆</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -61,6 +67,8 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
+import { v4 as uuidv4 } from "uuid";
+//需要currentUser的資料，放入使用者頭像(props)
 export default {
   mixins: [fromNowFilter],
   props: {
@@ -69,9 +77,32 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      replyComment: "",
+    };
+  },
   methods: {
+    handleReplySubmit() {
+      this.$emit("after-create-reply", {
+        id: uuidv4(),
+        TweetId: this.tweet.id,
+        comment: this.replyComment,
+      });
+    },
     clickToClose() {
-      this.$emit("after-click-close-reply", null);
+      this.$emit("after-click-close-reply");
+    },
+    calculateReplyInput() {
+      const introductionLength = this.user.introduction.length;
+      this.introductionLength = introductionLength;
+    },
+    //用出現滾輪的欄高判斷是否調整textarea高
+    autoTextAreaHeight(e) {
+      //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高
+      if (e.currentTarget.scrollHeight > e.currentTarget.clientHeight) {
+        e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+      }
     },
   },
 };
@@ -82,7 +113,7 @@ export default {
   width: 100%;
   height: 2000px;
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
 }
@@ -136,12 +167,12 @@ export default {
   width: 500px;
   height: auto;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: flex-end;
   font-size: 18px;
 }
 .tweet-input-content {
-  width: 500px;
+  width: 450px;
   height: 100%;
   resize: none;
   border: none;
@@ -158,8 +189,8 @@ export default {
 .tweet-reply-btn {
   width: 64px;
   height: 40px;
+  margin-left: 400px;
   margin-bottom: 15px;
-  margin-top: 10px;
   background-color: #ff6000;
   border-radius: 50px;
   color: #f5f8fa;

@@ -408,4 +408,14 @@ export default {
   background-color: #ff6000;
   color: #f5f8fa;
 }
+.user-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: #1c1c1c;
+}
+.user-account {
+  font-size: 15px;
+  font-weight: bold;
+  color: #657786;
+}
 </style>

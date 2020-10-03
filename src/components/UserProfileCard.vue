@@ -258,4 +258,8 @@ export default {
 .followings {
   margin-right: 20px;
 }
+.followings:hover,
+.followers:hover {
+  border-bottom: 1px solid #000;
+}
 </style>

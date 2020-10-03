@@ -16,7 +16,7 @@
         @showReplyModal="showReplyModal"
         :likePage="likePage"
         :pageMode="pageMode"
-        :tweets="tweets"
+        :initial-tweets="tweets"
       />
     </div>
     <div class="follow-top">
@@ -31,6 +31,8 @@
     <TweetReplyModal
       v-if="replyModal"
       @after-click-close-reply="closeReplyModal"
+      :tweet="tweet"
+      @after-create-reply="createReply"
     />
     <UserProfileEditModal
       v-if="editModal"
@@ -2141,6 +2143,7 @@ export default {
       pageMode: "main",
       likePage: true,
       tweets: [],
+      tweet: {},
       currentUser: {},
       description: "",
       user: {
@@ -2171,8 +2174,9 @@ export default {
     CreateFinish() {
       this.$router.push({ name: "tweets-home" });
     },
-    showReplyModal() {
+    showReplyModal(replyTweet) {
       this.replyModal = true;
+      this.tweet = replyTweet;
     },
     closeReplyModal() {
       this.replyModal = false;
@@ -2238,6 +2242,20 @@ export default {
         },
       });
       this.CreateFinish();
+    },
+    createReply(payload) {
+      const { id, TweetId, comment } = payload;
+      this.tweet.Replies.push({
+        id,
+        TweetId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+        },
+        comment,
+        createdAt: new Date(),
+      });
+      this.closeReplyModal();
     },
   },
 };

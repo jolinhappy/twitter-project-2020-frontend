@@ -168,14 +168,16 @@ export default {
     },
     handleSubmit(e) {
       const form = e.target;
-      console.log(form);
       const formData = new FormData(form);
-      const a = formData.entries();
-      console.log("d", a);
-      console.log("AA", formData);
-      for (let w of a) {
-        console.log("dd", w);
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
       }
+      // const a = formData.entries();
+      // console.log("d", a);
+      // console.log("AA", formData);
+      // for (let w of a) {
+      //   console.log("dd", w);
+      // }
       this.$emit("after-submit", formData);
     },
     calculateNameInput() {
@@ -195,7 +197,7 @@ export default {
   width: 100%;
   height: 2000px;
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
 }

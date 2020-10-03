@@ -15,7 +15,7 @@
       <UserTweetsList
         @showReplyModal="showReplyModal"
         :pageMode="pageMode"
-        :tweets="tweets"
+        :initial-tweets="tweets"
       />
     </div>
     <div class="follow-top">
@@ -31,6 +31,7 @@
       v-if="replyModal"
       @after-click-close-reply="closeReplyModal"
       :tweet="tweet"
+      @after-create-reply="createReply"
     />
     <UserProfileEditModal
       v-if="editModal"
@@ -724,6 +725,7 @@ export default {
       editModal: false,
       pageMode: "main",
       tweets: [],
+      tweet: {},
       currentUser: {},
       description: "",
       user: {
@@ -755,8 +757,9 @@ export default {
     CreateFinish() {
       this.$router.push({ name: "tweets-home" });
     },
-    showReplyModal() {
+    showReplyModal(replyTweet) {
       this.replyModal = true;
+      this.tweet = replyTweet;
     },
     closeReplyModal() {
       this.replyModal = false;
@@ -806,7 +809,7 @@ export default {
     handleAfterSubmit(formData) {
       console.log(formData);
       for (let [name, value] of formData.entries()) {
-        console.log(name + ":" + value);
+        console.log(name + ": " + value);
       }
     },
     creatTweetFromModal(newDescription) {
@@ -823,6 +826,20 @@ export default {
         },
       });
       this.CreateFinish();
+    },
+    createReply(payload) {
+      const { id, TweetId, comment } = payload;
+      this.tweet.Replies.push({
+        id,
+        TweetId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+        },
+        comment,
+        createdAt: new Date(),
+      });
+      this.closeReplyModal();
     },
   },
 };
