@@ -6,7 +6,7 @@
       </router-link>
       <div class="sidebar-options">
         <div class="sidebar-list">
-          <template v-if="!isAdmin">
+          <template v-if="!currentUser.isAdmin">
             <div class="sidebar-item">
               <router-link to="/tweets" class="sidebar-link sidebar-home">
                 <img
@@ -18,7 +18,10 @@
               </router-link>
             </div>
             <div class="sidebar-item">
-              <router-link to="/users/:id" class="sidebar-link sidebar-info">
+              <router-link
+                :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+                class="sidebar-link sidebar-info"
+              >
                 <img
                   src="https://i.imgur.com/I8IlDOt.png"
                   class="option"
@@ -90,6 +93,16 @@
 </template>
 
 <script>
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "dummy",
+    email: "123@hhhh.com",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+  },
+  isAuthenticated: true,
+};
 export default {
   props: {
     isAdmin: {
@@ -97,7 +110,28 @@ export default {
       require: true,
     },
   },
+  data() {
+    return {
+      currentUser: {
+        id: -1,
+        name: " ",
+        email: "",
+        avatar: "",
+      },
+      isAuthenticated: false,
+    };
+  },
+  created() {
+    this.fetchUser();
+  },
   methods: {
+    fetchUser() {
+      this.currentUser = {
+        ...this.currentUser,
+        ...dummyUser.currentUser,
+      };
+      this.isAuthenticated = dummyUser.isAuthenticated;
+    },
     showCreateModal() {
       this.$emit("showCreateModal");
     },
@@ -173,6 +207,7 @@ export default {
 
 .logout-link {
   display: flex;
+  margin-bottom: 15px;
 }
 .logout-link:hover {
   color: #657786;

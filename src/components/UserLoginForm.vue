@@ -1,16 +1,48 @@
 <template>
-  <form action="" class="login-form">
+  <form action="" class="login-form" @submit.prevent.stop="handleSubmit">
     <div class="form-label-group">
       <label for="account" class="form-label">帳號</label>
-      <input type="text" class="form-input" required />
+      <input type="text" class="form-input" v-model="account" required />
     </div>
     <div class="form-label-group">
       <label for="password" class="form-label">密碼</label>
-      <input type="text" class="form-input" required />
+      <input type="text" class="form-input" v-model="password" required />
     </div>
     <button type="submit" class="btn login-btn">登入</button>
   </form>
 </template>
+
+
+<script>
+export default {
+  props: {
+    initialAccount: {
+      type: String,
+      required: true,
+    },
+    initialPassword: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      account: this.initialAccount,
+      password: this.initialPassword,
+    };
+  },
+  methods: {
+    handleSubmit() {
+      const data = JSON.stringify({
+        account: this.account,
+        password: this.password,
+      });
+      this.$emit("afterSubmit", data);
+    },
+  },
+};
+</script>
+
 
 <style scoped>
 form {

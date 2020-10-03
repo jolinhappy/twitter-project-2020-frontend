@@ -15,8 +15,7 @@
       <div class="follow-tab">
         <UserNavTab :isFollowPage="isFollowPage" />
       </div>
-      <!-- USER -->
-      <FollowUsersList />
+      <FollowUsersList :initialFollowData="followingUsers" />
     </div>
     <div class="follow-top">
       <FollowTopList />
@@ -36,7 +35,154 @@ import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import UserNavTab from "./../components/UserNavTab";
 
+const dummyFollowings = [
+  {
+    id: 3,
+    email: "user2@example.com",
+    password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
+    name: "user2",
+    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
+    introduction: "I am user2",
+    role: "user",
+    account: "@user2",
+    cover: "http://lorempixel.com/640/480/food",
+    createdAt: "2020-10-01T08:02:45.000Z",
+    updatedAt: "2020-10-01T08:02:45.000Z",
+    Followship: {
+      followerId: 2,
+      followingId: 3,
+      createdAt: "2020-09-30T12:56:39.000Z",
+      updatedAt: "2020-09-30T12:56:39.000Z",
+    },
+    followingId: 3,
+    isFollowed: true,
+  },
+  {
+    id: 4,
+    email: "user3@example.com",
+    password: "$2a$10$Iw6Dxi0uwEhtv80niOrmbO0TDy02HsfobmxiqnhSJOE/9Ywd0VoAK",
+    name: "user3",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/lebinoclard/128.jpg",
+    introduction: "I am user3",
+    role: "user",
+    account: "@user3",
+    cover: "http://lorempixel.com/640/480/nature",
+    createdAt: "2020-10-01T08:02:45.000Z",
+    updatedAt: "2020-10-01T08:02:45.000Z",
+    Followship: {
+      followerId: 2,
+      followingId: 4,
+      createdAt: "2020-09-30T12:56:39.000Z",
+      updatedAt: "2020-09-30T12:56:39.000Z",
+    },
+    followingId: 4,
+    isFollowed: true,
+  },
+];
+const dummyUser = {
+  id: 2,
+  email: "user1@example.com",
+  password: "$2a$10$3wamA26AS7tJ8szugZM38.n3ebSvNRtVuDxqb4rN1aVa0IAMEXNOq",
+  name: "user1",
+  avatar:
+    "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+  introduction: "I am user1",
+  role: "user",
+  account: "@user1",
+  cover: "http://lorempixel.com/640/480/abstract",
+  createdAt: "2020-10-01T08:02:45.000Z",
+  updatedAt: "2020-10-01T08:02:45.000Z",
+  Followers: [
+    {
+      id: 3,
+      email: "user2@example.com",
+      password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
+      name: "user2",
+      avatar:
+        "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
+      introduction: "I am user2",
+      role: "user",
+      account: "@user2",
+      cover: "http://lorempixel.com/640/480/food",
+      createdAt: "2020-10-01T08:02:45.000Z",
+      updatedAt: "2020-10-01T08:02:45.000Z",
+      Followship: {
+        followerId: 3,
+        followingId: 2,
+        createdAt: "2020-09-30T12:56:39.000Z",
+        updatedAt: "2020-09-30T12:56:39.000Z",
+      },
+    },
+    {
+      id: 5,
+      email: "user4@example.com",
+      password: "$2a$10$3zsfWwpQrzLjWNEGWt..2OtsMuR84soXOY7ZawiNQzWL9HvUYaGlq",
+      name: "user4",
+      avatar:
+        "https://s3.amazonaws.com/uifaces/faces/twitter/noufalibrahim/128.jpg",
+      introduction: "I am user4",
+      role: "user",
+      account: "@user4",
+      cover: "http://lorempixel.com/640/480/food",
+      createdAt: "2020-10-01T08:02:45.000Z",
+      updatedAt: "2020-10-01T08:02:45.000Z",
+      Followship: {
+        followerId: 5,
+        followingId: 2,
+        createdAt: "2020-09-30T12:56:39.000Z",
+        updatedAt: "2020-09-30T12:56:39.000Z",
+      },
+    },
+  ],
+  Followings: [
+    {
+      id: 3,
+      email: "user2@example.com",
+      password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
+      name: "user2",
+      avatar:
+        "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
+      introduction: "I am user2",
+      role: "user",
+      account: "@user2",
+      cover: "http://lorempixel.com/640/480/food",
+      createdAt: "2020-10-01T08:02:45.000Z",
+      updatedAt: "2020-10-01T08:02:45.000Z",
+      Followship: {
+        followerId: 2,
+        followingId: 3,
+        createdAt: "2020-09-30T12:56:39.000Z",
+        updatedAt: "2020-09-30T12:56:39.000Z",
+      },
+    },
+    {
+      id: 4,
+      email: "user3@example.com",
+      password: "$2a$10$Iw6Dxi0uwEhtv80niOrmbO0TDy02HsfobmxiqnhSJOE/9Ywd0VoAK",
+      name: "user3",
+      avatar:
+        "https://s3.amazonaws.com/uifaces/faces/twitter/lebinoclard/128.jpg",
+      introduction: "I am user3",
+      role: "user",
+      account: "@user3",
+      cover: "http://lorempixel.com/640/480/nature",
+      createdAt: "2020-10-01T08:02:45.000Z",
+      updatedAt: "2020-10-01T08:02:45.000Z",
+      Followship: {
+        followerId: 2,
+        followingId: 4,
+        createdAt: "2020-09-30T12:56:39.000Z",
+        updatedAt: "2020-09-30T12:56:39.000Z",
+      },
+    },
+  ],
+  isMyself: false,
+  isFollowed: false,
+};
+
 export default {
+  name: "UserFollowings",
   components: {
     Sidebar,
     FollowUsersList,
@@ -49,7 +195,24 @@ export default {
       createModal: false,
       replyModal: false,
       isFollowPage: true,
+      followingUsers: [],
+      user: {
+        id: -1,
+        name: "",
+        account: "",
+        avatar: "",
+        cover: "",
+        introduction: "",
+      },
+      followers: [],
+      followings: [],
+      isMyself: false,
+      isFollowed: false,
     };
+  },
+  created() {
+    this.fetchFollowings();
+    this.fetchUser();
   },
   methods: {
     showCreateModal() {
@@ -57,6 +220,35 @@ export default {
     },
     closeCreateModal() {
       this.createModal = false;
+    },
+    //TODO:用params取得id然後用在API取得資料
+    fetchFollowings() {
+      this.followingUsers = dummyFollowings;
+    },
+    fetchUser() {
+      const {
+        id,
+        name,
+        account,
+        avatar,
+        cover,
+        introduction,
+        isMyself,
+        isFollowed,
+      } = dummyUser;
+      this.user = {
+        ...this.user,
+        id,
+        name,
+        account,
+        avatar,
+        cover,
+        introduction,
+      };
+      this.followers = dummyUser.Followers;
+      this.followings = dummyUser.Followings;
+      this.isMyself = isMyself;
+      this.isFollowed = isFollowed;
     },
   },
 };

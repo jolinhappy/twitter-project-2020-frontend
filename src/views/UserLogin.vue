@@ -2,7 +2,11 @@
   <div class="container">
     <img src="https://i.imgur.com/v5wdZG6.png" alt="logo" class="logo" />
     <h2>登入 Alphitter</h2>
-    <UserLoginForm />
+    <UserLoginForm
+      :initialAccount="account"
+      :initialPassword="password"
+      @afterSubmit="submitLogin"
+    />
     <div class="regist-link">
       <p>
         <router-link to="/regist">註冊Alphitter</router-link>．
@@ -15,8 +19,20 @@
 <script>
 import UserLoginForm from "./../components/UserLoginForm";
 export default {
+  name: "UserLogin",
   components: {
     UserLoginForm,
+  },
+  data() {
+    return {
+      account: "",
+      password: "",
+    };
+  },
+  methods: {
+    submitLogin(data) {
+      console.log("data", data);
+    },
   },
 };
 </script>

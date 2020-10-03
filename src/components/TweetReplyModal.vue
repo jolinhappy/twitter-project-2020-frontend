@@ -13,32 +13,19 @@
         <div class="reply-section">
           <div class="user-tweet-container">
             <div class="profile-image">
-              <img
-                src="https://i.imgur.com/W2nxio3.png"
-                class="user-img"
-                alt=""
-              />
-              <div class="line"></div>
+              <img :src="tweet.User.avatar" class="user-img" alt="" />
+              <div class="line-part">
+                <div class="line"></div>
+              </div>
             </div>
             <div class="tweet-part">
               <div class="tweet-info">
-                <div class="user-name">username</div>
-                <div class="user-account">@12345</div>
-                <div class="create-time">．3天前</div>
+                <div class="user-name">{{ tweet.User.name }}</div>
+                <div class="user-account">{{ tweet.User.account }}</div>
+                <div class="create-time">．{{ tweet.createdAt | fromNow }}</div>
               </div>
               <div class="tweet-content">
-                jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o
-                jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-                iowr 23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 2r
-                ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k
-                opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 2r ij2oij ri2j
-                roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k opt42okt;
-                k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o 4 k2;okt;o2 k;t4k2 ;otk;24o
-                2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k
-                opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk 2r ij2oij ri2j
-                roir32ro 23j poj p jpj 24po jri24j iowr 23rko24k opt42okt;
-                k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o
+                {{ tweet.description }}
               </div>
               <div class="reply-for">
                 <p>回覆</p>
@@ -47,7 +34,7 @@
             </div>
           </div>
           <div class="tweet-reply-container">
-            <div class="profile-image">
+            <div class="profile-image-reply">
               <img
                 src="https://i.imgur.com/W2nxio3.png"
                 class="user-img"
@@ -73,7 +60,15 @@
 </template>
 
 <script>
+import { fromNowFilter } from "./../utils/mixins";
 export default {
+  mixins: [fromNowFilter],
+  props: {
+    tweet: {
+      type: Object,
+      required: true,
+    },
+  },
   methods: {
     clickToClose() {
       this.$emit("after-click-close-reply", null);
@@ -121,7 +116,14 @@ export default {
 }
 .profile-image {
   width: 70px;
-  height: 120px;
+  height: auto;
+  flex: 1;
+}
+
+.profile-image-reply {
+  width: 70px;
+  height: auto;
+  flex: 1;
 }
 .user-img {
   width: 50px;
@@ -171,27 +173,36 @@ export default {
   height: auto;
   display: flex;
   margin-top: 10px;
+  flex: 1;
 }
 
 .tweet-part {
-  width: 450px;
+  width: 469px;
   display: flex;
   flex-direction: column;
 }
 .tweet-content {
   font-size: 15px;
 }
-.line {
-  background: gray;
-  position: relative;
-  height: auto;
+.line-part {
+  width: 100%;
+  height: 100%;
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
+.line {
+  width: 2px;
+  height: 45%;
+  margin-bottom: 50px;
+  margin-right: 10px;
+  background: #ccd6cc;
+}
 .line::after {
   content: "";
   width: 2px;
-  height: 80px;
+  height: auto;
   background: #ccd6cc;
   position: absolute;
   left: 50%;

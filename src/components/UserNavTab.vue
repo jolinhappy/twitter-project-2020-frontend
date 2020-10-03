@@ -2,7 +2,9 @@
   <ul class="tweets-nav-tab">
     <template v-if="!isFollowPage">
       <li class="tab-item">
-        <router-link to="/users/:id" class="tab-link user-tweets"
+        <router-link
+          :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+          class="tab-link user-tweets"
           >推文</router-link
         >
       </li>
@@ -34,11 +36,44 @@
 
 
 <script>
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "dummy",
+    email: "123@hhhh.com",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+  },
+  isAuthenticated: true,
+};
 export default {
   props: {
     isFollowPage: {
       type: Boolean,
       require: true,
+    },
+  },
+  data() {
+    return {
+      currentUser: {
+        id: -1,
+        name: " ",
+        email: "",
+        avatar: "",
+      },
+      isAuthenticated: false,
+    };
+  },
+  created() {
+    this.fetchUser();
+  },
+  methods: {
+    fetchUser() {
+      this.currentUser = {
+        ...this.currentUser,
+        ...dummyUser.currentUser,
+      };
+      this.isAuthenticated = dummyUser.isAuthenticated;
     },
   },
 };

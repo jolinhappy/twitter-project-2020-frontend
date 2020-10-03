@@ -5,27 +5,20 @@
         <img src="https://i.imgur.com/aPVTDn2.png" class="back-img" alt="" />
       </button>
       <div class="title-content">
-        <div class="name">Jolin</div>
-        <div class="tweets-count">25推文</div>
+        <div class="name">{{ user.name }}</div>
+        <div class="tweets-count">{{ tweets.length }}推文</div>
       </div>
     </div>
     <div class="profile-content">
       <div class="cover-part">
-        <img
-          src="https://i.imgur.com/1Gtowr4.png"
-          class="cover-img"
-          alt="cover"
-        />
+        <img :src="user.cover" class="cover-img" alt="cover" />
       </div>
       <div class="user-img-part">
-        <img
-          src="https://i.imgur.com/rMilpGT.png"
-          class="user-main-img"
-          alt="user-img"
-        />
+        <img :src="user.avatar" class="user-main-img" alt="user-img" />
       </div>
       <div class="detail-info-part">
         <div class="button-part">
+          <!-- <template v-if="!isMyself"> -->
           <button type="button" class="message-btn">
             <img
               src="https://i.imgur.com/DTgxxcI.png"
@@ -40,25 +33,29 @@
               alt="message"
             />
           </button>
-          <button type="button" class="following">正在追蹤</button>
+          <button type="button" class="following">正在跟隨</button>
+          <button type="button" class="follow">跟隨</button>
+          <!-- </template>
+          <template v-else> -->
           <button type="button" class="edit-info" @click="showEditModal">
             編輯個人資料
           </button>
+          <!-- </template> -->
         </div>
         <div class="name-info">
-          <div class="user-name">Jolin</div>
-          <div class="user-account">@jolin</div>
-          <div class="discription">唱跳天后蔡依林，怪美的呸姐</div>
+          <div class="user-name">{{ user.name }}</div>
+          <div class="user-account">{{ user.account }}</div>
+          <div class="introduction">{{ user.introduction }}</div>
         </div>
         <div class="follow-info">
           <router-link to="/users/:id/followings" class="followings-link"
             ><div class="followings">
-              <strong>20個</strong>追蹤中
+              <strong>{{ followings.length }}個</strong>追蹤中
             </div></router-link
           >
           <router-link to="/users/:id/followers" class="followers-link"
             ><div class="followers">
-              <strong>30位</strong>追蹤者
+              <strong>{{ followers.length }}位</strong>追蹤者
             </div></router-link
           >
         </div>
@@ -75,6 +72,35 @@ import UserNavTab from "./../components/UserNavTab";
 export default {
   components: {
     UserNavTab,
+  },
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+    followings: {
+      type: Array,
+      required: true,
+    },
+    followers: {
+      type: Array,
+      required: true,
+    },
+    tweets: {
+      type: Array,
+      required: true,
+    },
+    isMyself: {
+      type: Boolean,
+      required: true,
+    },
+    isFollowed: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  data() {
+    return {};
   },
   methods: {
     showEditModal() {
@@ -193,6 +219,17 @@ export default {
   color: white;
   border-radius: 100px;
 }
+
+.follow {
+  width: 62px;
+  height: 40px;
+  border-radius: 100px;
+  border: 1px solid #ff6000;
+  color: #ff6000;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 100px;
+}
 .name-info {
   margin-top: 30px;
   margin-bottom: 10px;
@@ -206,7 +243,7 @@ export default {
   font-weight: 500;
   color: #657786;
 }
-.discription {
+.introduction {
   line-height: 20px;
   font-size: 14px;
   font-weight: normal;

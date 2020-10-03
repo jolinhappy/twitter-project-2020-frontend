@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import UserLogin from '../views/UserLogin.vue'
+import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -76,6 +77,11 @@ const routes = [
     name: 'admin-users',
     component: () => import('../views/AdminUsers.vue')
   },
+  {
+    path: '*',
+    name: 'not-found',
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({

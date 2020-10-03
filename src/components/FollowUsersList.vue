@@ -1,89 +1,92 @@
 <template>
-  <div class="users-list">
-    <router-link to="/tweets/:id" class="user-profile-link">
-      <div class="users-list-container">
-        <div class="profile-image">
-          <img src="https://i.imgur.com/W2nxio3.png" class="user-img" alt="" />
+  <div class="users-list user-profile-link">
+    <!-- <router-link
+      to="/tweets/:id"
+      
+      
+    > -->
+    <div
+      class="users-list-container"
+      v-for="follow in follows"
+      :key="follow.id"
+    >
+      <router-link
+        :to="{ name: 'user-profile', params: { id: follow.id } }"
+        class="profile-image"
+      >
+        <img :src="follow.avatar" class="user-img" alt="" />
+      </router-link>
+      <div class="user">
+        <div class="user-info">
+          <div class="user-name">
+            <router-link
+              :to="{ name: 'user-profile', params: { id: follow.id } }"
+              class="user-name-link"
+            >
+              <div class="name">{{ follow.name }}</div>
+            </router-link>
+            <div class="user-account">{{ follow.account }}</div>
+          </div>
+          <div class="follow-btn">
+            <button
+              type="button"
+              class="followed"
+              v-if="follow.isFollowed"
+              @click="deleteFollow(follow.id)"
+            >
+              正在跟隨
+            </button>
+            <button
+              type="button"
+              class="follow"
+              v-else
+              @click="addFollow(follow.id)"
+            >
+              跟隨
+            </button>
+          </div>
         </div>
-        <div class="user">
-          <div class="user-info">
-            <div class="user-name">
-              <router-link to="/users/:id" class="user-name-link">
-                <div class="name">username</div>
-              </router-link>
-              <div class="user-account">@12345</div>
-            </div>
-            <div class="follow-btn">
-              <button type="button" class="followed">正在跟隨</button>
-            </div>
-          </div>
-          <div class="user-description">
-            jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
-          </div>
-        </div>
-      </div>
-    </router-link>
-
-    <router-link to="/tweets/:id" class="user-profile-link">
-      <div class="users-list-container">
-        <div class="profile-image">
-          <img src="https://i.imgur.com/W2nxio3.png" class="user-img" alt="" />
-        </div>
-        <div class="user">
-          <div class="user-info">
-            <div class="user-name">
-              <router-link to="/users/:id" class="user-name-link">
-                <div class="name">username</div>
-              </router-link>
-              <div class="user-account">@12345</div>
-            </div>
-            <div class="follow-btn">
-              <button type="button" class="followed">正在跟隨</button>
-            </div>
-          </div>
-          <div class="user-description">
-            jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
-          </div>
+        <div class="user-description">
+          {{ follow.introduction }}
         </div>
       </div>
-    </router-link>
-    <router-link to="/tweets/:id" class="user-profile-link">
-      <div class="users-list-container">
-        <div class="profile-image">
-          <img src="https://i.imgur.com/W2nxio3.png" class="user-img" alt="" />
-        </div>
-        <div class="user">
-          <div class="user-info">
-            <div class="user-name">
-              <router-link to="/users/:id" class="user-name-link">
-                <div class="name">username</div>
-              </router-link>
-              <div class="user-account">@12345</div>
-            </div>
-            <div class="follow-btn">
-              <button type="button" class="followed">正在跟隨</button>
-            </div>
-          </div>
-          <div class="user-description">
-            jiejwir2irj 2r ij2oij ri2j roir32ro 23j poj p jpj 24po jri24j
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k; iowr
-            23rko24k opt42okt; k4;otk;o4 k2;okt;o2 k;t4k2 ;otk;24o k;
-          </div>
-        </div>
-      </div>
-    </router-link>
+    </div>
+    <!-- </router-link> -->
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    initialFollowData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      follows: this.initialFollowData,
+    };
+  },
+  methods: {
+    addFollow(id) {
+      this.follows.map((follow) => {
+        if (follow.id === id) {
+          follow.isFollowed = true;
+        }
+        return follow;
+      });
+    },
+    deleteFollow(id) {
+      this.follows.map((follow) => {
+        if (follow.id === id) {
+          follow.isFollowed = false;
+        }
+        return follow;
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -144,12 +147,34 @@ export default {};
 }
 .followed {
   width: 92px;
-  height: 38px;
+  height: 30px;
   background-color: #ff6000;
   border-radius: 100px;
   color: #f5f8fa;
   margin: auto 0;
   font-size: 15px;
   font-weight: bold;
+}
+.followed:hover {
+  border: 1px solid #ff6000;
+  color: #ff6000;
+  background-color: #ffffff;
+}
+.follow {
+  width: 62px;
+  height: 30px;
+  border-radius: 100px;
+  border: 1px solid #ff6000;
+  color: #ff6000;
+  font-size: 15px;
+  font-weight: bold;
+  margin: auto 0;
+}
+.follow:hover {
+  background-color: #ff6000;
+  color: #f5f8fa;
+}
+.user-img:hover {
+  transform: scale(1.1, 1.1);
 }
 </style>

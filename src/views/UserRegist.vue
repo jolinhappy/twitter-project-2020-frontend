@@ -2,7 +2,14 @@
   <div class="container">
     <img src="https://i.imgur.com/v5wdZG6.png" alt="logo" class="logo" />
     <h2>建立你的帳號</h2>
-    <UserInfoForm />
+    <UserInfoForm
+      :initialAccount="account"
+      :initialName="name"
+      :initialEmail="email"
+      :initialPassword="password"
+      :initialCheckPassword="checkPassword"
+      @afterSubmit="submitRegist"
+    />
     <div class="cancel">
       <p>
         <router-link to="/login">取消</router-link>
@@ -14,8 +21,23 @@
 <script>
 import UserInfoForm from "./../components/UserInfoForm";
 export default {
+  name: "UserRegist",
   components: {
     UserInfoForm,
+  },
+  data() {
+    return {
+      account: "",
+      name: "",
+      email: "",
+      password: "",
+      checkPassword: "",
+    };
+  },
+  methods: {
+    submitRegist(data) {
+      console.log("data", data);
+    },
   },
 };
 </script>

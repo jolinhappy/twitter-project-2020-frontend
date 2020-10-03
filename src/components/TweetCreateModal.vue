@@ -12,13 +12,9 @@
         </div>
         <div class="tweet-create-container">
           <div class="profile-image">
-            <img
-              src="https://i.imgur.com/W2nxio3.png"
-              class="user-img"
-              alt=""
-            />
+            <img :src="currentUser.avatar" class="user-img" alt="" />
           </div>
-          <div class="tweet-input">
+          <form class="tweet-input">
             <textarea
               name="tweet-input-area"
               class="tweet-input-content"
@@ -26,9 +22,17 @@
               cols="30"
               rows="10"
               placeholder="有什麼新鮮事？"
+              v-model="description"
+              @keydown="autoTextAreaHeight"
             ></textarea>
-            <button type="submit" class="tweet-create-btn">推文</button>
-          </div>
+            <button
+              type="submit"
+              class="tweet-create-btn"
+              @click.stop.prevent="handleSubmit"
+            >
+              推文
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -36,19 +40,74 @@
 </template>
 
 <script>
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "dummy",
+    email: "123@hhhh.com",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+  },
+  isAuthenticated: true,
+};
 export default {
+  props: {
+    initialDescription: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      description: this.initialDescription,
+      currentUser: {
+        id: -1,
+        name: " ",
+        email: "",
+        avatar: "",
+      },
+      isAuthenticated: false,
+    };
+  },
+  created() {
+    this.fetchCurrentUser();
+  },
   methods: {
     clickToClose() {
-      this.$emit("after-click-close-create", null);
+      this.$emit("after-click-close-create");
+    },
+    handleSubmit() {
+      const newDescription = this.description;
+      console.log(newDescription);
+      this.$emit("afterSubmit", newDescription);
+    },
+    finishCreate() {
+      this.$emit("after-click-close-create");
+    },
+    fetchCurrentUser() {
+      this.currentUser = {
+        ...this.currentUser,
+        ...dummyUser.currentUser,
+      };
+      this.isAuthenticated = dummyUser.isAuthenticated;
+    },
+    //用出現滾輪的欄高判斷是否調整textarea大小
+    autoTextAreaHeight(e) {
+      //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高
+      if (e.currentTarget.scrollHeight > e.currentTarget.clientHeight) {
+        e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+      }
     },
   },
 };
+
+//textarea自動增加欄高
 </script>
 
 <style scoped>
 .tweet-create-modal {
   width: 100%;
-  height: 2000px;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
   position: absolute;
   display: flex;
@@ -77,7 +136,7 @@ export default {
 .tweet-create-container {
   display: flex;
   height: 245px;
-  /* overflow: auto; */
+  overflow: auto;
 }
 .profile-image {
   width: 80px;
@@ -122,5 +181,16 @@ export default {
   font-weight: 500;
   font-size: 18px;
   margin-top: 15px;
+  margin-bottom: 15px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  width: 10px;
+  height: 5px;
+  background: gray;
+  border-radius: 50px;
 }
 </style>

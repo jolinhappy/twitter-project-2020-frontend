@@ -2,7 +2,11 @@
   <div class="profile-edit-modal">
     <div class="modal-container">
       <div class="modal-box">
-        <form action="" class="profile-edit-form">
+        <form
+          action=""
+          class="profile-edit-form"
+          @submit.stop.prevent="handleSubmit"
+        >
           <div class="cancel-edit">
             <img
               src="https://i.imgur.com/qd4MrVa.png"
@@ -21,23 +25,28 @@
                   class="photo-icon"
                   alt=""
                 />
-                <input type="file" id="cover-upload-input" />
+                <input
+                  type="file"
+                  id="cover-upload-input"
+                  accept="image/*"
+                  @change="handleCoverChange"
+                />
               </label>
 
-              <label for="cover-delete-input">
-                <a href="" class="delete"
-                  ><img
-                    src="https://i.imgur.com/VElvsCz.png"
-                    class="delete-icon"
-                    alt=""
-                /></a>
+              <label for="cover-delete-input" @click="deleteCover">
+                <img
+                  src="https://i.imgur.com/VElvsCz.png"
+                  class="delete-icon"
+                  alt=""
+                />
               </label>
             </div>
             <div class="cover-part">
               <img
-                src="https://i.imgur.com/1Gtowr4.png"
+                :src="user.cover"
                 class="cover-img"
                 alt="cover"
+                v-if="user.cover"
               />
             </div>
             <div class="user-img-part">
@@ -48,21 +57,28 @@
                     class="upload-photo-icon"
                     alt=""
                   />
-                  <input type="file" id="photo-upload-input" />
+                  <input
+                    type="file"
+                    id="photo-upload-input"
+                    accept="image/*"
+                    @change="handleAvatarChange"
+                  />
                 </label>
               </div>
-              <img
-                src="https://i.imgur.com/rMilpGT.png"
-                class="user-main-img"
-                alt="user-img"
-              />
+              <img :src="user.avatar" class="user-main-img" alt="user-img" />
             </div>
             <div class="detail-edit">
               <div class="form-label-group">
                 <label for="name" class="name-label form-label">名稱</label>
-                <input type="text" class="form-input name-input" required />
+                <input
+                  type="text"
+                  class="form-input name-input"
+                  v-model="user.name"
+                  @input="calculateNameInput"
+                  required
+                />
               </div>
-              <div class="name-word-count">1/50</div>
+              <div class="name-word-count">{{ nameLength }}/50</div>
               <div class="form-label-group">
                 <label for="discription" class="discpription-label form-label"
                   >自我介紹</label
@@ -70,10 +86,14 @@
                 <input
                   type="text"
                   class="form-input description-input"
+                  v-model="user.introduction"
+                  @input="calculateIntroductionInput"
                   required
                 />
               </div>
-              <div class="description-word-count">0/160</div>
+              <div class="description-word-count">
+                {{ introductionLength }}/160
+              </div>
             </div>
           </div>
         </form>
@@ -84,9 +104,87 @@
 
 <script>
 export default {
+  props: {
+    initialUser: {
+      type: Object,
+      default: () => {
+        return {
+          id: -1,
+          name: "",
+          account: "",
+          avatar: "",
+          cover: "",
+          introduction: "",
+        };
+      },
+    },
+  },
+  created() {
+    this.user = {
+      ...this.user,
+      ...this.initialUser,
+    };
+    this.calculateNameInput();
+    this.calculateIntroductionInput();
+  },
+  data() {
+    return {
+      user: {
+        id: -1,
+        name: "",
+        account: "",
+        avatar: "",
+        cover: "",
+        introduction: "",
+      },
+      nameLength: 0,
+      introductionLength: 0,
+    };
+  },
   methods: {
     clickToClose() {
       this.$emit("after-click-close-edit");
+    },
+    handleCoverChange(e) {
+      const { files } = e.target;
+      if (files === 0) {
+        this.user.cover = "";
+      } else {
+        const coverURL = window.URL.createObjectURL(files[0]);
+        this.user.cover = coverURL;
+      }
+    },
+    handleAvatarChange(e) {
+      const { files } = e.target;
+      if (files === 0) {
+        this.user.avatar = "";
+      } else {
+        const avatarURL = window.URL.createObjectURL(files[0]);
+        this.user.avatar = avatarURL;
+      }
+    },
+    deleteCover() {
+      this.user.cover = "";
+    },
+    handleSubmit(e) {
+      const form = e.target;
+      console.log(form);
+      const formData = new FormData(form);
+      const a = formData.entries();
+      console.log("d", a);
+      console.log("AA", formData);
+      for (let w of a) {
+        console.log("dd", w);
+      }
+      this.$emit("after-submit", formData);
+    },
+    calculateNameInput() {
+      const nameLength = this.user.name.length;
+      this.nameLength = nameLength;
+    },
+    calculateIntroductionInput() {
+      const introductionLength = this.user.introduction.length;
+      this.introductionLength = introductionLength;
     },
   },
 };
@@ -118,7 +216,6 @@ export default {
   width: 24px;
   height: 24px;
   line-height: 40px;
-  /* margin-top: 15px; */
   cursor: pointer;
   margin: auto 15px;
 }
@@ -140,7 +237,8 @@ export default {
 }
 
 .cover-part {
-  width: 598px;
+  width: 600px;
+  height: 200px;
   display: flex;
   align-items: center;
   position: relative;

@@ -2,7 +2,11 @@
   <div class="container">
     <img src="https://i.imgur.com/v5wdZG6.png" alt="logo" class="logo" />
     <h2>後台登入</h2>
-    <UserLoginForm />
+    <UserLoginForm
+      :initialAccount="account"
+      :initialPassword="password"
+      @afterSubmit="submitLogin"
+    />
     <div class="regist-link">
       <p>
         <router-link to="/login">前台登入</router-link>
@@ -16,6 +20,17 @@ import UserLoginForm from "./../components/UserLoginForm";
 export default {
   components: {
     UserLoginForm,
+  },
+  data() {
+    return {
+      account: "",
+      password: "",
+    };
+  },
+  methods: {
+    submitLogin(data) {
+      console.log("data", data);
+    },
   },
 };
 </script>

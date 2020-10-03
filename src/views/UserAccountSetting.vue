@@ -8,22 +8,46 @@
           <p>帳號設定</p>
         </div>
         <div class="form-part">
-          <form action="" class="login-form">
+          <form
+            action=""
+            class="login-form"
+            @submit.stop.prevent="handleSubmit"
+          >
             <div class="form-label-group">
               <label for="account" class="form-label">帳號</label>
-              <input type="text" class="form-input" required />
+              <input
+                type="text"
+                class="form-input"
+                v-model="currentUser.account"
+                required
+              />
             </div>
             <div class="form-label-group">
               <label for="name" class="form-label">名稱</label>
-              <input type="text" class="form-input" required />
+              <input
+                type="text"
+                class="form-input"
+                v-model="currentUser.name"
+                required
+              />
             </div>
             <div class="form-label-group">
               <label for="account" class="form-label">Email</label>
-              <input type="email" class="form-input" required />
+              <input
+                type="email"
+                class="form-input"
+                v-model="currentUser.email"
+                required
+              />
             </div>
             <div class="form-label-group">
               <label for="password" class="form-label">密碼</label>
-              <input type="text" class="form-input" required />
+              <input
+                type="text"
+                class="form-input"
+                v-model="currentUser.password"
+                required
+              />
             </div>
             <div class="form-label-group">
               <label for="password-check" class="form-label">密碼確認</label>
@@ -46,6 +70,18 @@
 <script>
 import Sidebar from "./../components/Sidebar";
 import TweetCreateModal from "./../components/TweetCreateModal";
+
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "dummy",
+    account: "@dummy",
+    email: "123@hhhh.com",
+    avatar:
+      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+  },
+  isAuthenticated: true,
+};
 export default {
   components: {
     Sidebar,
@@ -54,7 +90,18 @@ export default {
   data() {
     return {
       createModal: false,
+      currentUser: {
+        id: -1,
+        name: "",
+        account: "",
+        email: "",
+        avatar: "",
+      },
+      isAuthenticated: false,
     };
+  },
+  created() {
+    this.fetchCurrentUser();
   },
   methods: {
     showCreateModal() {
@@ -62,6 +109,40 @@ export default {
     },
     closeCreateModal() {
       this.createModal = false;
+    },
+    fetchCurrentUser() {
+      const { id, name, account, email, avatar } = dummyUser.currentUser;
+      this.currentUser = {
+        id,
+        name,
+        account,
+        email,
+        avatar,
+      };
+      this.isAuthenticated = dummyUser.isAuthenticated;
+    },
+    handleSubmit(e) {
+      console.log("s", e);
+      const form = e.target;
+      console.log("dd", form);
+      const formData = new FormData(form);
+      // for (let [name] of formData.entries()) {
+      //   console.log(name);
+      // }
+      const a = formData.entries();
+      console.log("d", a);
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
+      }
+      // console.log("AA", formData);
+      const data = JSON.stringify({
+        account: this.currentUser.account,
+        name: this.currentUser.name,
+        email: this.currentUser.email,
+        password: this.currentUser.password,
+        checkPassword: this.currentUser.checkPassword,
+      });
+      console.log("data", data);
     },
   },
 };
@@ -141,6 +222,10 @@ form {
   font-size: 18px;
   margin-top: 10px;
   margin-left: 530px;
+}
+
+.btn:hover {
+  background-color: #f75000;
 }
 </style>
 
