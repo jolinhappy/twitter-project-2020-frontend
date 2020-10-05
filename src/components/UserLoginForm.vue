@@ -8,7 +8,9 @@
       <label for="password" class="form-label">密碼</label>
       <input type="text" class="form-input" v-model="password" required />
     </div>
-    <button type="submit" class="btn login-btn">登入</button>
+    <button type="submit" class="btn login-btn" :disabled="isProcessing">
+      登入
+    </button>
   </form>
 </template>
 
@@ -24,6 +26,10 @@ export default {
       type: String,
       required: true,
     },
+    isProcessing: {
+      type: Boolean,
+      require: true,
+    },
   },
   data() {
     return {
@@ -33,10 +39,10 @@ export default {
   },
   methods: {
     handleSubmit() {
-      const data = JSON.stringify({
+      const data = {
         account: this.account,
         password: this.password,
-      });
+      };
       this.$emit("afterSubmit", data);
     },
   },

@@ -5,6 +5,7 @@
     <UserLoginForm
       :initialAccount="account"
       :initialPassword="password"
+      :isProcessing="isProcessing"
       @afterSubmit="submitLogin"
     />
     <div class="regist-link">
@@ -18,6 +19,8 @@
 
 <script>
 import UserLoginForm from "./../components/UserLoginForm";
+import authorizationAPI from "./../apis/authorization";
+import { Toast } from "./../utils/helpers";
 export default {
   name: "UserLogin",
   components: {
@@ -27,11 +30,36 @@ export default {
     return {
       account: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
-    submitLogin(data) {
-      console.log("data", data);
+    async submitLogin(data) {
+      const { account, password } = data;
+      try {
+        this.isProcessing = true;
+        if (!account || !password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入帳號和密碼",
+          });
+          return;
+        }
+        const response = await authorizationAPI.login({
+          account,
+          password,
+        });
+        const { data } = response;
+        localStorage.setItem("token", data.token);
+        this.$router.push("/tweets");
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "請確認是否輸入正確的帳號及密碼",
+        });
+        this.isProcessing = false;
+      }
     },
   },
 };

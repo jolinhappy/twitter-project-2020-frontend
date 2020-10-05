@@ -20,7 +20,9 @@
       <label for="password-check" class="form-label">密碼確認</label>
       <input type="text" class="form-input" v-model="checkPassword" required />
     </div>
-    <button type="submit" class="btn login-btn">註冊</button>
+    <button type="submit" class="btn login-btn" :disabled="isProcessing">
+      註冊
+    </button>
   </form>
 </template>
 
@@ -47,6 +49,10 @@ export default {
       type: String,
       required: true,
     },
+    isProcessing: {
+      type: Boolean,
+      require: true,
+    },
   },
   data() {
     return {
@@ -59,13 +65,13 @@ export default {
   },
   methods: {
     handleSubmit() {
-      const data = JSON.stringify({
+      const data = {
         account: this.account,
         name: this.name,
         email: this.email,
         password: this.password,
         checkPassword: this.checkPassword,
-      });
+      };
       this.$emit("afterSubmit", data);
     },
   },

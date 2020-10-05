@@ -32,7 +32,7 @@
                 <router-link
                   :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
                   class="reply-user-account"
-                  >{{ tweet.User.account }}</router-link
+                  >@{{ tweet.User.account }}</router-link
                 >
               </div>
             </div>
@@ -67,7 +67,7 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 //需要currentUser的資料，放入使用者頭像(props)
 export default {
   mixins: [fromNowFilter],
@@ -85,8 +85,7 @@ export default {
   methods: {
     handleReplySubmit() {
       this.$emit("after-create-reply", {
-        id: uuidv4(),
-        TweetId: this.tweet.id,
+        tweetId: this.tweet.id,
         comment: this.replyComment,
       });
     },

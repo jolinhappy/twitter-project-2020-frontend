@@ -43,10 +43,12 @@
 const dummyUser = {
   currentUser: {
     id: 1,
-    name: "dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+    name: "root",
+    account: "root",
+    email: "root@example.com",
+    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/jedbridges/128.jpg",
+    cover: "http://lorempixel.com/640/480/cats",
+    isAdmin: true,
   },
   isAuthenticated: true,
 };

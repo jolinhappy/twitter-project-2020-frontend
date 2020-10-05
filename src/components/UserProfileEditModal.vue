@@ -28,6 +28,7 @@
                 <input
                   type="file"
                   id="cover-upload-input"
+                  name="cover"
                   accept="image/*"
                   @change="handleCoverChange"
                 />
@@ -61,6 +62,7 @@
                     type="file"
                     id="photo-upload-input"
                     accept="image/*"
+                    name="avatar"
                     @change="handleAvatarChange"
                   />
                 </label>
@@ -74,6 +76,7 @@
                   type="text"
                   class="form-input name-input"
                   v-model="user.name"
+                  name="name"
                   @input="calculateNameInput"
                   required
                 />
@@ -86,6 +89,7 @@
                 <input
                   type="text"
                   class="form-input description-input"
+                  name="introduction"
                   v-model="user.introduction"
                   @input="calculateIntroductionInput"
                   required

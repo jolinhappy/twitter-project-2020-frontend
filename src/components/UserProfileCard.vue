@@ -18,29 +18,31 @@
       </div>
       <div class="detail-info-part">
         <div class="button-part">
-          <!-- <template v-if="!isMyself"> -->
-          <button type="button" class="message-btn">
-            <img
-              src="https://i.imgur.com/DTgxxcI.png"
-              class="message-icon"
-              alt="message"
-            />
-          </button>
-          <button type="button" class="notice-btn">
-            <img
-              src="https://i.imgur.com/JDdDdr0.png"
-              class="notice-icon"
-              alt="message"
-            />
-          </button>
-          <button type="button" class="following">正在跟隨</button>
-          <button type="button" class="follow">跟隨</button>
-          <!-- </template>
-          <template v-else> -->
-          <button type="button" class="edit-info" @click="showEditModal">
-            編輯個人資料
-          </button>
-          <!-- </template> -->
+          <template v-if="!isMyself">
+            <button type="button" class="message-btn">
+              <img
+                src="https://i.imgur.com/DTgxxcI.png"
+                class="message-icon"
+                alt="message"
+              />
+            </button>
+            <button type="button" class="notice-btn">
+              <img
+                src="https://i.imgur.com/JDdDdr0.png"
+                class="notice-icon"
+                alt="message"
+              />
+            </button>
+            <button type="button" v-if="isFollowed" class="following">
+              正在跟隨
+            </button>
+            <button type="button" v-else class="follow">跟隨</button>
+          </template>
+          <template v-else>
+            <button type="button" class="edit-info" @click="showEditModal">
+              編輯個人資料
+            </button>
+          </template>
         </div>
         <div class="name-info">
           <div class="user-name">{{ user.name }}</div>
@@ -161,6 +163,7 @@ export default {
 .cover-img {
   width: 600px;
   height: 200px;
+  object-fit: cover;
 }
 .user-img-part {
   background: #ffffff;
@@ -261,5 +264,14 @@ export default {
 .followings:hover,
 .followers:hover {
   border-bottom: 1px solid #000;
+}
+.followed:hover {
+  border: 1px solid #ff6000;
+  color: #ff6000;
+  background-color: #ffffff;
+}
+.follow:hover {
+  background-color: #ff6000;
+  color: #f5f8fa;
 }
 </style>

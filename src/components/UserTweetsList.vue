@@ -16,7 +16,7 @@
           >
             <div class="user-name">{{ tweet.User.name }}</div>
           </router-link>
-          <div class="user-account">{{ tweet.User.account }}</div>
+          <div class="user-account">@{{ tweet.User.account }}</div>
           <div class="create-time">．{{ tweet.createdAt | fromNow }}</div>
         </div>
         <div class="tag-user" v-if="pageMode !== 'main'">
@@ -30,7 +30,7 @@
           {{ tweet.description }}
         </router-link>
         <div class="tweet-action">
-          <div class="tweet-reply" @click="showReplyModal(tweet.id)">
+          <div class="tweet-reply" @click="showReplyModal(tweet)">
             <img
               src="https://i.imgur.com/SaR8cz3.png"
               class="reply"
@@ -45,7 +45,7 @@
               src="https://i.imgur.com/8wXFVUF.png"
               class="like"
               alt="like"
-              @click="deleteLike(tweet.id)"
+              @click="deleteLike({ id: tweet.id, tweet })"
             />
             <span class="isLike-count">{{
               tweet.Likes ? tweet.Likes.length : "0"
@@ -56,7 +56,7 @@
               src="https://i.imgur.com/qs9Pe3N.png"
               class="like isliked"
               alt="like"
-              @click="addLike(tweet.id)"
+              @click="addLike({ id: tweet.id, tweet })"
             />
             <span class="like-count">{{
               tweet.Likes ? tweet.Likes.length : "0"
@@ -65,6 +65,7 @@
         </div>
       </div>
     </div>
+    <div class="no-data" v-if="tweets.length < 1">尚無相關推文...</div>
   </div>
 </template>
 
@@ -80,7 +81,9 @@ const dummyUser = {
   isAuthenticated: true,
 };
 import { fromNowFilter } from "./../utils/mixins";
-import { v4 as uuidv4 } from "uuid";
+import tweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
+
 export default {
   mixins: [fromNowFilter],
   props: {
@@ -112,14 +115,17 @@ export default {
       tweet: {},
     };
   },
+  watch: {
+    initialTweets(newValue) {
+      this.tweets = { ...this.tweets, ...newValue };
+    },
+  },
   created() {
     this.fetchCurrentUser();
   },
   methods: {
-    showReplyModal(id) {
-      //TODO用單篇推文的id串GET/api/tweets/:id拿回覆彈窗中的原文推文資料(可先用假資料串)
-      const replyTweet = this.tweets.filter((oneTweet) => oneTweet.id === id);
-      this.tweet = { ...replyTweet }[0];
+    showReplyModal(tweet) {
+      this.tweet = tweet;
       this.$emit("showReplyModal", this.tweet);
     },
     fetchCurrentUser() {
@@ -129,38 +135,57 @@ export default {
       };
       this.isAuthenticated = dummyUser.isAuthenticated;
     },
-    addLike(id) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === id) {
-          return {
-            ...tweet,
-            isLiked: true,
-          };
+    async addLike({ id, tweet }) {
+      try {
+        const { data } = await tweetsAPI.addLike({ tweetId: id });
+        console.log(data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        return tweet;
-      });
-      const likeTweet = this.tweets.filter((oneTweet) => oneTweet.id === id);
-      likeTweet[0].Likes.push({
-        id: uuidv4(),
-        UserId: this.currentUser,
-        TweetId: this.tweet.id,
-      });
+        tweet.isLiked = true;
+        tweet.Likes.push({
+          UserId: this.currentUser,
+        });
+        Toast.fire({
+          icon: "success",
+          title: "對方已經收到您的讚囉！",
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法按讚，請稍後再試",
+        });
+      }
     },
-    deleteLike(id) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === id) {
-          return {
-            ...tweet,
-            isLiked: false,
-          };
-        }
-        return tweet;
-      });
-      const deleteLikeTweet = this.tweets.filter(
-        (oneTweet) => oneTweet.id === id
-      );
-      deleteLikeTweet[0].Likes.splice(0, 1);
-      console.log(deleteLikeTweet);
+    async deleteLike({ id, tweet }) {
+      try {
+        const { data } = await tweetsAPI.deleteLike({ tweetId: id });
+        console.log(data);
+
+        tweet.isLiked = false;
+        tweet.Likes.splice(0, 1);
+        // this.tweets = this.tweets.map((tweet) => {
+        //   if (tweet.id === id) {
+        //     return {
+        //       ...tweet,
+        //       isLiked: false,
+        //     };
+        //   }
+        //   return tweet;
+        // });
+        // const deleteLikeTweet = this.tweets.filter(
+        //   (oneTweet) => oneTweet.id === id
+        // );
+        // deleteLikeTweet[0].Likes.splice(0, 1);
+        // console.log(deleteLikeTweet);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消按讚，請稍後再試",
+        });
+      }
     },
   },
 };
@@ -276,5 +301,10 @@ export default {
 }
 .user-img:hover {
   transform: scale(1.1, 1.1);
+}
+.no-data {
+  font-weight: 500;
+  margin-top: 15px;
+  margin-left: 15px;
 }
 </style>

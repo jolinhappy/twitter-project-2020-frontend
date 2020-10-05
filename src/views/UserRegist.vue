@@ -9,6 +9,7 @@
       :initialPassword="password"
       :initialCheckPassword="checkPassword"
       @afterSubmit="submitRegist"
+      :isProcessing="isProcessing"
     />
     <div class="cancel">
       <p>
@@ -20,6 +21,9 @@
 
 <script>
 import UserInfoForm from "./../components/UserInfoForm";
+import authorizationAPI from "./../apis/authorization";
+import { Toast } from "./../utils/helpers";
+
 export default {
   name: "UserRegist",
   components: {
@@ -32,11 +36,52 @@ export default {
       email: "",
       password: "",
       checkPassword: "",
+      isProcessing: false,
     };
   },
   methods: {
-    submitRegist(data) {
-      console.log("data", data);
+    async submitRegist(data) {
+      try {
+        this.isProcessing = true;
+        const { account, name, email, password, checkPassword } = data;
+        if (!account || !name || !email || !password || !checkPassword) {
+          Toast.fire({
+            icon: "warning",
+            title: "請確認是否已填寫所有欄位",
+          });
+          return;
+        }
+        if (password !== checkPassword) {
+          Toast.fire({
+            icon: "warning",
+            title: "密碼與確認密碼不符",
+          });
+          return;
+        }
+        console.log("data", data);
+        const response = await authorizationAPI.login({
+          account,
+          name,
+          email,
+          password,
+          checkPassword,
+        });
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "註冊成功",
+        });
+        this.$router.push("/login");
+      } catch (error) {
+        this.isProcessing = false;
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法註冊，請稍後再試",
+        });
+      }
     },
   },
 };
