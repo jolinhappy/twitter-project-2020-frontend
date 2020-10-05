@@ -9,7 +9,7 @@
       <input type="text" class="form-input" v-model="password" required />
     </div>
     <button type="submit" class="btn login-btn" :disabled="isProcessing">
-      登入
+      {{ isProcessing ? "登入中..." : "登入" }}
     </button>
   </form>
 </template>

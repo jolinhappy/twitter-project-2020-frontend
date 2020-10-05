@@ -14,7 +14,7 @@
         :to="{ name: 'user-profile', params: { id: follow.id } }"
         class="profile-image"
       >
-        <img :src="follow.avatar" class="user-img" alt="" />
+        <img :src="follow.avatar | emptyImage" class="user-img" alt="" />
       </router-link>
       <div class="user">
         <div class="user-info">
@@ -56,7 +56,9 @@
 </template>
 
 <script>
+import { emptyImageFilter } from "./../utils/mixins";
 export default {
+  mixins: [emptyImageFilter],
   props: {
     initialFollowData: {
       type: Array,

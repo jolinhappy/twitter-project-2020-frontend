@@ -58,16 +58,15 @@ export default {
           });
           return;
         }
-        console.log("data", data);
-        const response = await authorizationAPI.login({
+        const response = await authorizationAPI.regist({
           account,
           name,
           email,
           password,
           checkPassword,
         });
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
+        if (response.data.status === "error") {
+          throw new Error(response.data.status);
         }
         Toast.fire({
           icon: "success",

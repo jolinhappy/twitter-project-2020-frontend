@@ -7,3 +7,11 @@ export const fromNowFilter = {
     }
   }
 }
+
+export const emptyImageFilter = {
+  filters: {
+    emptyImage(src) {
+      return src || 'https://i.imgur.com/qRezTy6.pnge'
+    }
+  }
+}

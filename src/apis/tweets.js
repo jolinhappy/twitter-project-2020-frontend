@@ -15,10 +15,13 @@ export default {
   getTweet({ tweetId }) {
     return apiHelper.get(`/tweets/${tweetId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
+  getTweetReplies({ tweetId }) {
+    return apiHelper.get(`/tweets/${tweetId}/replies`, { headers: { Authorization: `Bearer ${getToken()}` } })
+  },
   addLike({ tweetId }) {
     return apiHelper.post(`/tweets/${tweetId}/like`, null, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
   deleteLike({ tweetId }) {
-    return apiHelper.post(`/tweets/${tweetId}/unlike`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.delete(`/tweets/${tweetId}/unlike`, { headers: { Authorization: `Bearer ${getToken()}` } })
   }
 }

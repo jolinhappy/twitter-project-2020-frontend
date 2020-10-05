@@ -34,52 +34,9 @@ import FollowUsersList from "./../components/FollowUsersList";
 import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import UserNavTab from "./../components/UserNavTab";
+import userAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 
-const dummyFollowings = [
-  {
-    id: 3,
-    email: "user2@example.com",
-    password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
-    name: "user2",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
-    introduction: "I am user2",
-    role: "user",
-    account: "@user2",
-    cover: "http://lorempixel.com/640/480/food",
-    createdAt: "2020-10-01T08:02:45.000Z",
-    updatedAt: "2020-10-01T08:02:45.000Z",
-    Followship: {
-      followerId: 2,
-      followingId: 3,
-      createdAt: "2020-09-30T12:56:39.000Z",
-      updatedAt: "2020-09-30T12:56:39.000Z",
-    },
-    followingId: 3,
-    isFollowed: true,
-  },
-  {
-    id: 4,
-    email: "user3@example.com",
-    password: "$2a$10$Iw6Dxi0uwEhtv80niOrmbO0TDy02HsfobmxiqnhSJOE/9Ywd0VoAK",
-    name: "user3",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/lebinoclard/128.jpg",
-    introduction: "I am user3",
-    role: "user",
-    account: "@user3",
-    cover: "http://lorempixel.com/640/480/nature",
-    createdAt: "2020-10-01T08:02:45.000Z",
-    updatedAt: "2020-10-01T08:02:45.000Z",
-    Followship: {
-      followerId: 2,
-      followingId: 4,
-      createdAt: "2020-09-30T12:56:39.000Z",
-      updatedAt: "2020-09-30T12:56:39.000Z",
-    },
-    followingId: 4,
-    isFollowed: true,
-  },
-];
 const dummyUser = {
   id: 2,
   email: "user1@example.com",
@@ -211,7 +168,8 @@ export default {
     };
   },
   created() {
-    this.fetchFollowings();
+    const { id: userId } = this.$route.params;
+    this.fetchFollowings(userId);
     this.fetchUser();
   },
   methods: {
@@ -221,9 +179,22 @@ export default {
     closeCreateModal() {
       this.createModal = false;
     },
-    //TODO:用params取得id然後用在API取得資料
-    fetchFollowings() {
-      this.followingUsers = dummyFollowings;
+    // //TODO:用params取得id然後用在API取得資料
+    // fetchFollowings() {
+    //   this.followingUsers = dummyFollowings;
+    // },
+    async fetchFollowings(userId) {
+      try {
+        const { data } = await userAPI.getFollowings({ userId });
+        console.log(data);
+        this.followingUsers = data;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得追總者清單，請稍後再試",
+        });
+      }
     },
     fetchUser() {
       const {

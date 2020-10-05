@@ -11,10 +11,19 @@
     </div>
     <div class="profile-content">
       <div class="cover-part">
-        <img :src="user.cover" class="cover-img" alt="cover" />
+        <img
+          :src="user.cover"
+          class="cover-img"
+          alt="cover"
+          v-if="user.cover"
+        />
       </div>
       <div class="user-img-part">
-        <img :src="user.avatar" class="user-main-img" alt="user-img" />
+        <img
+          :src="user.avatar | emptyImage"
+          class="user-main-img"
+          alt="user-img"
+        />
       </div>
       <div class="detail-info-part">
         <div class="button-part">
@@ -50,12 +59,16 @@
           <div class="introduction">{{ user.introduction }}</div>
         </div>
         <div class="follow-info">
-          <router-link to="/users/:id/followings" class="followings-link"
+          <router-link
+            :to="{ name: 'user-followings', params: { id: user.id } }"
+            class="followings-link"
             ><div class="followings">
               <strong>{{ followings.length }}個</strong>追蹤中
             </div></router-link
           >
-          <router-link to="/users/:id/followers" class="followers-link"
+          <router-link
+            :to="{ name: 'user-followers', params: { id: user.id } }"
+            class="followers-link"
             ><div class="followers">
               <strong>{{ followers.length }}位</strong>追蹤者
             </div></router-link
@@ -71,7 +84,10 @@
 
 <script>
 import UserNavTab from "./../components/UserNavTab";
+import { emptyImageFilter } from "./../utils/mixins";
+
 export default {
+  mixins: [emptyImageFilter],
   components: {
     UserNavTab,
   },
@@ -156,9 +172,11 @@ export default {
   color: #657786;
 }
 .cover-part {
-  width: 598px;
+  width: 600px;
+  height: 200px;
   display: flex;
   align-items: center;
+  background: #999999;
 }
 .cover-img {
   width: 600px;
@@ -182,6 +200,7 @@ export default {
   height: 140px;
   object-fit: cover;
   border-radius: 50%;
+  background: #999999;
 }
 
 .detail-info-part {

@@ -3,38 +3,46 @@
     <div class="follow-top-title">
       <p>跟隨誰</p>
     </div>
-    <div class="follow-top-user" v-for="user in topUsers" :key="user.key">
-      <div class="profile-image top-user-image">
-        <img :src="user.avatar" class="user-img top-user" alt="" />
-      </div>
-      <div class="top-user-info">
-        <a href="#" class="user-name-link">
-          <div class="user-name">{{ user.name }}</div>
-        </a>
-        <div class="user-account">{{ user.account }}</div>
-      </div>
-      <div class="follow-btn">
-        <button
-          type="button"
-          class="followed"
-          :name="user.id"
-          v-if="user.isFollowed"
-          @click="deleteFollow(user.id)"
-        >
-          正在跟隨
-        </button>
-        <button
-          type="button"
-          class="follow"
-          name="id"
-          v-else
-          @click="addFollow(user.id)"
-        >
-          跟隨
-        </button>
+    <div class="follow-users-container">
+      <div class="follow-top-user" v-for="user in topUsers" :key="user.key">
+        <div class="profile-image top-user-image">
+          <img
+            :src="user.avatar | emptyImage"
+            class="user-img top-user"
+            alt=""
+          />
+        </div>
+        <div class="top-user-info">
+          <router-link
+            :to="{ name: 'user-profile', params: { id: user.id } }"
+            class="user-name-link"
+          >
+            <div class="user-name">{{ user.name }}</div>
+          </router-link>
+          <div class="user-account">{{ user.account }}</div>
+        </div>
+        <div class="follow-btn">
+          <button
+            type="button"
+            class="followed"
+            :name="user.id"
+            v-if="user.isFollowed"
+            @click="deleteFollow(user.id)"
+          >
+            正在跟隨
+          </button>
+          <button
+            type="button"
+            class="follow"
+            name="id"
+            v-else
+            @click="addFollow(user.id)"
+          >
+            跟隨
+          </button>
+        </div>
       </div>
     </div>
-
     <div class="more">
       <a href="#" class="readMore">顯示更多</a>
     </div>
@@ -44,8 +52,10 @@
 <script>
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
+import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
+  mixins: [emptyImageFilter],
   data() {
     return {
       topUsers: [],
@@ -132,6 +142,11 @@ export default {
   line-height: 45px;
   margin-left: 15px;
 }
+.follow-users-container {
+  width: 350px;
+  height: 350px;
+  overflow: hidden;
+}
 .follow-top-user {
   display: flex;
   align-items: center;
@@ -181,6 +196,7 @@ export default {
   font-size: 15px;
   font-weight: bold;
   color: #ff6000;
+  border-top: 1px solid #e6ecf0;
 }
 .readMore {
   line-height: 45px;

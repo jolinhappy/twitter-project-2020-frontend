@@ -17,7 +17,7 @@
       </li>
       <li class="tab-item">
         <router-link
-          :to="{ name: 'user-likes', params: { id: $route.params.id } }"
+          :to="{ name: 'user-likes', params: $route.params.id }"
           class="tab-link user-likes"
           >喜歡的內容</router-link
         >
@@ -25,12 +25,16 @@
     </template>
     <template v-else>
       <li class="tab-item">
-        <router-link to="/users/:id/followers" class="tab-link user-followers"
+        <router-link
+          :to="{ name: 'user-followers', params: $route.params.id }"
+          class="tab-link user-followers"
           >追隨者</router-link
         >
       </li>
       <li class="tab-item">
-        <router-link to="/users/:id/followings" class="tab-link user-followings"
+        <router-link
+          :to="{ name: 'user-followings', params: $route.params.id }"
+          class="tab-link user-followings"
           >正在追蹤</router-link
         >
       </li>

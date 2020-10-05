@@ -10,7 +10,11 @@
         <div class="tweet-create-container">
           <div class="profile-image">
             <router-link to="/users/:id">
-              <img :src="currentUser.avatar" class="user-img" alt="" />
+              <img
+                :src="currentUser.avatar | emptyImage"
+                class="user-img"
+                alt=""
+              />
             </router-link>
           </div>
           <form class="tweet-input">
@@ -68,6 +72,7 @@ import TweetReplyModal from "./../components/TweetReplyModal";
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
+import { emptyImageFilter } from "./../utils/mixins";
 
 const dummyUser = {
   currentUser: {
@@ -84,6 +89,7 @@ const dummyUser = {
 
 export default {
   name: "home",
+  mixins: [emptyImageFilter],
   components: {
     Sidebar,
     UserTweetsList,
@@ -229,6 +235,7 @@ export default {
     async createReply(payload) {
       try {
         const { tweetId, comment } = payload;
+        console.log(comment);
         if (comment.length === 0) {
           Toast.fire({
             icon: "warning",
@@ -255,7 +262,6 @@ export default {
           tweetId,
           comment,
         });
-        console.log("cqq", this.tweet);
         this.closeReplyModal();
       } catch (error) {
         console.log(error);

@@ -7,13 +7,13 @@ export default {
       password
     })
   },
-  regist() {
+  regist({ account, name, email, password, checkPassword }) {
     return apiHelper.post('/users', {
-      account: "",
-      name: "",
-      email: "",
-      password: "",
-      checkPassword: "",
+      account,
+      name,
+      email,
+      password,
+      checkPassword,
     })
   },
 }

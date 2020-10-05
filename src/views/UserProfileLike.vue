@@ -216,19 +216,43 @@ export default {
         });
       }
     },
-    createReply(payload) {
-      const { id, TweetId, comment } = payload;
-      this.tweet.Replies.push({
-        id,
-        TweetId,
-        User: {
-          id: this.currentUser.id,
-          name: this.currentUser.name,
-        },
-        comment,
-        createdAt: new Date(),
-      });
-      this.closeReplyModal();
+    async createReply(payload) {
+      try {
+        const { tweetId, comment } = payload;
+        if (comment.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入回覆內容",
+          });
+          return;
+        }
+
+        if (Comment.length > 140) {
+          Toast.fire({
+            icon: "warning",
+            title: "回覆字數限制140字以內，請減少輸入的字數",
+          });
+          return;
+        }
+        const { data } = await tweetsAPI.replyTweet({
+          tweetId,
+          comment,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.tweet.Replies.push({
+          tweetId,
+          comment,
+        });
+        this.closeReplyModal();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法回覆推文，請稍後再試看",
+        });
+      }
     },
   },
 };

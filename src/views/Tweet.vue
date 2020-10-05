@@ -20,7 +20,11 @@
         <div class="user-tweet-content">
           <div class="tweet-info">
             <div class="profile-image">
-              <img :src="tweet.User.avatar" class="user-img" alt="" />
+              <img
+                :src="tweet.User.avatar | emptyImage"
+                class="user-img"
+                alt=""
+              />
             </div>
             <div class="user-info">
               <a href="#" class="user-name-link">
@@ -42,7 +46,7 @@
             >回覆
           </div>
           <div class="user-like-count">
-            <strong>{{ tweet.LikedUsers.length }}</strong
+            <strong>{{ tweet.Likes.length }}</strong
             >喜歡次數
           </div>
         </div>
@@ -109,141 +113,26 @@ import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import TweetReplyModal from "./../components/TweetReplyModal";
 import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from "./../utils/mixins";
 import { v4 as uuidv4 } from "uuid";
+import tweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
 
-const dummyCurrentUser = {
-  currentUser: {
-    id: 1,
-    name: "dummy",
-    account: "@dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  },
-  isAuthenticated: true,
-};
-const dummyTweet = {
-  id: 2,
-  UserId: 2,
-  description: "Voluptatem quibusdam perspiciatis non est fugit et.",
-  createdAt: "2020-10-03T03:27:11.000Z",
-  updatedAt: "2020-10-03T03:27:11.000Z",
-  User: {
-    id: 2,
-    email: "user1@example.com",
-    password: "$2a$10$nB2zP5szxWym4mgxztzDf.bDnXWcZF8FCkqgVlObo6E6WFpBeKZ1y",
-    name: "user1",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/bublienko/128.jpg",
-    introduction: "I am user1",
-    role: "user",
-    account: "@user1",
-    cover: "http://lorempixel.com/640/480/sports",
-    createdAt: "2020-10-03T03:27:10.000Z",
-    updatedAt: "2020-10-03T03:27:10.000Z",
-  },
-  Replies: [
-    {
-      id: 4,
-      UserId: 6,
-      TweetId: 2,
-      comment:
-        "Pariatur voluptatem non. Et minima quis in voluptas est ipsa sit dicta nesciunt. Beatae soluta et consequatur pariatur perferendis omnis esse. Laudantium voluptas voluptas blanditiis repellendus optio quibusdam totam et velit. Repellat facilis animi voluptatibus et ab quam omnis. Eius sint et quis sint ratione qui harum asperiores et.",
-      createdAt: "2020-10-03T03:27:11.000Z",
-      updatedAt: "2020-10-03T03:27:11.000Z",
-    },
-    {
-      id: 5,
-      UserId: 5,
-      TweetId: 2,
-      comment: "nisi",
-      createdAt: "2020-10-03T03:27:11.000Z",
-      updatedAt: "2020-10-03T03:27:11.000Z",
-    },
-    {
-      id: 6,
-      UserId: 3,
-      TweetId: 2,
-      comment:
-        "Id voluptas quis quibusdam facere quod ut sit dicta dolore.\nEt illo temporibus.",
-      createdAt: "2020-10-03T03:27:11.000Z",
-      updatedAt: "2020-10-03T03:27:11.000Z",
-    },
-  ],
-  LikedUsers: [],
-  isLiked: false,
-};
-const dummyReplies = [
-  {
-    id: 1,
-    UserId: 3,
-    TweetId: 1,
-    comment: "alias",
-    createdAt: "2020-10-03T03:27:11.000Z",
-    updatedAt: "2020-10-03T03:27:11.000Z",
-    User: {
-      id: 3,
-      email: "user2@example.com",
-      password: "$2a$10$/idL7fvEx1KV5ZYBvaXXCef6R54PMZwTtpalFqZ7CcTuvT7AUAGfe",
-      name: "user2",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/jennyshen/128.jpg",
-      introduction: "I am user2",
-      role: "user",
-      account: "@user2",
-      cover: "http://lorempixel.com/640/480/nature",
-      createdAt: "2020-10-03T03:27:10.000Z",
-      updatedAt: "2020-10-03T03:27:10.000Z",
-    },
-  },
-  {
-    id: 2,
-    UserId: 4,
-    TweetId: 1,
-    comment:
-      "Porro similique corporis dolorem.\nAliquid cum molestiae consequatur occaecati.",
-    createdAt: "2020-10-03T03:27:11.000Z",
-    updatedAt: "2020-10-03T03:27:11.000Z",
-    User: {
-      id: 4,
-      email: "user3@example.com",
-      password: "$2a$10$mY2Q2EAdWvfwcHyBYefIteWMl2rrzwidezIYeX5XyVTEpG8FZ7eMO",
-      name: "user3",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/sweetdelisa/128.jpg",
-      introduction: "I am user3",
-      role: "user",
-      account: "@user3",
-      cover: "http://lorempixel.com/640/480/people",
-      createdAt: "2020-10-03T03:27:11.000Z",
-      updatedAt: "2020-10-03T03:27:11.000Z",
-    },
-  },
-  {
-    id: 3,
-    UserId: 2,
-    TweetId: 1,
-    comment: "fugiat",
-    createdAt: "2020-10-03T03:27:11.000Z",
-    updatedAt: "2020-10-03T03:27:11.000Z",
-    User: {
-      id: 2,
-      email: "user1@example.com",
-      password: "$2a$10$nB2zP5szxWym4mgxztzDf.bDnXWcZF8FCkqgVlObo6E6WFpBeKZ1y",
-      name: "user1",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/bublienko/128.jpg",
-      introduction: "I am user1",
-      role: "user",
-      account: "@user1",
-      cover: "http://lorempixel.com/640/480/sports",
-      createdAt: "2020-10-03T03:27:10.000Z",
-      updatedAt: "2020-10-03T03:27:10.000Z",
-    },
-  },
-];
+// const dummyCurrentUser = {
+//   currentUser: {
+//     id: 1,
+//     name: "dummy",
+//     account: "@dummy",
+//     email: "123@hhhh.com",
+//     avatar:
+//       "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+//   },
+//   isAuthenticated: true,
+// };
+
 export default {
   name: "Tweet",
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   components: {
     Sidebar,
     UserTweetsList,
@@ -264,13 +153,15 @@ export default {
     };
   },
   created() {
-    this.fetchCurrentUser();
-    this.fetchTweet();
-    this.fetchReplies();
+    const { id: tweetId } = this.$route.params;
+    // this.fetchCurrentUser();
+    this.fetchTweet(tweetId);
+    this.fetchReplies(tweetId);
   },
   methods: {
     showCreateModal() {
       this.createModal = true;
+      console.log(this.createModal);
     },
     closeCreateModal() {
       this.createModal = false;
@@ -284,49 +175,143 @@ export default {
     closeReplyModal() {
       this.replyModal = false;
     },
-    fetchTweet() {
-      this.tweet = dummyTweet;
+    async fetchTweet(tweetId) {
+      try {
+        const { data } = await tweetsAPI.getTweet({ tweetId });
+        this.tweet = data;
+        console.log(this.tweet);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文資料，請稍後再試",
+        });
+      }
     },
-    fetchReplies() {
-      this.tweets = dummyReplies;
+    async fetchReplies(tweetId) {
+      try {
+        const { data } = await tweetsAPI.getTweetReplies({ tweetId });
+        this.tweets = data;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文的回覆內容，請稍後再試",
+        });
+      }
     },
-    fetchCurrentUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyCurrentUser.currentUser,
-      };
-      this.isAuthenticated = dummyCurrentUser.isAuthenticated;
+    // fetchCurrentUser() {
+    //   this.currentUser = {
+    //     ...this.currentUser,
+    //     ...dummyCurrentUser.currentUser,
+    //   };
+    //   this.isAuthenticated = dummyCurrentUser.isAuthenticated;
+    // },
+    async creatTweetFromModal(newDescription) {
+      try {
+        if (newDescription.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入推文內容",
+          });
+          return;
+        }
+        if (newDescription.length > 140) {
+          Toast.fire({
+            icon: "warning",
+            title: "推文字數限制140字以內，請減少輸入的字數",
+          });
+          return;
+        }
+        const { data } = await tweetsAPI.createTweet({
+          description: newDescription,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.tweets.splice(0, 0, {
+          id: uuidv4(),
+          userId: this.currentUser.id,
+          createdAt: new Date(),
+          description: newDescription,
+          User: {
+            name: this.currentUser.name,
+            account: this.currentUser.account,
+            avatar: this.currentUser.avatar,
+          },
+        });
+        this.CreateFinish();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法新增推文，請稍後再試看",
+        });
+      }
     },
-    creatTweetFromModal(newDescription) {
-      console.log("new", newDescription);
-      this.tweets.push({
-        id: uuidv4(),
-        userId: this.currentUser.id,
-        createdAt: new Date(),
-        description: newDescription,
-        User: {
-          name: this.currentUser.name,
-          account: this.currentUser.account,
-          avatar: this.currentUser.avatar,
-        },
-      });
-      this.CreateFinish();
+    //單篇推文底下的回覆推文功能暫時PASS，只做主要推文回覆
+    async createReply(payload) {
+      try {
+        const { tweetId, comment } = payload;
+        if (comment.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入回覆內容",
+          });
+          return;
+        }
+
+        if (Comment.length > 140) {
+          Toast.fire({
+            icon: "warning",
+            title: "回覆字數限制140字以內，請減少輸入的字數",
+          });
+          return;
+        }
+        const { data } = await tweetsAPI.replyTweet({
+          tweetId,
+          comment,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.tweets.splice(0, 0, {
+          tweetId,
+          User: {
+            id: this.currentUser.id,
+            name: this.currentUser.name,
+            avatar: this.currentUser.avatar,
+            acount: this.currentUser.account,
+          },
+          comment,
+          createdAt: new Date(),
+        });
+        this.closeReplyModal();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法回覆推文，請稍後再試看",
+        });
+      }
     },
-    createReply(payload) {
-      const { id, TweetId, comment } = payload;
-      console.log(this.tweet.Replies);
-      this.tweet.Replies.push({
-        id,
-        TweetId,
-        User: {
-          id: this.currentUser.id,
-          name: this.currentUser.name,
-        },
-        comment,
-        createdAt: new Date(),
-      });
-      this.closeReplyModal();
-    },
+    // createReply(payload) {
+    //   const { id, TweetId, comment } = payload;
+    //   console.log(this.tweet.Replies);
+    //   this.tweets.splice(0, 0, {
+    //     id,
+    //     TweetId,
+    //     User: {
+    //       id: this.currentUser.id,
+    //       name: this.currentUser.name,
+    //       avatar: this.currentUser.avatar,
+    //       acount: this.currentUser.account,
+    //     },
+    //     comment,
+    //     createdAt: new Date(),
+    //   });
+    //   this.closeReplyModal();
+    // },
     addLike() {
       this.tweet.isLiked = true;
       this.tweet.LikedUsers.push({

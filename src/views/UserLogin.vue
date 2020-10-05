@@ -45,11 +45,17 @@ export default {
           });
           return;
         }
-        const response = await authorizationAPI.login({
+        const { data } = await authorizationAPI.login({
           account,
           password,
         });
-        const { data } = response;
+        if (data.status === "error") {
+          Toast.fire({
+            icon: "error",
+            title: "請確認帳號密碼是否正確",
+          });
+          throw new Error(data.message);
+        }
         localStorage.setItem("token", data.token);
         this.$router.push("/tweets");
       } catch (error) {

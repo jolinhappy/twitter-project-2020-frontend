@@ -5,7 +5,7 @@
         <router-link
           :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
         >
-          <img :src="tweet.User.avatar" class="user-img" alt="" />
+          <img :src="tweet.User.avatar | emptyImage" class="user-img" alt="" />
         </router-link>
       </div>
       <div class="tweet">
@@ -21,13 +21,13 @@
         </div>
         <div class="tag-user" v-if="pageMode !== 'main'">
           <div class="tag-text">回覆</div>
-          <a href="#" class="tag-user-acount">{{ mainTweet.User.account }}</a>
+          <a href="#" class="tag-user-acount">@{{ mainTweet.User.account }}</a>
         </div>
         <router-link
           :to="{ name: 'tweet', params: { id: tweet.id } }"
           class="tweet-content"
         >
-          {{ tweet.description }}
+          {{ tweet.description || tweet.comment }}
         </router-link>
         <div class="tweet-action">
           <div class="tweet-reply" @click="showReplyModal(tweet)">
@@ -65,7 +65,9 @@
         </div>
       </div>
     </div>
-    <div class="no-data" v-if="tweets.length < 1">尚無相關推文...</div>
+    <div class="no-data-container">
+      <div class="no-data" v-if="tweets.length < 1">尚無相關推文...</div>
+    </div>
   </div>
 </template>
 
@@ -81,11 +83,12 @@ const dummyUser = {
   isAuthenticated: true,
 };
 import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from "./../utils/mixins";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     pageMode: {
       type: String,
@@ -196,6 +199,12 @@ export default {
   width: 600px;
   height: auto;
 }
+.tweets-list {
+  width: 600px;
+  height: 800px;
+  border-left: 1px solid #e6ecf0;
+  border-right: 1px solid #e6ecf0;
+}
 .tweet-list-container {
   width: 600px;
   height: auto;
@@ -302,8 +311,13 @@ export default {
 .user-img:hover {
   transform: scale(1.1, 1.1);
 }
+.no-data-container {
+  display: flex;
+  justify-content: center;
+}
 .no-data {
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 25px;
   margin-top: 15px;
   margin-left: 15px;
 }

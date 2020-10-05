@@ -17,6 +17,8 @@
 
 <script>
 import UserLoginForm from "./../components/UserLoginForm";
+import adminAPI from "./../apis/admin";
+import { Toast } from "./../utils/helpers";
 export default {
   components: {
     UserLoginForm,
@@ -25,12 +27,43 @@ export default {
     return {
       account: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
-    submitLogin(data) {
-      console.log("data", data);
+    async submitLogin(data) {
+      const { account, password } = data;
+      try {
+        this.isProcessing = true;
+        if (!account || !password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入帳號和密碼",
+          });
+          return;
+        }
+        const response = await adminAPI.adminLogin({
+          account,
+          password,
+        });
+        const { data } = response;
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        localStorage.setItem("token", data.token);
+        this.$router.push("/admin/tweets");
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "請確認是否輸入正確的帳號及密碼",
+        });
+        this.isProcessing = false;
+      }
     },
+    // submitLogin(data) {
+    //   console.log("data", data);
+    // },
   },
 };
 </script>
