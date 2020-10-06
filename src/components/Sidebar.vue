@@ -117,14 +117,14 @@
           </button>
         </div>
         <div class="logout-item">
-          <router-link to="/login" class="logout-link">
+          <div class="logout-button" @click="logout">
             <img
               src="https://i.imgur.com/uxgzcrv.png"
               class="option"
               alt="logout"
             />
             <span>登出</span>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -151,6 +151,10 @@ export default {
   methods: {
     showCreateModal() {
       this.$emit("showCreateModal");
+    },
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/login");
     },
   },
 };
@@ -222,11 +226,12 @@ export default {
   background-color: #f75000;
 }
 
-.logout-link {
+.logout-button {
   display: flex;
   margin-bottom: 15px;
+  cursor: pointer;
 }
-.logout-link:hover {
+.logout-button:hover {
   color: #657786;
 }
 

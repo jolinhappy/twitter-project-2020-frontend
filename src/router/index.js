@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'user-login',
-    component: UserLogin
+    name: 'root',
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -90,10 +90,28 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  console.log('to', to)
+router.beforeEach(async (to, from, next) => {
   console.log('from', from)
-  store.dispatch('fetchCurrentUser')
+  const token = localStorage.getItem('token')
+  const tokenInStore = store.state.token
+  let isAuthenticated = store.state.isAuthenticated
+  console.log(isAuthenticated)
+  //如果本地token和store裡面的token不同，重新用getCurrentUserAPI驗證身分
+  if (token && token !== tokenInStore) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+  const pathWithoutAuthentication = ['user-login', 'user-regist']
+
+  //未驗證且想要進入登入註冊頁以外的頁面的情況
+  if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
+    next('/login')
+    return
+  }
+  //已經驗證但又往登入頁及註冊頁移動一率導回首頁
+  if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+    next('/tweets')
+    return
+  }
   next()
 })
 export default router
