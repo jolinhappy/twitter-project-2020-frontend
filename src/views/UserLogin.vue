@@ -49,6 +49,7 @@ export default {
           account,
           password,
         });
+        console.log(data);
         if (data.status === "error") {
           Toast.fire({
             icon: "error",
@@ -57,6 +58,7 @@ export default {
           throw new Error(data.message);
         }
         localStorage.setItem("token", data.token);
+        this.$store.commit("setCurrentUser", data.user);
         this.$router.push("/tweets");
       } catch (error) {
         console.log(error);

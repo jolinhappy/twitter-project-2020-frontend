@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar :isAdmin="isAdmin" />
+    <Sidebar
+      :isAdmin="isAdmin"
+      :admin-page="adminPage"
+      :selected-page="selectedPage"
+    />
     <div class="admin-tweets">
       <div class="admin-tweets-container">
         <div class="admin-tweets-title">
@@ -72,6 +76,8 @@ export default {
     return {
       isAdmin: true,
       adminTweets: [],
+      adminPage: true,
+      selectedPage: "adminTweets",
     };
   },
   created() {

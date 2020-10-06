@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="account-setting">
       <div class="account-setting-container">
         <div class="setting-title">
@@ -62,6 +62,8 @@
     <TweetCreateModal
       v-if="createModal"
       @after-click-close-create="closeCreateModal"
+      :initial-description="description"
+      @afterSubmit="creatTweetFromModal"
     />
   </div>
 </template>
@@ -70,38 +72,25 @@
 <script>
 import Sidebar from "./../components/Sidebar";
 import TweetCreateModal from "./../components/TweetCreateModal";
+// import { v4 as uuidv4 } from "uuid";
+import tweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "dummy",
-    account: "@dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  },
-  isAuthenticated: true,
-};
 export default {
   components: {
     Sidebar,
     TweetCreateModal,
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       createModal: false,
-      currentUser: {
-        id: -1,
-        name: "",
-        account: "",
-        email: "",
-        avatar: "",
-      },
-      isAuthenticated: false,
+      selectedPage: "setting",
+      description: "",
     };
-  },
-  created() {
-    this.fetchCurrentUser();
   },
   methods: {
     showCreateModal() {
@@ -110,31 +99,10 @@ export default {
     closeCreateModal() {
       this.createModal = false;
     },
-    fetchCurrentUser() {
-      const { id, name, account, email, avatar } = dummyUser.currentUser;
-      this.currentUser = {
-        id,
-        name,
-        account,
-        email,
-        avatar,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
+    CreateFinish() {
+      this.$router.push({ name: "tweets-home" });
     },
-    handleSubmit(e) {
-      console.log("s", e);
-      const form = e.target;
-      console.log("dd", form);
-      const formData = new FormData(form);
-      // for (let [name] of formData.entries()) {
-      //   console.log(name);
-      // }
-      const a = formData.entries();
-      console.log("d", a);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
-      }
-      // console.log("AA", formData);
+    handleSubmit() {
       const data = JSON.stringify({
         account: this.currentUser.account,
         name: this.currentUser.name,
@@ -143,6 +111,37 @@ export default {
         checkPassword: this.currentUser.checkPassword,
       });
       console.log("data", data);
+    },
+    async creatTweetFromModal(newDescription) {
+      try {
+        if (newDescription.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入推文內容",
+          });
+          return;
+        }
+        if (newDescription.length > 140) {
+          Toast.fire({
+            icon: "warning",
+            title: "推文字數限制140字以內，請減少輸入的字數",
+          });
+          return;
+        }
+        const { data } = await tweetsAPI.createTweet({
+          description: newDescription,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.CreateFinish();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法新增推文，請稍後再試看",
+        });
+      }
     },
   },
 };

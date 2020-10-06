@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar @showCreateModal="showCreateModal" :selected-page="selectedPage" />
     <div class="user-tweet">
       <div class="user-tweet-card">
         <div class="tweet-title">
@@ -78,7 +78,7 @@
       </div>
       <UserTweetsList
         @showReplyModal="showReplyModal"
-        :pageMode="pageMode"
+        :page-mode="pageMode"
         :initial-tweets="tweets"
         :mainTweet="tweet"
       />
@@ -117,18 +117,7 @@ import { emptyImageFilter } from "./../utils/mixins";
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
-
-// const dummyCurrentUser = {
-//   currentUser: {
-//     id: 1,
-//     name: "dummy",
-//     account: "@dummy",
-//     email: "123@hhhh.com",
-//     avatar:
-//       "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-//   },
-//   isAuthenticated: true,
-// };
+import { mapState } from "vuex";
 
 export default {
   name: "Tweet",
@@ -140,6 +129,9 @@ export default {
     TweetCreateModal,
     TweetReplyModal,
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       createModal: false,
@@ -149,12 +141,12 @@ export default {
       description: "",
       tweet: {},
       tweets: [],
-      currentUser: {},
+      // currentUser: {},
+      selectedPage: "",
     };
   },
   created() {
     const { id: tweetId } = this.$route.params;
-    // this.fetchCurrentUser();
     this.fetchTweet(tweetId);
     this.fetchReplies(tweetId);
   },
@@ -200,13 +192,6 @@ export default {
         });
       }
     },
-    // fetchCurrentUser() {
-    //   this.currentUser = {
-    //     ...this.currentUser,
-    //     ...dummyCurrentUser.currentUser,
-    //   };
-    //   this.isAuthenticated = dummyCurrentUser.isAuthenticated;
-    // },
     async creatTweetFromModal(newDescription) {
       try {
         if (newDescription.length === 0) {

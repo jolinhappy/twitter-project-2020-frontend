@@ -1,16 +1,15 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="main-profile">
       <UserProfileCard
         @showEditModal="showEditModal"
         :user="user"
-        :followers="followers"
-        :followings="followings"
-        :tweets="tweets"
+        :initial-followers="followers"
+        :initial-followings="followings"
         :isMyself="isMyself"
-        :isFollowed="isFollowed"
+        :initial-isFollowed="isFollowed"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"
@@ -90,6 +89,7 @@ export default {
       followings: [],
       isMyself: false,
       isFollowed: false,
+      selectedPage: "profile",
     };
   },
   created() {

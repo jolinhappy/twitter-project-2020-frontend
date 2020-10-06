@@ -5,13 +5,18 @@
     </div>
     <div class="follow-users-container">
       <div class="follow-top-user" v-for="user in topUsers" :key="user.key">
-        <div class="profile-image top-user-image">
-          <img
-            :src="user.avatar | emptyImage"
-            class="user-img top-user"
-            alt=""
-          />
-        </div>
+        <router-link
+          :to="{ name: 'user-profile', params: { id: user.id } }"
+          class="user-avatar-link"
+        >
+          <div class="profile-image top-user-image">
+            <img
+              :src="user.avatar | emptyImage"
+              class="user-img top-user"
+              alt=""
+            />
+          </div>
+        </router-link>
         <div class="top-user-info">
           <router-link
             :to="{ name: 'user-profile', params: { id: user.id } }"
@@ -230,5 +235,8 @@ export default {
   font-size: 15px;
   font-weight: bold;
   color: #657786;
+}
+.user-img:hover {
+  transform: scale(1.1, 1.1);
 }
 </style>

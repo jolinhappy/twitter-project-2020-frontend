@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar :isAdmin="isAdmin" />
+    <Sidebar
+      :isAdmin="isAdmin"
+      :admin-page="adminPage"
+      :selected-page="selectedPage"
+    />
     <div class="admin-users">
       <div class="admin-tweets-container">
         <div class="admin-tweets-title">
@@ -10,7 +14,7 @@
         <!-- list-card -->
         <div class="user-cards-container">
           <router-link
-            to="/users/:id"
+            :to="{ name: 'user-profile', params: { id: user.id } }"
             class="user-profile-link"
             v-for="user in adminUsers"
             :key="user.id"
@@ -74,8 +78,8 @@
 <script>
 import Sidebar from "./../components/Sidebar";
 import { emptyImageFilter } from "./../utils/mixins";
-// import adminAPI from "./../apis/admin";
-// import { Toast } from "./../utils/helpers";
+import adminAPI from "./../apis/admin";
+import { Toast } from "./../utils/helpers";
 
 export default {
   mixins: [emptyImageFilter],
@@ -86,26 +90,28 @@ export default {
     return {
       isAdmin: true,
       adminUsers: [],
+      adminPage: true,
+      selectedPage: "adminUsers",
     };
   },
-  // created() {
-  //   this.fetchAdminUsers();
-  // },
-  // methods: {
-  //   async fetchAdminUsers() {
-  //     try {
-  //       const { data } = await adminAPI.getUsers();
-  //       console.log(data);
-  //       this.adminUsers = data;
-  //     } catch (error) {
-  //       console.log(error);
-  //       Toast.fire({
-  //         icon: "error",
-  //         title: "無法讀取使用者資料，請稍後再試",
-  //       });
-  //     }
-  //   },
-  // },
+  created() {
+    this.fetchAdminUsers();
+  },
+  methods: {
+    async fetchAdminUsers() {
+      try {
+        const { data } = await adminAPI.getUsers();
+        console.log(data);
+        this.adminUsers = data;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法讀取使用者資料，請稍後再試",
+        });
+      }
+    },
+  },
 };
 </script>
 
@@ -137,9 +143,9 @@ export default {
 }
 
 .user-cards-container {
-  width: 1200px;
+  width: auto;
   height: auto;
-  margin: 10px auto;
+  margin: 10px 10px;
   display: flex;
   flex-wrap: wrap;
 }

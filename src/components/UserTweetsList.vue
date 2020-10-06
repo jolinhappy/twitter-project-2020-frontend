@@ -127,7 +127,9 @@ export default {
     this.fetchCurrentUser();
   },
   methods: {
+    //tweet頁面底下留言功能暫時PASS，另外因為是comment不是description，回覆窗內文無法套用
     showReplyModal(tweet) {
+      console.log(tweet);
       this.tweet = tweet;
       this.$emit("showReplyModal", this.tweet);
     },
@@ -201,16 +203,21 @@ export default {
 }
 .tweets-list {
   width: 600px;
-  height: 800px;
+  height: 100%;
+  flex: 1;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 .tweet-list-container {
   width: 600px;
   height: auto;
-  border: 1px solid #e6ecf0;
+  border-top: 1px solid #e6ecf0;
+  border-bottom: 1px solid #e6ecf0;
   display: flex;
   padding-top: 10px;
+}
+.tweet-list-container:hover {
+  background: #e6ecf0;
 }
 .tweet-info {
   display: flex;

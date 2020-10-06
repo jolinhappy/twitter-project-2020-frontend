@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar
+      @showCreateModal="showCreateModal"
+      :admin-page="adminPage"
+      :selected-page="selectedPage"
+    />
     <div class="main-tweets">
       <div class="tweet-create">
         <div class="tweet-title">
@@ -31,6 +35,7 @@
               type="submit"
               class="tweet-create-btn"
               @click.stop.prevent="createTweet"
+              :disabled="isProcessing"
             >
               推文
             </button>
@@ -39,7 +44,7 @@
       </div>
       <UserTweetsList
         @showReplyModal="showReplyModal"
-        :pageMode="pageMode"
+        :page-mode="pageMode"
         :initial-tweets="tweets"
         :initial-tweet="tweet"
       />
@@ -73,19 +78,7 @@ import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root",
-    account: "root",
-    email: "root@example.com",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/jedbridges/128.jpg",
-    cover: "http://lorempixel.com/640/480/cats",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
+import { mapState } from "vuex";
 
 export default {
   name: "home",
@@ -99,17 +92,22 @@ export default {
   },
   data() {
     return {
-      currentUser: {},
       createModal: false,
       replyModal: false,
       pageMode: "main",
       tweets: [],
       description: "",
       tweet: {},
+      adminPage: false,
+      selectedPage: "home",
+      isProcessing: false,
     };
   },
+  computed: {
+    //從vuex拿取現在登入者的資料
+    ...mapState(["currentUser"]),
+  },
   created() {
-    this.fetchCurrentUser();
     this.fetchUserTweets();
   },
   methods: {
@@ -126,13 +124,6 @@ export default {
     closeReplyModal() {
       this.replyModal = false;
     },
-    fetchCurrentUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
-    },
     async fetchUserTweets() {
       try {
         const response = await tweetsAPI.getTweets();
@@ -148,6 +139,7 @@ export default {
     },
     async createTweet() {
       try {
+        this.isProcessing = true;
         if (this.description.length === 0) {
           Toast.fire({
             icon: "warning",
@@ -179,7 +171,7 @@ export default {
             avatar: this.currentUser.avatar,
           },
         });
-
+        this.isProcessing = false;
         this.description = "";
       } catch (error) {
         console.log(error);
@@ -187,6 +179,7 @@ export default {
           icon: "error",
           title: "無法新增推文，請稍後再試",
         });
+        this.isProcessing = false;
       }
     },
     async creatTweetFromModal(newDescription) {

@@ -14,11 +14,16 @@
     </div>
     <div class="form-label-group">
       <label for="password" class="form-label">密碼</label>
-      <input type="text" class="form-input" v-model="password" required />
+      <input type="password" class="form-input" v-model="password" required />
     </div>
     <div class="form-label-group">
       <label for="password-check" class="form-label">密碼確認</label>
-      <input type="text" class="form-input" v-model="checkPassword" required />
+      <input
+        type="password"
+        class="form-input"
+        v-model="checkPassword"
+        required
+      />
     </div>
     <button type="submit" class="btn login-btn" :disabled="isProcessing">
       註冊

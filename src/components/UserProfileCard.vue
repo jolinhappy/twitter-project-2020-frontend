@@ -42,10 +42,22 @@
                 alt="message"
               />
             </button>
-            <button type="button" v-if="isFollowed" class="following">
+            <button
+              type="button"
+              v-if="isFollowed"
+              class="following"
+              @click="deletFollow(user.id)"
+            >
               正在跟隨
             </button>
-            <button type="button" v-else class="follow">跟隨</button>
+            <button
+              type="button"
+              v-else
+              class="follow"
+              @click="addFollow(user.id)"
+            >
+              跟隨
+            </button>
           </template>
           <template v-else>
             <button type="button" class="edit-info" @click="showEditModal">
@@ -85,6 +97,7 @@
 <script>
 import UserNavTab from "./../components/UserNavTab";
 import { emptyImageFilter } from "./../utils/mixins";
+import userAPI from "./../apis/users";
 
 export default {
   mixins: [emptyImageFilter],
@@ -96,15 +109,11 @@ export default {
       type: Object,
       required: true,
     },
-    followings: {
+    initialFollowings: {
       type: Array,
       required: true,
     },
-    followers: {
-      type: Array,
-      required: true,
-    },
-    tweets: {
+    initialFollowers: {
       type: Array,
       required: true,
     },
@@ -112,17 +121,45 @@ export default {
       type: Boolean,
       required: true,
     },
-    isFollowed: {
+    initialIsFollowed: {
       type: Boolean,
       required: true,
     },
   },
   data() {
-    return {};
+    return {
+      tweets: [],
+      followers: this.initialFollowers,
+      followings: this.initialFollowings,
+      isFollowed: this.initialIsFollowed,
+    };
+  },
+  created() {
+    const { id: userId } = this.$route.params;
+    this.fetchUserTweets(userId);
   },
   methods: {
     showEditModal() {
       this.$emit("showEditModal");
+    },
+    async fetchUserTweets(userId) {
+      try {
+        const { data } = await userAPI.getUserTweets({ userId });
+        console.log(data);
+        this.tweets = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    addFollow(id) {
+      this.isFollowed = true;
+      console.log(id);
+      this.followers.push({});
+    },
+    deletFollow(id) {
+      console.log(id);
+      this.isFollowed = false;
+      this.followers.splice(0, 1);
     },
   },
 };

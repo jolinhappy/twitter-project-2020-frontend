@@ -6,14 +6,22 @@
       </router-link>
       <div class="sidebar-options">
         <div class="sidebar-list">
-          <template v-if="!currentUser.isAdmin">
+          <template v-if="!adminPage">
             <div class="sidebar-item">
               <router-link to="/tweets" class="sidebar-link sidebar-home">
                 <img
                   src="https://i.imgur.com/WnH29Ya.png"
                   class="option"
                   alt="home"
+                  v-if="selectedPage === 'home'"
                 />
+                <img
+                  src="https://i.imgur.com/pXjwuqG.png"
+                  class="option"
+                  alt="home-unselectd"
+                  v-else
+                />
+
                 <span>首頁</span>
               </router-link>
             </div>
@@ -23,9 +31,19 @@
                 class="sidebar-link sidebar-info"
               >
                 <img
-                  src="https://i.imgur.com/I8IlDOt.png"
+                  src="https://i.imgur.com/tS096bA.png"
                   class="option"
                   alt="user-info"
+                  v-if="
+                    selectedPage === 'profile' &&
+                    $route.params.id === currentUser.id
+                  "
+                />
+                <img
+                  src="https://i.imgur.com/I8IlDOt.png"
+                  class="option"
+                  alt="user-info-unselected"
+                  v-else
                 />
                 <span>個人資料</span>
               </router-link>
@@ -33,9 +51,16 @@
             <div class="sidebar-item">
               <router-link to="/setting" class="sidebar-link sidebar-option">
                 <img
-                  src="https://i.imgur.com/64D9EP9.png"
+                  src="https://i.imgur.com/wHeyts0.png"
                   class="option"
                   alt="option"
+                  v-if="selectedPage === 'setting'"
+                />
+                <img
+                  src="https://i.imgur.com/64D9EP9.png"
+                  class="option"
+                  alt="option-unseleted"
+                  v-else
                 />
                 <span>設定</span>
               </router-link>
@@ -50,7 +75,14 @@
                 <img
                   src="https://i.imgur.com/WnH29Ya.png"
                   class="option"
-                  alt="home"
+                  alt="tweets"
+                  v-if="selectedPage === 'adminTweets'"
+                />
+                <img
+                  src="https://i.imgur.com/pXjwuqG.png"
+                  class="option"
+                  alt="tweets-unselectd"
+                  v-else
                 />
                 <span>推文清單</span>
               </router-link>
@@ -61,9 +93,16 @@
                 class="sidebar-link sidebar-admin-user"
               >
                 <img
+                  src="https://i.imgur.com/tS096bA.png"
+                  class="option"
+                  alt="users"
+                  v-if="selectedPage === 'adminUsers'"
+                />
+                <img
                   src="https://i.imgur.com/I8IlDOt.png"
                   class="option"
-                  alt="user-info"
+                  alt="users-unselected"
+                  v-else
                 />
                 <span>使用者列表</span>
               </router-link>
@@ -72,7 +111,7 @@
           <button
             class="show-tweet-modal"
             @click="showCreateModal"
-            v-if="!isAdmin"
+            v-if="!adminPage"
           >
             推文
           </button>
@@ -93,45 +132,23 @@
 </template>
 
 <script>
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  },
-  isAuthenticated: true,
-};
+import { mapState } from "vuex";
+
 export default {
   props: {
-    isAdmin: {
+    adminPage: {
       type: Boolean,
       require: true,
     },
+    selectedPage: {
+      type: String,
+      required: true,
+    },
   },
-  data() {
-    return {
-      currentUser: {
-        id: -1,
-        name: " ",
-        email: "",
-        avatar: "",
-      },
-      isAuthenticated: false,
-    };
-  },
-  created() {
-    this.fetchUser();
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   methods: {
-    fetchUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
-    },
     showCreateModal() {
       this.$emit("showCreateModal");
     },

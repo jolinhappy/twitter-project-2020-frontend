@@ -40,18 +40,8 @@
 </template>
 
 <script>
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root",
-    account: "root",
-    email: "root@example.com",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/jedbridges/128.jpg",
-    cover: "http://lorempixel.com/640/480/cats",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
+import { mapState } from "vuex";
+
 export default {
   props: {
     initialDescription: {
@@ -59,20 +49,13 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       description: this.initialDescription,
-      currentUser: {
-        id: -1,
-        name: " ",
-        email: "",
-        avatar: "",
-      },
-      isAuthenticated: false,
     };
-  },
-  created() {
-    this.fetchCurrentUser();
   },
   methods: {
     clickToClose() {
@@ -85,13 +68,6 @@ export default {
     },
     finishCreate() {
       this.$emit("after-click-close-create");
-    },
-    fetchCurrentUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
     },
     //用出現滾輪的欄高判斷是否調整textarea高
     autoTextAreaHeight(e) {

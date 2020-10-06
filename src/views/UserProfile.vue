@@ -1,16 +1,15 @@
 <template>
   <div class="container">
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="main-profile">
       <UserProfileCard
         @showEditModal="showEditModal"
         :user="user"
-        :followers="followers"
-        :followings="followings"
-        :tweets="tweets"
+        :initial-followers="followers"
+        :initial-followings="followings"
         :isMyself="isMyself"
-        :isFollowed="isFollowed"
+        :initial-isFollowed="isFollowed"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"
@@ -55,20 +54,7 @@ import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import userAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
-
-const dummyCurrentUser = {
-  currentUser: {
-    id: 1,
-    name: "dummy",
-    account: "@dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  },
-  isAuthenticated: true,
-};
-
-//TODO:用API帶入id拿對應使用這的資料
+import { mapState } from "vuex";
 
 export default {
   name: "UserProfile",
@@ -81,6 +67,9 @@ export default {
     UserProfileEditModal,
     UserProfileCard,
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       createModal: false,
@@ -89,7 +78,6 @@ export default {
       pageMode: "main",
       tweets: [],
       tweet: {},
-      currentUser: {},
       description: "",
       user: {
         id: -1,
@@ -103,11 +91,11 @@ export default {
       followings: [],
       isMyself: false,
       isFollowed: false,
+      selectedPage: "profile",
     };
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchCurrentUser();
     this.fetchUserTweets(userId);
     this.fetchUser(userId);
   },
@@ -133,13 +121,6 @@ export default {
     },
     closeEditModal() {
       this.editModal = false;
-    },
-    fetchCurrentUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyCurrentUser.currentUser,
-      };
-      this.isAuthenticated = dummyCurrentUser.isAuthenticated;
     },
     async fetchUserTweets(userId) {
       try {

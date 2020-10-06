@@ -39,11 +39,7 @@
           </div>
           <div class="tweet-reply-container">
             <div class="profile-image-reply">
-              <img
-                src="https://i.imgur.com/W2nxio3.png"
-                class="user-img"
-                alt=""
-              />
+              <img :src="currentUser.avatar" class="user-img" alt="" />
             </div>
             <form class="tweet-input" @submit.stop.prevent="handleReplySubmit">
               <textarea
@@ -67,8 +63,8 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-// import { v4 as uuidv4 } from "uuid";
-//需要currentUser的資料，放入使用者頭像(props)
+import { mapState } from "vuex";
+
 export default {
   mixins: [fromNowFilter],
   props: {
@@ -76,6 +72,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   data() {
     return {

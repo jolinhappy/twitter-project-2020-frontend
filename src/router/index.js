@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import UserLogin from '../views/UserLogin.vue'
 import NotFound from '../views/NotFound.vue'
+import store from './../store/index'
 
 Vue.use(VueRouter)
 
@@ -89,4 +90,10 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  console.log('to', to)
+  console.log('from', from)
+  store.dispatch('fetchCurrentUser')
+  next()
+})
 export default router
