@@ -12,7 +12,11 @@
         </div>
         <div class="tweet-create-container">
           <div class="profile-image">
-            <img :src="currentUser.avatar" class="user-img" alt="" />
+            <img
+              :src="currentUser.avatar | emptyImage"
+              class="user-img"
+              alt=""
+            />
           </div>
           <form class="tweet-input">
             <textarea
@@ -41,8 +45,9 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { emptyImageFilter } from "./../utils/mixins";
 export default {
+  mixins: [emptyImageFilter],
   props: {
     initialDescription: {
       type: String,

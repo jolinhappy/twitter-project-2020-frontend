@@ -33,5 +33,7 @@ export default {
   getFollowers({ userId }) {
     return apiHelper.get(`/users/${userId}/followers`, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
-
+  updatrInfo({ userId, formData, }) {
+    return apiHelper.put(`/users/${userId}`, formData, { headers: { Authorization: `Bearer ${getToken()}` } })
+  }
 }

@@ -143,14 +143,14 @@ export default {
         if (this.description.length === 0) {
           Toast.fire({
             icon: "warning",
-            title: "請輸入推文內容",
+            title: "沒寫推文內容，不給送出喔！",
           });
           return;
         }
         if (this.description.length > 140) {
           Toast.fire({
             icon: "warning",
-            title: "推文字數限制140字以內，請減少輸入的字數",
+            title: "哎呀！推文只能輸入140個字喔！",
           });
           return;
         }
@@ -187,15 +187,16 @@ export default {
         if (newDescription.length === 0) {
           Toast.fire({
             icon: "warning",
-            title: "請輸入推文內容",
+            title: "沒寫推文內容，不給送出喔！",
           });
           return;
         }
         if (newDescription.length > 140) {
           Toast.fire({
             icon: "warning",
-            title: "推文字數限制140字以內，請減少輸入的字數",
+            title: "哎呀！推文只能輸入140個字喔！",
           });
+
           return;
         }
         const { data } = await tweetsAPI.createTweet({

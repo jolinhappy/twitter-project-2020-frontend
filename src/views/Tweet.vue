@@ -5,13 +5,13 @@
     <div class="user-tweet">
       <div class="user-tweet-card">
         <div class="tweet-title">
-          <a href="#" class="back-button"
-            ><img
+          <button class="back-button" @click="$router.back()">
+            <img
               src="https://i.imgur.com/aPVTDn2.png"
               class="back-img"
               alt=""
             />
-          </a>
+          </button>
           <div class="title-content">
             <div class="title-name">推文</div>
           </div>
@@ -27,17 +27,24 @@
               />
             </div>
             <div class="user-info">
-              <a href="#" class="user-name-link">
+              <router-link
+                :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
+                class="user-name-link"
+              >
                 <div class="user-name">{{ tweet.User.name }}</div>
-              </a>
-              <div class="user-account">{{ tweet.User.account }}</div>
+              </router-link>
+              <div class="user-account">@{{ tweet.User.account }}</div>
             </div>
           </div>
           <div class="tweet">
             <div class="user-tweet-text">
               {{ tweet.description }}
             </div>
-            <div class="create-time">{{ tweet.createdAt | fromNow }}</div>
+            <div class="create-time">
+              {{ tweet.createdAt | formateDateToTime }}．{{
+                tweet.createdAt | formateDate
+              }}
+            </div>
           </div>
         </div>
         <div class="action-count">
@@ -112,7 +119,6 @@ import UserTweetsList from "./../components/UserTweetsList";
 import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import TweetReplyModal from "./../components/TweetReplyModal";
-import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
@@ -121,7 +127,7 @@ import { mapState } from "vuex";
 
 export default {
   name: "Tweet",
-  mixins: [fromNowFilter, emptyImageFilter],
+  mixins: [emptyImageFilter],
   components: {
     Sidebar,
     UserTweetsList,
@@ -141,14 +147,20 @@ export default {
       description: "",
       tweet: {},
       tweets: [],
-      // currentUser: {},
       selectedPage: "",
+      date: "",
     };
   },
   created() {
     const { id: tweetId } = this.$route.params;
     this.fetchTweet(tweetId);
     this.fetchReplies(tweetId);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: tweetId } = to.params;
+    this.fetchTweet(tweetId);
+    this.fetchReplies(tweetId);
+    next();
   },
   methods: {
     showCreateModal() {
@@ -171,7 +183,6 @@ export default {
       try {
         const { data } = await tweetsAPI.getTweet({ tweetId });
         this.tweet = data;
-        console.log(this.tweet);
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -280,23 +291,6 @@ export default {
         });
       }
     },
-    // createReply(payload) {
-    //   const { id, TweetId, comment } = payload;
-    //   console.log(this.tweet.Replies);
-    //   this.tweets.splice(0, 0, {
-    //     id,
-    //     TweetId,
-    //     User: {
-    //       id: this.currentUser.id,
-    //       name: this.currentUser.name,
-    //       avatar: this.currentUser.avatar,
-    //       acount: this.currentUser.account,
-    //     },
-    //     comment,
-    //     createdAt: new Date(),
-    //   });
-    //   this.closeReplyModal();
-    // },
     addLike() {
       this.tweet.isLiked = true;
       this.tweet.LikedUsers.push({
@@ -309,6 +303,25 @@ export default {
       this.tweet.isLiked = false;
       console.log(this.tweet.LikedUsers);
       this.tweet.LikedUsers.splice(0, 1);
+    },
+  },
+  filters: {
+    formateDate(value) {
+      const date = new Date(value);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+
+      return year + "年" + month + "月" + day + "日";
+    },
+    formateDateToTime(value) {
+      const date = new Date(value);
+      const hour = date.getHours();
+      const afterhour = hour - 12;
+      const minute = date.getMinutes();
+      return hour > 12
+        ? "下午" + afterhour + ":" + minute
+        : "上午" + hour + ":" + minute;
     },
   },
 };
@@ -396,7 +409,7 @@ export default {
   font-weight: bold;
 }
 .user-name:hover {
-  border-bottom: 1px solid #000;
+  text-decoration: underline;
 }
 .user-account {
   font-size: 15px;

@@ -65,8 +65,8 @@
         </div>
       </div>
     </div>
-    <div class="no-data-container">
-      <div class="no-data" v-if="tweets.length < 1">尚無相關推文...</div>
+    <div class="no-data-container" v-if="initialTweets.length === 0">
+      <div class="no-data">尚無相關推文...</div>
     </div>
   </div>
 </template>
@@ -324,7 +324,7 @@ export default {
 }
 .no-data {
   font-weight: 700;
-  font-size: 25px;
+  font-size: 20px;
   margin-top: 15px;
   margin-left: 15px;
 }

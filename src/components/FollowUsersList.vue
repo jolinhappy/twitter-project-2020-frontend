@@ -1,10 +1,5 @@
 <template>
   <div class="users-list user-profile-link">
-    <!-- <router-link
-      to="/tweets/:id"
-      
-      
-    > -->
     <div
       class="users-list-container"
       v-for="follow in follows"
@@ -51,7 +46,9 @@
         </div>
       </div>
     </div>
-    <!-- </router-link> -->
+    <div class="no-data-container" v-if="initialFollowData.length === 0">
+      <div class="no-data">沒有追蹤者或追蹤中的使用者...</div>
+    </div>
   </div>
 </template>
 
@@ -178,5 +175,15 @@ export default {
 }
 .user-img:hover {
   transform: scale(1.1, 1.1);
+}
+.no-data-container {
+  display: flex;
+  justify-content: center;
+}
+.no-data {
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: 15px;
+  margin-left: 15px;
 }
 </style>

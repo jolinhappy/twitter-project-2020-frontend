@@ -72,8 +72,8 @@
 <script>
 import Sidebar from "./../components/Sidebar";
 import TweetCreateModal from "./../components/TweetCreateModal";
-// import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
+import userAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
@@ -102,15 +102,32 @@ export default {
     CreateFinish() {
       this.$router.push({ name: "tweets-home" });
     },
-    handleSubmit() {
-      const data = JSON.stringify({
-        account: this.currentUser.account,
-        name: this.currentUser.name,
-        email: this.currentUser.email,
-        password: this.currentUser.password,
-        checkPassword: this.currentUser.checkPassword,
-      });
-      console.log("data", data);
+    async handleSubmit() {
+      try {
+        // const formData = {
+        //   account: this.currentUser.account,
+        //   name: this.currentUser.name,
+        //   email: this.currentUser.email,
+        //   password: this.currentUser.password,
+        //   checkPassword: this.currentUser.checkPassword,
+        // };
+        const { data } = await userAPI.updatrInfo({
+          formData: {
+            account: this.currentUser.account,
+            name: this.currentUser.name,
+            email: this.currentUser.email,
+            password: this.currentUser.password,
+            checkPassword: this.currentUser.checkPassword,
+          },
+        });
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法儲存資料，請稍後再試",
+        });
+      }
     },
     async creatTweetFromModal(newDescription) {
       try {

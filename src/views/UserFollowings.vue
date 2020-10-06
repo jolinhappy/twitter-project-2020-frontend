@@ -8,8 +8,8 @@
           <img src="https://i.imgur.com/aPVTDn2.png" class="back-img" alt="" />
         </button>
         <div class="title-content">
-          <div class="name">Jolin</div>
-          <div class="tweets-count">25推文</div>
+          <div class="name">{{ userName }}</div>
+          <div class="tweets-count">{{ tweets.length }}推文</div>
         </div>
       </div>
       <div class="follow-tab">
@@ -23,6 +23,8 @@
     <TweetCreateModal
       v-if="createModal"
       @after-click-close-create="closeCreateModal"
+      :initial-description="description"
+      @afterSubmit="creatTweetFromModal"
     />
   </div>
 </template>
@@ -36,107 +38,7 @@ import TweetCreateModal from "./../components/TweetCreateModal";
 import UserNavTab from "./../components/UserNavTab";
 import userAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
-
-const dummyUser = {
-  id: 2,
-  email: "user1@example.com",
-  password: "$2a$10$3wamA26AS7tJ8szugZM38.n3ebSvNRtVuDxqb4rN1aVa0IAMEXNOq",
-  name: "user1",
-  avatar:
-    "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  introduction: "I am user1",
-  role: "user",
-  account: "@user1",
-  cover: "http://lorempixel.com/640/480/abstract",
-  createdAt: "2020-10-01T08:02:45.000Z",
-  updatedAt: "2020-10-01T08:02:45.000Z",
-  Followers: [
-    {
-      id: 3,
-      email: "user2@example.com",
-      password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
-      name: "user2",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
-      introduction: "I am user2",
-      role: "user",
-      account: "@user2",
-      cover: "http://lorempixel.com/640/480/food",
-      createdAt: "2020-10-01T08:02:45.000Z",
-      updatedAt: "2020-10-01T08:02:45.000Z",
-      Followship: {
-        followerId: 3,
-        followingId: 2,
-        createdAt: "2020-09-30T12:56:39.000Z",
-        updatedAt: "2020-09-30T12:56:39.000Z",
-      },
-    },
-    {
-      id: 5,
-      email: "user4@example.com",
-      password: "$2a$10$3zsfWwpQrzLjWNEGWt..2OtsMuR84soXOY7ZawiNQzWL9HvUYaGlq",
-      name: "user4",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/noufalibrahim/128.jpg",
-      introduction: "I am user4",
-      role: "user",
-      account: "@user4",
-      cover: "http://lorempixel.com/640/480/food",
-      createdAt: "2020-10-01T08:02:45.000Z",
-      updatedAt: "2020-10-01T08:02:45.000Z",
-      Followship: {
-        followerId: 5,
-        followingId: 2,
-        createdAt: "2020-09-30T12:56:39.000Z",
-        updatedAt: "2020-09-30T12:56:39.000Z",
-      },
-    },
-  ],
-  Followings: [
-    {
-      id: 3,
-      email: "user2@example.com",
-      password: "$2a$10$midINOLdLpE6CpDpdmu7kuy2zGOg7uEgCUZmjwdNwgzihxqEwou6O",
-      name: "user2",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/randomlies/128.jpg",
-      introduction: "I am user2",
-      role: "user",
-      account: "@user2",
-      cover: "http://lorempixel.com/640/480/food",
-      createdAt: "2020-10-01T08:02:45.000Z",
-      updatedAt: "2020-10-01T08:02:45.000Z",
-      Followship: {
-        followerId: 2,
-        followingId: 3,
-        createdAt: "2020-09-30T12:56:39.000Z",
-        updatedAt: "2020-09-30T12:56:39.000Z",
-      },
-    },
-    {
-      id: 4,
-      email: "user3@example.com",
-      password: "$2a$10$Iw6Dxi0uwEhtv80niOrmbO0TDy02HsfobmxiqnhSJOE/9Ywd0VoAK",
-      name: "user3",
-      avatar:
-        "https://s3.amazonaws.com/uifaces/faces/twitter/lebinoclard/128.jpg",
-      introduction: "I am user3",
-      role: "user",
-      account: "@user3",
-      cover: "http://lorempixel.com/640/480/nature",
-      createdAt: "2020-10-01T08:02:45.000Z",
-      updatedAt: "2020-10-01T08:02:45.000Z",
-      Followship: {
-        followerId: 2,
-        followingId: 4,
-        createdAt: "2020-09-30T12:56:39.000Z",
-        updatedAt: "2020-09-30T12:56:39.000Z",
-      },
-    },
-  ],
-  isMyself: false,
-  isFollowed: false,
-};
+import tweetsAPI from "./../apis/tweets";
 
 export default {
   name: "UserFollowings",
@@ -153,24 +55,15 @@ export default {
       replyModal: false,
       isFollowPage: true,
       followingUsers: [],
-      user: {
-        id: -1,
-        name: "",
-        account: "",
-        avatar: "",
-        cover: "",
-        introduction: "",
-      },
-      followers: [],
-      followings: [],
-      isMyself: false,
-      isFollowed: false,
+      tweets: [],
+      userName: "",
+      description: "",
     };
   },
   created() {
     const { id: userId } = this.$route.params;
     this.fetchFollowings(userId);
-    this.fetchUser();
+    this.fetchUser(userId);
   },
   methods: {
     showCreateModal() {
@@ -179,10 +72,46 @@ export default {
     closeCreateModal() {
       this.createModal = false;
     },
-    // //TODO:用params取得id然後用在API取得資料
-    // fetchFollowings() {
-    //   this.followingUsers = dummyFollowings;
-    // },
+    CreateFinish() {
+      this.$router.push({ name: "tweets-home" });
+    },
+    async fetchUserTweets(userId) {
+      try {
+        const { data } = await userAPI.getUserLikedTweets({ userId });
+        this.tweets = data.map((tweet) => {
+          return {
+            ...tweet,
+            tweet: {
+              ...tweet.Tweet,
+              isLiked: tweet.isLiked,
+            },
+          };
+        });
+        this.tweets = this.tweets.map((tweet) => {
+          return tweet.tweet;
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法讀取推文資料，請稍後再試",
+        });
+      }
+    },
+    async fetchUser(userId) {
+      try {
+        const { data } = await userAPI.getUser({ userId });
+        console.log(data);
+        const { name } = data;
+        this.userName = name;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }
+    },
     async fetchFollowings(userId) {
       try {
         const { data } = await userAPI.getFollowings({ userId });
@@ -196,30 +125,36 @@ export default {
         });
       }
     },
-    fetchUser() {
-      const {
-        id,
-        name,
-        account,
-        avatar,
-        cover,
-        introduction,
-        isMyself,
-        isFollowed,
-      } = dummyUser;
-      this.user = {
-        ...this.user,
-        id,
-        name,
-        account,
-        avatar,
-        cover,
-        introduction,
-      };
-      this.followers = dummyUser.Followers;
-      this.followings = dummyUser.Followings;
-      this.isMyself = isMyself;
-      this.isFollowed = isFollowed;
+    async creatTweetFromModal(newDescription) {
+      try {
+        if (newDescription.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "請輸入推文內容",
+          });
+          return;
+        }
+        if (newDescription.length > 140) {
+          Toast.fire({
+            icon: "warning",
+            title: "推文字數限制140字以內，請減少輸入的字數",
+          });
+          return;
+        }
+        const { data } = await tweetsAPI.createTweet({
+          description: newDescription,
+        });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.CreateFinish();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法新增推文，請稍後再試看",
+        });
+      }
     },
   },
 };

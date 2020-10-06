@@ -75,14 +75,16 @@
             :to="{ name: 'user-followings', params: { id: user.id } }"
             class="followings-link"
             ><div class="followings">
-              <strong>{{ followings.length }}個</strong>追蹤中
+              <span class="total-count">{{ followings.length }}個</span
+              ><span class="category">追蹤中</span>
             </div></router-link
           >
           <router-link
             :to="{ name: 'user-followers', params: { id: user.id } }"
             class="followers-link"
             ><div class="followers">
-              <strong>{{ followers.length }}位</strong>追蹤者
+              <span class="total-count">{{ followers.length }}位</span
+              ><span class="category">追蹤者</span>
             </div></router-link
           >
         </div>
@@ -230,7 +232,7 @@ export default {
   border-radius: 50%;
   position: absolute;
   left: 15px;
-  bottom: 195px;
+  bottom: 180px;
 }
 .user-main-img {
   width: 140px;
@@ -241,8 +243,8 @@ export default {
 }
 
 .detail-info-part {
-  width: 600px;
-  height: 230px;
+  width: 550px;
+  height: 210px;
   display: flex;
   flex-direction: column;
   margin-left: 20px;
@@ -312,20 +314,28 @@ export default {
 .follow-info {
   display: flex;
   font-size: 14px;
-  font-weight: 500;
+}
+.total-count {
+  font-weight: bold;
+}
+.category {
+  font-weight: bold;
+  color: #657786;
 }
 .followings {
   margin-right: 20px;
 }
 .followings:hover,
 .followers:hover {
-  border-bottom: 1px solid #000;
+  text-decoration: underline;
 }
+
 .followed:hover {
   border: 1px solid #ff6000;
   color: #ff6000;
   background-color: #ffffff;
 }
+.edit-info:hover,
 .follow:hover {
   background-color: #ff6000;
   color: #f5f8fa;
