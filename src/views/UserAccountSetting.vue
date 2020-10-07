@@ -18,7 +18,8 @@
               <input
                 type="text"
                 class="form-input"
-                v-model="currentUser.account"
+                name="account"
+                v-model="account"
                 required
               />
             </div>
@@ -27,7 +28,8 @@
               <input
                 type="text"
                 class="form-input"
-                v-model="currentUser.name"
+                name="name"
+                v-model="name"
                 required
               />
             </div>
@@ -36,22 +38,28 @@
               <input
                 type="email"
                 class="form-input"
-                v-model="currentUser.email"
+                name="email"
+                v-model="email"
                 required
               />
             </div>
             <div class="form-label-group">
               <label for="password" class="form-label">密碼</label>
               <input
-                type="text"
+                type="password"
                 class="form-input"
-                v-model="currentUser.password"
-                required
+                name="password"
+                v-model="password"
               />
             </div>
             <div class="form-label-group">
               <label for="password-check" class="form-label">密碼確認</label>
-              <input type="text" class="form-input" required />
+              <input
+                type="password"
+                class="form-input"
+                name="checkPassword"
+                v-model="checkPassword"
+              />
             </div>
             <button type="submit" class="btn login-btn">儲存</button>
           </form>
@@ -89,8 +97,16 @@ export default {
     return {
       createModal: false,
       selectedPage: "setting",
-      description: "",
+      id: "",
+      account: "",
+      name: "",
+      email: "",
+      password: "",
+      checkPassword: "",
     };
+  },
+  created() {
+    this.fetchUserData();
   },
   methods: {
     showCreateModal() {
@@ -102,24 +118,41 @@ export default {
     CreateFinish() {
       this.$router.push({ name: "tweets-home" });
     },
+    fetchUserData() {
+      this.id = this.currentUser.id;
+      this.account = this.currentUser.account;
+      this.name = this.currentUser.name;
+      this.email = this.currentUser.email;
+    },
     async handleSubmit() {
       try {
-        // const formData = {
-        //   account: this.currentUser.account,
-        //   name: this.currentUser.name,
-        //   email: this.currentUser.email,
-        //   password: this.currentUser.password,
-        //   checkPassword: this.currentUser.checkPassword,
-        // };
-        const { data } = await userAPI.updatrInfo({
-          formData: {
-            account: this.currentUser.account,
-            name: this.currentUser.name,
-            email: this.currentUser.email,
-            password: this.currentUser.password,
-            checkPassword: this.currentUser.checkPassword,
-          },
-        });
+        if (!this.account || !this.name || !this.email) {
+          Toast.fire({
+            icon: "warning",
+            title: "您有漏填的欄位喔！",
+          });
+          return;
+        }
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: "warning",
+            title: "密碼與確認密碼不符",
+          });
+          return;
+        }
+        // const form = e.target;
+        // const formData = new FormData(form);
+        const userId = this.id;
+        // for (let [name, value] of formData.entries()) {
+        //   console.log(name + ": " + value);
+        const formData = {
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          checkPassword: this.checkPassword,
+        };
+        const { data } = await userAPI.updateInfo({ userId, formData });
         console.log(data);
       } catch (error) {
         console.log(error);

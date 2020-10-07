@@ -67,7 +67,11 @@
                   />
                 </label>
               </div>
-              <img :src="user.avatar" class="user-main-img" alt="user-img" />
+              <img
+                :src="user.avatar | emptyImage"
+                class="user-main-img"
+                alt="user-img"
+              />
             </div>
             <div class="detail-edit">
               <div class="form-label-group">
@@ -107,7 +111,9 @@
 </template>
 
 <script>
+import { emptyImageFilter } from "./../utils/mixins";
 export default {
+  mixins: [emptyImageFilter],
   props: {
     initialUser: {
       type: Object,
@@ -248,10 +254,12 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
+  background: #999999;
 }
 .cover-img {
   width: 600px;
   height: 200px;
+  object-fit: cover;
 }
 .cover-part::after {
   content: "";

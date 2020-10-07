@@ -143,7 +143,6 @@ export default {
     async addLike({ id, tweet }) {
       try {
         const { data } = await tweetsAPI.addLike({ tweetId: id });
-        console.log(data);
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -166,24 +165,15 @@ export default {
     async deleteLike({ id, tweet }) {
       try {
         const { data } = await tweetsAPI.deleteLike({ tweetId: id });
-        console.log(data);
-
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "成功取消按讚！",
+        });
         tweet.isLiked = false;
         tweet.Likes.splice(0, 1);
-        // this.tweets = this.tweets.map((tweet) => {
-        //   if (tweet.id === id) {
-        //     return {
-        //       ...tweet,
-        //       isLiked: false,
-        //     };
-        //   }
-        //   return tweet;
-        // });
-        // const deleteLikeTweet = this.tweets.filter(
-        //   (oneTweet) => oneTweet.id === id
-        // );
-        // deleteLikeTweet[0].Likes.splice(0, 1);
-        // console.log(deleteLikeTweet);
       } catch (error) {
         console.log(error);
         Toast.fire({

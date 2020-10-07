@@ -6,6 +6,7 @@
       :initialAccount="account"
       :initialPassword="password"
       @afterSubmit="submitLogin"
+      :is-processing="isProcessing"
     />
     <div class="regist-link">
       <p>
@@ -17,7 +18,7 @@
 
 <script>
 import UserLoginForm from "./../components/UserLoginForm";
-import adminAPI from "./../apis/admin";
+import authorizationAPI from "./../apis/authorization";
 import { Toast } from "./../utils/helpers";
 export default {
   components: {
@@ -42,7 +43,7 @@ export default {
           });
           return;
         }
-        const response = await adminAPI.adminLogin({
+        const response = await authorizationAPI.adminLogin({
           account,
           password,
         });
@@ -56,7 +57,7 @@ export default {
         console.log(error);
         Toast.fire({
           icon: "error",
-          title: "請確認是否輸入正確的帳號及密碼",
+          title: "請確認帳號密碼是否正確",
         });
         this.isProcessing = false;
       }

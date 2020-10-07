@@ -16,4 +16,10 @@ export default {
       checkPassword,
     })
   },
+  adminLogin({ account, password }) {
+    return apiHelper.post('/admin', {
+      account,
+      password
+    })
+  },
 }

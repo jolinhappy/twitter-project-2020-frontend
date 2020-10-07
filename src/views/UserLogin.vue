@@ -57,6 +57,13 @@ export default {
           });
           throw new Error(data.message);
         }
+        if (data.user.role === "admin") {
+          Toast.fire({
+            icon: "error",
+            title: "請確認帳號密碼是否正確",
+          });
+          return;
+        }
         localStorage.setItem("token", data.token);
         this.$store.commit("setCurrentUser", data.user);
         this.$router.push("/tweets");
@@ -64,7 +71,7 @@ export default {
         console.log(error);
         Toast.fire({
           icon: "error",
-          title: "請確認是否輸入正確的帳號及密碼",
+          title: "請確認帳號密碼是否正確",
         });
         this.isProcessing = false;
       }

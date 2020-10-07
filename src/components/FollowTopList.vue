@@ -84,10 +84,9 @@ export default {
     },
     async addFollow(id) {
       try {
-        const res = await usersAPI.addFollow();
-        const { data } = await usersAPI.addFollow();
+        console.log(id);
+        const { data } = await usersAPI.addFollow({ id });
         console.log(data);
-        console.log(res);
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -107,7 +106,7 @@ export default {
     },
     async deleteFollow(id) {
       try {
-        const res = await usersAPI.deleteFollow({ userId: id });
+        const res = await usersAPI.deleteFollow({ followingId: id });
         console.log(res);
         this.topUsers.map((topUser) => {
           if (topUser.id === id) {

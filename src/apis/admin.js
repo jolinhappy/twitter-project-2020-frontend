@@ -3,12 +3,6 @@ import { apiHelper } from '../utils/helpers'
 const getToken = () => localStorage.getItem('token')
 
 export default {
-  adminLogin({ account, password }) {
-    return apiHelper.post('/admin', {
-      account,
-      password
-    })
-  },
   getTweets() {
     return apiHelper.get('/admin/tweets', { headers: { Authorization: `Bearer ${getToken()}` } })
   },

@@ -8,8 +8,8 @@
         :user="user"
         :initial-followers="followers"
         :initial-followings="followings"
-        :isMyself="isMyself"
-        :initial-isFollowed="isFollowed"
+        :is-myself="isMyself"
+        :initial-is-followed="isFollowed"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"
@@ -175,10 +175,23 @@ export default {
         });
       }
     },
-    handleAfterSubmit(formData) {
-      console.log(formData);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
+    async handleAfterSubmit(formData) {
+      try {
+        const response = await userAPI.updateInfo({
+          userId: this.currentUser.id,
+          formData,
+        });
+        console.log("dd", response);
+        console.log(formData);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法儲存資料，請稍後再試",
+        });
       }
     },
     async creatTweetFromModal(newDescription) {

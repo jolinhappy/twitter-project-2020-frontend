@@ -87,7 +87,7 @@
         @showReplyModal="showReplyModal"
         :page-mode="pageMode"
         :initial-tweets="tweets"
-        :mainTweet="tweet"
+        :main-tweet="tweet"
       />
     </div>
     <div class="follow-top">

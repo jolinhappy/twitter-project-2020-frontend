@@ -4,6 +4,7 @@ import UserLogin from '../views/UserLogin.vue'
 import NotFound from '../views/NotFound.vue'
 import store from './../store/index'
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -100,18 +101,43 @@ router.beforeEach(async (to, from, next) => {
   if (token && token !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
-  const pathWithoutAuthentication = ['user-login', 'user-regist']
+  const isAdmin = store.state.currentUser.isAdmin
+  const pathWithoutAuthentication = ['user-login', 'user-regist', 'admin-login']
+  const pathNeedAdmin = ['admin-users', 'admin-tweets']
+  const pathAdminCanReach = ['user-login', 'user-regist', 'admin-login', 'admin-users', 'admin-tweets']
+
 
   //未驗證且想要進入登入註冊頁以外的頁面的情況
   if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
     next('/login')
     return
   }
-  //已經驗證但又往登入頁及註冊頁移動一率導回首頁
-  if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+  //有管理者權限想到前台或非登入口頁面一律導向登入口
+  if (isAdmin && !pathAdminCanReach.includes(to.name)) {
+    next('/login')
+    return
+  }
+  //沒有管理者權限想前往後台一率導向錯誤頁面
+  if (!isAdmin && pathNeedAdmin.includes(to.name)) {
+    next('*')
+    return
+  }
+
+  //已經驗證，且為一般使用者，但又往登入頁及註冊頁移動一率導回首頁
+  if (isAuthenticated && !isAdmin && pathWithoutAuthentication.includes(to.name)) {
     next('/tweets')
     return
   }
+  //已經驗證，且為管理者，但又往登入頁及註冊頁移動一率導回首頁
+  if (isAuthenticated && isAdmin && pathWithoutAuthentication.includes(to.name)) {
+    next('/admin/tweets')
+    return
+  }
+
   next()
 })
+
+
+
+
 export default router

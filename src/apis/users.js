@@ -21,11 +21,11 @@ export default {
   getUserLikedTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/likes`, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
-  addFollow() {
-    return apiHelper.post('/followships', null, { headers: { Authorization: `Bearer ${getToken()}` } })
+  addFollow({ id }) {
+    return apiHelper.post('/followships', { id }, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
-  deleteFollow({ userId }) {
-    return apiHelper.delete(`/followships/${userId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+  deleteFollow({ followingId }) {
+    return apiHelper.delete(`/followships/${followingId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
   getFollowings({ userId }) {
     return apiHelper.get(`/users/${userId}/followings`, { headers: { Authorization: `Bearer ${getToken()}` } })
@@ -33,7 +33,7 @@ export default {
   getFollowers({ userId }) {
     return apiHelper.get(`/users/${userId}/followers`, { headers: { Authorization: `Bearer ${getToken()}` } })
   },
-  updatrInfo({ userId, formData, }) {
+  updateInfo({ userId, formData }) {
     return apiHelper.put(`/users/${userId}`, formData, { headers: { Authorization: `Bearer ${getToken()}` } })
   }
 }

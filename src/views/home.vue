@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar
       @showCreateModal="showCreateModal"
@@ -79,6 +80,7 @@ import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
+import Spinner from "./../components/Spinner";
 
 export default {
   name: "home",
@@ -89,6 +91,7 @@ export default {
     FollowTopList,
     TweetCreateModal,
     TweetReplyModal,
+    Spinner,
   },
   data() {
     return {
@@ -101,6 +104,7 @@ export default {
       adminPage: false,
       selectedPage: "home",
       isProcessing: false,
+      isLoading: false,
     };
   },
   computed: {
@@ -126,15 +130,18 @@ export default {
     },
     async fetchUserTweets() {
       try {
+        this.isLoading = true;
         const response = await tweetsAPI.getTweets();
         const { data } = response;
         this.tweets = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法取得推文資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async createTweet() {

@@ -9,7 +9,7 @@
         :initial-followers="followers"
         :initial-followings="followings"
         :isMyself="isMyself"
-        :initial-isFollowed="isFollowed"
+        :initial-followed="isFollowed"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"

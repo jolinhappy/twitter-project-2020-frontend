@@ -13,7 +13,11 @@
         <div class="reply-section">
           <div class="user-tweet-container">
             <div class="profile-image">
-              <img :src="tweet.User.avatar" class="user-img" alt="" />
+              <img
+                :src="tweet.User.avatar | emptyImage"
+                class="user-img"
+                alt=""
+              />
               <div class="line-part">
                 <div class="line"></div>
               </div>
@@ -39,7 +43,11 @@
           </div>
           <div class="tweet-reply-container">
             <div class="profile-image-reply">
-              <img :src="currentUser.avatar" class="user-img" alt="" />
+              <img
+                :src="currentUser.avatar | emptyImage"
+                class="user-img"
+                alt=""
+              />
             </div>
             <form class="tweet-input" @submit.stop.prevent="handleReplySubmit">
               <textarea
@@ -63,10 +71,11 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     tweet: {
       type: Object,

@@ -99,7 +99,7 @@
 <script>
 import UserNavTab from "./../components/UserNavTab";
 import { emptyImageFilter } from "./../utils/mixins";
-import userAPI from "./../apis/users";
+import usersAPI from "./../apis/users";
 
 export default {
   mixins: [emptyImageFilter],
@@ -136,6 +136,11 @@ export default {
       isFollowed: this.initialIsFollowed,
     };
   },
+  watch: {
+    initialIsFollowed(newValue) {
+      this.isFollowed = newValue;
+    },
+  },
   created() {
     const { id: userId } = this.$route.params;
     this.fetchUserTweets(userId);
@@ -146,20 +151,24 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        const { data } = await userAPI.getUserTweets({ userId });
+        const { data } = await usersAPI.getUserTweets({ userId });
         console.log(data);
         this.tweets = data;
       } catch (error) {
         console.log(error);
       }
     },
-    addFollow(id) {
+    async addFollow(id) {
+      const { data } = await usersAPI.addFollow({ id });
+      console.log("dd", data);
       this.isFollowed = true;
       console.log(id);
       this.followers.push({});
     },
-    deletFollow(id) {
-      console.log(id);
+    async deletFollow(id) {
+      console.log(this.user);
+      const res = await usersAPI.deleteFollow({ userId: id });
+      console.log("dd", res);
       this.isFollowed = false;
       this.followers.splice(0, 1);
     },
