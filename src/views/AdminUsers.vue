@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar
       :isAdmin="isAdmin"
@@ -13,61 +14,56 @@
         </div>
         <!-- list-card -->
         <div class="user-cards-container">
-          <router-link
-            :to="{ name: 'user-profile', params: { id: user.id } }"
-            class="user-profile-link"
+          <div
+            class="user-profile-card"
             v-for="user in adminUsers"
             :key="user.id"
           >
-            <div class="user-profile-card">
-              <div class="cover-part">
-                <img :src="user.cover" class="cover-img" alt="cover" />
-              </div>
-              <div class="user-img-part">
-                <img
-                  :src="user.avatar | emptyImage"
-                  class="user-main-img"
-                  alt="user-img"
-                />
-              </div>
-              <div class="detail-info-part">
-                <div class="user-name">{{ user.name }}</div>
-                <div class="user-account">{{ user.account }}</div>
-                <div class="user-action">
-                  <div class="user-reply" @click="showReplyModal">
-                    <img
-                      src="https://i.imgur.com/SaR8cz3.png"
-                      class="reply"
-                      alt="reply"
-                    />
-                    <span class="reply-count">{{ user.Replies.length }}</span>
-                  </div>
-                  <div class="user-like">
-                    <img
-                      src="https://i.imgur.com/qs9Pe3N.png"
-                      class="like"
-                      alt="like"
-                    />
-                    <span class="like-count">{{ user.Likes.length }}</span>
-                  </div>
+            <div class="cover-part">
+              <img :src="user.cover" class="cover-img" alt="cover" />
+            </div>
+            <div class="user-img-part">
+              <img
+                :src="user.avatar | emptyImage"
+                class="user-main-img"
+                alt="user-img"
+              />
+            </div>
+            <div class="detail-info-part">
+              <div class="user-name">{{ user.name }}</div>
+              <div class="user-account">{{ user.account }}</div>
+              <div class="user-action">
+                <div class="user-reply" @click="showReplyModal">
+                  <img
+                    src="https://i.imgur.com/SaR8cz3.png"
+                    class="reply"
+                    alt="reply"
+                  />
+                  <span class="reply-count">{{ user.Replies.length }}</span>
                 </div>
-                <div class="follow-info">
-                  <router-link
-                    to="/users/:id/followings"
-                    class="followings-link"
-                    ><div class="followings">
-                      <strong>{{ user.Followings.length }}個</strong>追蹤中
-                    </div></router-link
-                  >
-                  <router-link to="/users/:id/followers" class="followers-link"
-                    ><div class="followers">
-                      <strong>{{ user.Followers.length }}位</strong>追蹤者
-                    </div></router-link
-                  >
+                <div class="user-like">
+                  <img
+                    src="https://i.imgur.com/qs9Pe3N.png"
+                    class="like"
+                    alt="like"
+                  />
+                  <span class="like-count">{{ user.Likes.length }}</span>
                 </div>
+              </div>
+              <div class="follow-info">
+                <router-link to="/users/:id/followings" class="followings-link"
+                  ><div class="followings">
+                    <strong>{{ user.Followings.length }}個</strong>追蹤中
+                  </div></router-link
+                >
+                <router-link to="/users/:id/followers" class="followers-link"
+                  ><div class="followers">
+                    <strong>{{ user.Followers.length }}位</strong>追蹤者
+                  </div></router-link
+                >
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -80,11 +76,13 @@ import Sidebar from "./../components/Sidebar";
 import { emptyImageFilter } from "./../utils/mixins";
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
+import Spinner from "./../components/Spinner";
 
 export default {
   mixins: [emptyImageFilter],
   components: {
     Sidebar,
+    Spinner,
   },
   data() {
     return {
@@ -92,6 +90,7 @@ export default {
       adminUsers: [],
       adminPage: true,
       selectedPage: "adminUsers",
+      isLoading: false,
     };
   },
   created() {
@@ -100,15 +99,17 @@ export default {
   methods: {
     async fetchAdminUsers() {
       try {
+        this.isLoading = true;
         const { data } = await adminAPI.getUsers();
-        console.log(data);
         this.adminUsers = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法讀取使用者資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
   },
@@ -149,18 +150,15 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
-.user-profile-link {
-  width: 245px;
-  height: 314px;
-  margin-right: 10px;
-  margin-top: 10px;
-}
+
 .user-profile-card {
   width: 245px;
   height: 314px;
   border-radius: 10%;
   position: relative;
   background: #f6f7f8;
+  margin-right: 13px;
+  margin-top: 13px;
 }
 .cover-part,
 .cover-img {

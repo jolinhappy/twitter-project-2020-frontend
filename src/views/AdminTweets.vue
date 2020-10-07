@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar
       :isAdmin="isAdmin"
@@ -31,9 +32,9 @@
                     }"
                     class="user-name-link"
                   >
-                    <div class="user-name">username</div>
+                    <div class="user-name">{{ tweet.User.name }}</div>
                   </router-link>
-                  <div class="user-account">{{ tweet.User.account }}</div>
+                  <div class="user-account">@{{ tweet.User.account }}</div>
                   <div class="create-time">
                     ．{{ tweet.createdAt | fromNow }}
                   </div>
@@ -66,11 +67,13 @@ import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
 import adminAPI from "./../apis/admin";
 import { Toast } from "./../utils/helpers";
+import Spinner from "./../components/Spinner";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
   components: {
     Sidebar,
+    Spinner,
   },
   data() {
     return {
@@ -78,6 +81,7 @@ export default {
       adminTweets: [],
       adminPage: true,
       selectedPage: "adminTweets",
+      isLoading: false,
     };
   },
   created() {
@@ -86,14 +90,17 @@ export default {
   methods: {
     async fetchAdminTweets() {
       try {
+        this.isLoading = true;
         const { data } = await adminAPI.getTweets();
         this.adminTweets = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法讀取推文資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async deleteTweet(id) {

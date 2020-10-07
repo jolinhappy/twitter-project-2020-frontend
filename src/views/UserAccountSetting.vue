@@ -61,7 +61,13 @@
                 v-model="checkPassword"
               />
             </div>
-            <button type="submit" class="btn login-btn">儲存</button>
+            <button
+              type="submit"
+              class="btn login-btn"
+              :disabled="isProcessing"
+            >
+              {{ isProcessing ? "儲存中" : "儲存" }}
+            </button>
           </form>
         </div>
       </div>
@@ -103,6 +109,7 @@ export default {
       email: "",
       password: "",
       checkPassword: "",
+      isProcessing: false,
     };
   },
   created() {
@@ -126,6 +133,7 @@ export default {
     },
     async handleSubmit() {
       try {
+        this.isProcessing = true;
         if (!this.account || !this.name || !this.email) {
           Toast.fire({
             icon: "warning",
@@ -156,12 +164,14 @@ export default {
           icon: "success",
           title: "儲存完成",
         });
+        this.isProcessing = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法儲存資料，請稍後再試",
         });
+        this.isProcessing = false;
       }
     },
     async creatTweetFromModal(newDescription) {

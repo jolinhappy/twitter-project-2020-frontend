@@ -244,6 +244,7 @@ export default {
   width: 600px;
   border: 1px solid #e5e5e5;
   position: relative;
+  z-index: 1;
 }
 .back-img {
   width: 24px;

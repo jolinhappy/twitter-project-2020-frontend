@@ -93,6 +93,7 @@ export default {
   position: fixed;
   display: flex;
   justify-content: center;
+  z-index: 60;
 }
 .modal-container {
   margin-top: 30px;

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="main-profile">
@@ -55,6 +56,7 @@ import tweetsAPI from "./../apis/tweets";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import Spinner from "./../components/Spinner";
 
 export default {
   name: "UserProfile",
@@ -66,6 +68,7 @@ export default {
     TweetReplyModal,
     UserProfileEditModal,
     UserProfileCard,
+    Spinner,
   },
   computed: {
     ...mapState(["currentUser"]),
@@ -92,11 +95,13 @@ export default {
       isMyself: false,
       isFollowed: false,
       selectedPage: "profile",
+      isLoading: false,
     };
   },
   inject: ["reload"],
   created() {
     const { id: userId } = this.$route.params;
+    this.f;
     this.fetchUserTweets(userId);
     this.fetchUser(userId);
   },
@@ -132,7 +137,6 @@ export default {
     async fetchUserTweets(userId) {
       try {
         const { data } = await usersAPI.getUserTweets({ userId });
-        console.log(data);
         this.tweets = data;
       } catch (error) {
         console.log(error);
@@ -144,6 +148,7 @@ export default {
     },
     async fetchUser(userId) {
       try {
+        this.isLoading = true;
         const { data } = await usersAPI.getUser({ userId });
         const {
           id,
@@ -168,12 +173,14 @@ export default {
         this.followings = data.Followings;
         this.isMyself = isMyself;
         this.isFollowed = isFollowed;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async handleAfterSubmit(formData) {
@@ -269,6 +276,10 @@ export default {
         this.tweet.Replies.push({
           tweetId,
           comment,
+        });
+        Toast.fire({
+          icon: "success",
+          title: "已送出回覆推文",
         });
         this.closeReplyModal();
       } catch (error) {

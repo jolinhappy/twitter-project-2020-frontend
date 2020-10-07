@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar @showCreateModal="showCreateModal" :selected-page="selectedPage" />
     <div class="user-tweet">
@@ -124,6 +125,7 @@ import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import Spinner from "./../components/Spinner";
 
 export default {
   name: "Tweet",
@@ -134,14 +136,10 @@ export default {
     FollowTopList,
     TweetCreateModal,
     TweetReplyModal,
+    Spinner,
   },
   computed: {
     ...mapState(["currentUser"]),
-  },
-  watch: {
-    // tweet(newValue) {
-    //   this.tweet = tweet;
-    // },
   },
   data() {
     return {
@@ -154,6 +152,7 @@ export default {
       tweets: [],
       selectedPage: "",
       date: "",
+      isLoading: false,
     };
   },
   created() {
@@ -186,14 +185,17 @@ export default {
     },
     async fetchTweet(tweetId) {
       try {
+        this.isLoading = true;
         const { data } = await tweetsAPI.getTweet({ tweetId });
         this.tweet = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法取得推文資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async fetchReplies(tweetId) {
@@ -286,6 +288,10 @@ export default {
           },
           comment,
           createdAt: new Date(),
+        });
+        Toast.fire({
+          icon: "success",
+          title: "已送出回覆推文",
         });
         this.closeReplyModal();
       } catch (error) {

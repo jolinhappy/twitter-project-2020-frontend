@@ -14,7 +14,9 @@
         </div>
         <div class="tweet-create-container">
           <div class="profile-image">
-            <router-link to="/users/:id">
+            <router-link
+              :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+            >
               <img
                 :src="currentUser.avatar | emptyImage"
                 class="user-img"
@@ -75,7 +77,6 @@ import UserTweetsList from "./../components/UserTweetsList";
 import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import TweetReplyModal from "./../components/TweetReplyModal";
-// import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
@@ -274,6 +275,10 @@ export default {
         this.tweet.Replies.push({
           tweetId,
           comment,
+        });
+        Toast.fire({
+          icon: "success",
+          title: "已送出回覆推文",
         });
         this.closeReplyModal();
       } catch (error) {

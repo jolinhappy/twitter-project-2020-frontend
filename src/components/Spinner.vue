@@ -22,12 +22,14 @@ $speed: 1s;
 
 body {
   margin: 0;
+  background: white;
 }
 .container {
   width: 100%;
   height: 100%;
   background: white;
   position: fixed;
+  z-index: 99;
 }
 
 .wraper {

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="main-profile">
@@ -60,6 +61,7 @@ import tweetsAPI from "./../apis/tweets";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import Spinner from "./../components/Spinner";
 
 export default {
   name: "UserProfileReply",
@@ -71,6 +73,7 @@ export default {
     TweetReplyModal,
     UserProfileEditModal,
     UserProfileCard,
+    Spinner,
   },
   computed: {
     ...mapState(["currentUser"]),
@@ -98,6 +101,7 @@ export default {
       isMyself: false,
       isFollowed: false,
       selectedPage: "profile",
+      isLoading: false,
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -160,6 +164,7 @@ export default {
     },
     async fetchUser(userId) {
       try {
+        this.isLoading = true;
         const { data } = await usersAPI.getUser({ userId });
         const {
           id,
@@ -184,12 +189,14 @@ export default {
         this.followings = data.Followings;
         this.isMyself = isMyself;
         this.isFollowed = isFollowed;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async handleAfterSubmit(formData) {
@@ -254,6 +261,10 @@ export default {
             account: this.currentUser.account,
             avatar: this.currentUser.avatar,
           },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "已送出回覆推文",
         });
         this.CreateFinish();
       } catch (error) {

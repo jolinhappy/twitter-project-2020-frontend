@@ -39,7 +39,6 @@ export default new Vuex.Store({
     async fetchCurrentUser({ commit }) {
       try {
         const response = await userAPI.getCurrentUser()
-
         if (response.statusText === 'error') {
           throw new Error(response.data)
         }

@@ -1,7 +1,8 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
-    <Sidebar @showCreateModal="showCreateModal" />
+    <Sidebar @showCreateModal="showCreateModal" :selected-page="selectedPage" />
     <div class="main-follow-info">
       <div class="info-title">
         <button class="back-button" @click="$router.back()">
@@ -36,9 +37,10 @@ import FollowUsersList from "./../components/FollowUsersList";
 import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import UserNavTab from "./../components/UserNavTab";
-import userAPI from "./../apis/users";
+import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import tweetsAPI from "./../apis/tweets";
+import Spinner from "./../components/Spinner";
 
 export default {
   name: "UserFollowings",
@@ -48,6 +50,7 @@ export default {
     FollowTopList,
     TweetCreateModal,
     UserNavTab,
+    Spinner,
   },
   data() {
     return {
@@ -58,11 +61,14 @@ export default {
       tweets: [],
       userName: "",
       description: "",
+      selectedPage: "",
+      isLoading: false,
     };
   },
   created() {
     const { id: userId } = this.$route.params;
     this.fetchFollowings(userId);
+    this.fetchUserTweets(userId);
     this.fetchUser(userId);
   },
   methods: {
@@ -77,19 +83,8 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        const { data } = await userAPI.getUserLikedTweets({ userId });
-        this.tweets = data.map((tweet) => {
-          return {
-            ...tweet,
-            tweet: {
-              ...tweet.Tweet,
-              isLiked: tweet.isLiked,
-            },
-          };
-        });
-        this.tweets = this.tweets.map((tweet) => {
-          return tweet.tweet;
-        });
+        const { data } = await usersAPI.getUserTweets({ userId });
+        this.tweets = data;
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -100,7 +95,7 @@ export default {
     },
     async fetchUser(userId) {
       try {
-        const { data } = await userAPI.getUser({ userId });
+        const { data } = await usersAPI.getUser({ userId });
         console.log(data);
         const { name } = data;
         this.userName = name;
@@ -114,15 +109,17 @@ export default {
     },
     async fetchFollowings(userId) {
       try {
-        const { data } = await userAPI.getFollowings({ userId });
-        console.log(data);
+        this.isLoading = true;
+        const { data } = await usersAPI.getFollowings({ userId });
         this.followingUsers = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
           title: "無法取得追總者清單，請稍後再試",
         });
+        this.isLoading = false;
       }
     },
     async creatTweetFromModal(newDescription) {
