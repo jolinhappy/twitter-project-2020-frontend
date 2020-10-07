@@ -61,10 +61,22 @@ import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
   mixins: [emptyImageFilter],
+  props: {
+    initialIsFollowed: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       topUsers: [],
+      isFollowed: this.initialIsFollowed,
     };
+  },
+  watch: {
+    initialIsFollowed(newValue) {
+      this.isFollowed = newValue;
+    },
   },
   created() {
     this.fetchTopUsers();
@@ -93,6 +105,7 @@ export default {
         this.topUsers.map((topUser) => {
           if (topUser.id === id) {
             topUser.isFollowed = true;
+            this.isFollowed = true;
           }
           return topUser;
         });
@@ -111,6 +124,7 @@ export default {
         this.topUsers.map((topUser) => {
           if (topUser.id === id) {
             topUser.isFollowed = false;
+            this.isFollowed = false;
           }
           return topUser;
         });

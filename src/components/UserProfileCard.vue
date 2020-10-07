@@ -100,6 +100,7 @@
 import UserNavTab from "./../components/UserNavTab";
 import { emptyImageFilter } from "./../utils/mixins";
 import usersAPI from "./../apis/users";
+import { Toast } from "../utils/helpers";
 
 export default {
   mixins: [emptyImageFilter],
@@ -159,18 +160,34 @@ export default {
       }
     },
     async addFollow(id) {
-      const { data } = await usersAPI.addFollow({ id });
-      console.log("dd", data);
-      this.isFollowed = true;
-      console.log(id);
-      this.followers.push({});
+      try {
+        const { data } = await usersAPI.addFollow({ id });
+        console.log("dd", data);
+        this.isFollowed = true;
+        console.log(id);
+        this.followers.push({});
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤，請稍後再試",
+        });
+      }
     },
     async deletFollow(id) {
-      console.log(this.user);
-      const res = await usersAPI.deleteFollow({ userId: id });
-      console.log("dd", res);
-      this.isFollowed = false;
-      this.followers.splice(0, 1);
+      try {
+        console.log(this.user);
+        const res = await usersAPI.deleteFollow({ followingId: id });
+        console.log("dd", res);
+        this.isFollowed = false;
+        this.followers.splice(0, 1);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤，請稍後再試",
+        });
+      }
     },
   },
 };

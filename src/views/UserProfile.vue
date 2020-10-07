@@ -18,7 +18,7 @@
       />
     </div>
     <div class="follow-top">
-      <FollowTopList />
+      <FollowTopList :initial-is-followed="isFollowed" />
     </div>
     <TweetCreateModal
       v-if="createModal"

@@ -70,7 +70,7 @@
               src="https://i.imgur.com/8wXFVUF.png"
               class="like-icon"
               alt="like"
-              @click="deleteLike()"
+              @click="deleteLike(tweet.id)"
             />
           </div>
           <div class="tweet-like" v-else>
@@ -137,6 +137,11 @@ export default {
   },
   computed: {
     ...mapState(["currentUser"]),
+  },
+  watch: {
+    // tweet(newValue) {
+    //   this.tweet = tweet;
+    // },
   },
   data() {
     return {
@@ -291,13 +296,24 @@ export default {
         });
       }
     },
-    addLike() {
-      this.tweet.isLiked = true;
-      this.tweet.LikedUsers.push({
-        id: uuidv4(),
-        UserId: this.currentUser,
-        TweetId: this.tweet.id,
-      });
+    async addLike(id) {
+      try {
+        console.log(id);
+        const { data } = await tweetsAPI.addLike({ tweetId: this.tweet.id });
+        console.log(data);
+        this.tweet.isLiked = true;
+        this.tweet.Likes.push({
+          id: uuidv4(),
+          UserId: this.currentUser,
+          TweetId: this.tweet.id,
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法按讚，請稍後再試",
+        });
+      }
     },
     deleteLike() {
       this.tweet.isLiked = false;
