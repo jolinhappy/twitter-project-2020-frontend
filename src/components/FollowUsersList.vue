@@ -67,6 +67,14 @@ export default {
       follows: this.initialFollowData,
     };
   },
+  watch: {
+    initialFollowData(newValue) {
+      this.follows = {
+        ...this.initialFollowData,
+        ...newValue,
+      };
+    },
+  },
   methods: {
     addFollow(id) {
       this.follows.map((follow) => {

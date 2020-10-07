@@ -1,25 +1,33 @@
 <template>
-  <div class="wraper">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+  <div class="container">
+    <div class="wraper">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </template>
 
 
-<style scoped>
+<style lang="scss" scoped>
 $orange: #ff4800;
 $dirty-white: #f5f5f5;
 $speed: 1s;
 
 body {
   margin: 0;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  background: white;
+  position: fixed;
 }
 
 .wraper {

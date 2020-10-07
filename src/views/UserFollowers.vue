@@ -117,6 +117,7 @@ export default {
     async fetchFollower(userId) {
       try {
         const { data } = await userAPI.getFollowers({ userId });
+        console.log("users", data);
         this.followerUsers = data;
       } catch (error) {
         console.log(error);

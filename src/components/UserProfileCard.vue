@@ -138,6 +138,12 @@ export default {
     };
   },
   watch: {
+    initialFollowers(newValue) {
+      this.followers = [...this.followers, ...newValue];
+    },
+    initialFollowings(newValue) {
+      this.followings = [...this.followings, ...newValue];
+    },
     initialIsFollowed(newValue) {
       this.isFollowed = newValue;
     },
@@ -152,6 +158,7 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
+        console.log(this.followers.length);
         const { data } = await usersAPI.getUserTweets({ userId });
         console.log(data);
         this.tweets = data;

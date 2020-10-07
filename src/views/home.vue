@@ -75,7 +75,7 @@ import UserTweetsList from "./../components/UserTweetsList";
 import FollowTopList from "./../components/FollowTopList";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import TweetReplyModal from "./../components/TweetReplyModal";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
@@ -164,20 +164,22 @@ export default {
         const { data } = await tweetsAPI.createTweet({
           description: this.description,
         });
+        console.log(data);
         if (data.status === "error") {
           throw new Error(data.message);
         }
         this.tweets.splice(0, 0, {
-          id: data.commetId,
+          // id: data.id,
           description: this.description,
           createdAt: new Date(),
           User: {
-            id: this.currentUser.id,
+            // id: data.UserId,
             name: this.currentUser.name,
             account: this.currentUser.account,
             avatar: this.currentUser.avatar,
           },
         });
+        console.log(this.tweet.User.id);
         this.isProcessing = false;
         this.description = "";
       } catch (error) {
@@ -213,11 +215,12 @@ export default {
           throw new Error(data.message);
         }
         this.tweets.splice(0, 0, {
-          id: uuidv4(),
-          userId: this.currentUser.id,
+          // id: data.id,
+          // userId: this.data.id,
           createdAt: new Date(),
           description: newDescription,
           User: {
+            id: data.UserId,
             name: this.currentUser.name,
             account: this.currentUser.account,
             avatar: this.currentUser.avatar,
