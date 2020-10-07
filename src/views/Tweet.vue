@@ -78,7 +78,7 @@
               src="https://i.imgur.com/qs9Pe3N.png"
               class="like-icon"
               alt="like"
-              @click="addLike()"
+              @click="addLike(tweet.id)"
             />
           </div>
         </div>
@@ -298,10 +298,15 @@ export default {
     },
     async addLike(id) {
       try {
-        console.log(id);
-        const { data } = await tweetsAPI.addLike({ tweetId: this.tweet.id });
-        console.log(data);
+        const { data } = await tweetsAPI.addLike({ tweetId: id });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
         this.tweet.isLiked = true;
+        Toast.fire({
+          icon: "success",
+          title: "對方已經收到您的讚囉！",
+        });
         this.tweet.Likes.push({
           id: uuidv4(),
           UserId: this.currentUser,
@@ -315,10 +320,28 @@ export default {
         });
       }
     },
-    deleteLike() {
-      this.tweet.isLiked = false;
-      console.log(this.tweet.LikedUsers);
-      this.tweet.LikedUsers.splice(0, 1);
+    async deleteLike(id) {
+      try {
+        console.log("yy", id);
+        const { data } = await tweetsAPI.deleteLike({ tweetId: id });
+        console.log(data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "成功取消按讚！",
+        });
+        this.tweet.isLiked = false;
+        console.log(this.tweet.LikedUsers);
+        this.tweet.Likes.splice(0, 1);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消按讚，請稍後再試",
+        });
+      }
     },
   },
   filters: {

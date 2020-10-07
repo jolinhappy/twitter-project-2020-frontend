@@ -96,12 +96,14 @@ export default {
     },
     async addFollow(id) {
       try {
-        console.log(id);
         const { data } = await usersAPI.addFollow({ id });
-        console.log(data);
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        Toast.fire({
+          icon: "success",
+          title: "跟隨成功",
+        });
         this.topUsers.map((topUser) => {
           if (topUser.id === id) {
             topUser.isFollowed = true;
@@ -119,8 +121,14 @@ export default {
     },
     async deleteFollow(id) {
       try {
-        const res = await usersAPI.deleteFollow({ followingId: id });
-        console.log(res);
+        const { data } = await usersAPI.deleteFollow({ followingId: id });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "成功取消跟隨",
+        });
         this.topUsers.map((topUser) => {
           if (topUser.id === id) {
             topUser.isFollowed = false;

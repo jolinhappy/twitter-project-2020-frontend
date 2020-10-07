@@ -1,85 +1,109 @@
 <template>
-  <div class="container">
-    .row .col-sm-2.col-xs-4.text-center .circles-loader
+  <div class="wraper">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 </template>
 
 
 <style scoped>
-@-moz-keyframes circles-loader {
-  0% {
-    -moz-transform: rotate(-720deg);
-    transform: rotate(-720deg);
-  }
-  50% {
-    -moz-transform: rotate(720deg);
-    transform: rotate(720deg);
-  }
+$orange: #ff4800;
+$dirty-white: #f5f5f5;
+$speed: 1s;
+
+body {
+  margin: 0;
 }
-@-webkit-keyframes circles-loader {
-  0% {
-    -webkit-transform: rotate(-720deg);
-    transform: rotate(-720deg);
-  }
-  50% {
-    -webkit-transform: rotate(720deg);
-    transform: rotate(720deg);
-  }
-}
-@keyframes circles-loader {
-  0% {
-    -moz-transform: rotate(-720deg);
-    -ms-transform: rotate(-720deg);
-    -webkit-transform: rotate(-720deg);
-    transform: rotate(-720deg);
-  }
-  50% {
-    -moz-transform: rotate(720deg);
-    -ms-transform: rotate(720deg);
-    -webkit-transform: rotate(720deg);
-    transform: rotate(720deg);
-  }
-}
-/* :not(:required) hides this rule from IE9 and below */
-.circles-loader:not(:required) {
-  position: relative;
-  text-indent: -9999px;
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background: rgba(255, 204, 51, 0.9);
-  border-radius: 100%;
-  -moz-animation: circles-loader 3s infinite ease-in-out;
-  -webkit-animation: circles-loader 3s infinite ease-in-out;
-  animation: circles-loader 3s infinite ease-in-out;
-  -moz-transform-origin: 50% 100%;
-  -ms-transform-origin: 50% 100%;
-  -webkit-transform-origin: 50% 100%;
-  transform-origin: 50% 100%;
-}
-.circles-loader:not(:required)::before {
-  background: rgba(255, 102, 0, 0.6);
-  border-radius: 100%;
-  content: "";
+
+.wraper {
   position: absolute;
-  width: 25px;
-  height: 25px;
-  top: 18.75px;
-  left: -10.82532px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  animation: rotate $speed ease-in-out infinite;
+
+  div {
+    height: 150px;
+    margin: 0 auto;
+    width: 150px;
+    box-sizing: border-box;
+    float: left;
+
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8),
+    &:nth-child(9) {
+      background-color: $orange;
+      height: 20px;
+      width: 20px;
+    }
+    &:nth-child(1) {
+      animation: loop $speed ease-in-out infinite;
+    }
+    &:nth-child(2) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.2s;
+    }
+    &:nth-child(3) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    &:nth-child(4) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.1s;
+    }
+    &:nth-child(5) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.4s;
+    }
+    &:nth-child(6) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.7s;
+    }
+    &:nth-child(7) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.3s;
+    }
+    &:nth-child(8) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.6s;
+    }
+    &:nth-child(9) {
+      animation: loop $speed ease-in-out infinite;
+      animation-delay: 0.8s;
+    }
+  }
 }
-.circles-loader:not(:required)::after {
-  background: rgba(255, 51, 0, 0.4);
-  border-radius: 100%;
-  content: "";
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  top: 18.75px;
-  left: 10.82532px;
+
+@keyframes loop {
+  0% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
-.row {
-  margin-top: 50px;
-}
+
 body,
 html {
   margin: 0;

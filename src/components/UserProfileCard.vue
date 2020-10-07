@@ -162,7 +162,13 @@ export default {
     async addFollow(id) {
       try {
         const { data } = await usersAPI.addFollow({ id });
-        console.log("dd", data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "跟隨成功",
+        });
         this.isFollowed = true;
         console.log(id);
         this.followers.push({});
@@ -176,9 +182,14 @@ export default {
     },
     async deletFollow(id) {
       try {
-        console.log(this.user);
-        const res = await usersAPI.deleteFollow({ followingId: id });
-        console.log("dd", res);
+        const { data } = await usersAPI.deleteFollow({ followingId: id });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "成功取消跟隨",
+        });
         this.isFollowed = false;
         this.followers.splice(0, 1);
       } catch (error) {

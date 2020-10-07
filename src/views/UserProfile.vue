@@ -274,20 +274,6 @@ export default {
         });
       }
     },
-    // createReply(payload) {
-    //   const { id, TweetId, comment } = payload;
-    //   this.tweet.Replies.push({
-    //     id,
-    //     TweetId,
-    //     User: {
-    //       id: this.currentUser.id,
-    //       name: this.currentUser.name,
-    //     },
-    //     comment,
-    //     createdAt: new Date(),
-    //   });
-    //   this.closeReplyModal();
-    // },
   },
 };
 </script>
