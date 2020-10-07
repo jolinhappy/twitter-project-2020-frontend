@@ -140,11 +140,7 @@ export default {
           });
           return;
         }
-        // const form = e.target;
-        // const formData = new FormData(form);
         const userId = this.id;
-        // for (let [name, value] of formData.entries()) {
-        //   console.log(name + ": " + value);
         const formData = {
           account: this.account,
           name: this.name,
@@ -153,7 +149,13 @@ export default {
           checkPassword: this.checkPassword,
         };
         const { data } = await userAPI.updateInfo({ userId, formData });
-        console.log(data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "儲存完成",
+        });
       } catch (error) {
         console.log(error);
         Toast.fire({

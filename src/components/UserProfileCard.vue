@@ -67,7 +67,7 @@
         </div>
         <div class="name-info">
           <div class="user-name">{{ user.name }}</div>
-          <div class="user-account">{{ user.account }}</div>
+          <div class="user-account">@{{ user.account }}</div>
           <div class="introduction">{{ user.introduction }}</div>
         </div>
         <div class="follow-info">
@@ -108,7 +108,7 @@ export default {
     UserNavTab,
   },
   props: {
-    user: {
+    initialUser: {
       type: Object,
       required: true,
     },
@@ -135,14 +135,21 @@ export default {
       followers: this.initialFollowers,
       followings: this.initialFollowings,
       isFollowed: this.initialIsFollowed,
+      user: this.initialUser,
     };
   },
   watch: {
     initialFollowers(newValue) {
-      this.followers = [...this.followers, ...newValue];
+      this.followers = [...newValue];
     },
     initialFollowings(newValue) {
-      this.followings = [...this.followings, ...newValue];
+      this.followings = [...newValue];
+    },
+    initialUser(newValue) {
+      this.user = {
+        ...this.user,
+        ...newValue,
+      };
     },
     initialIsFollowed(newValue) {
       this.isFollowed = newValue;
@@ -155,6 +162,27 @@ export default {
   methods: {
     showEditModal() {
       this.$emit("showEditModal");
+    },
+    async updateData(userId) {
+      try {
+        const { data } = await usersAPI.getUser({ userId });
+        const { id, name, account, avatar, cover, introduction } = data;
+        this.user = {
+          ...this.user,
+          id,
+          name,
+          account,
+          avatar,
+          cover,
+          introduction,
+        };
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }
     },
     async fetchUserTweets(userId) {
       try {

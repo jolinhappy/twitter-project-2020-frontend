@@ -96,7 +96,6 @@
                   name="introduction"
                   v-model="user.introduction"
                   @input="calculateIntroductionInput"
-                  required
                 />
               </div>
               <div class="description-word-count">
@@ -179,15 +178,10 @@ export default {
     handleSubmit(e) {
       const form = e.target;
       const formData = new FormData(form);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
-      }
-      // const a = formData.entries();
-      // console.log("d", a);
-      // console.log("AA", formData);
-      // for (let w of a) {
-      //   console.log("dd", w);
+      // for (let [name, value] of formData.entries()) {
+      //   console.log(name + ": " + value);
       // }
+
       this.$emit("after-submit", formData);
     },
     calculateNameInput() {

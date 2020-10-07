@@ -5,11 +5,12 @@
     <div class="main-profile">
       <UserProfileCard
         @showEditModal="showEditModal"
-        :user="user"
+        :initial-user="user"
         :initial-followers="followers"
         :initial-followings="followings"
         :is-myself="isMyself"
         :initial-is-followed="isFollowed"
+        ref="fetch"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"
@@ -35,7 +36,7 @@
     <UserProfileEditModal
       v-if="editModal"
       @after-click-close-edit="closeEditModal"
-      :initialUser="user"
+      :initial-user="user"
       @after-submit="handleAfterSubmit"
     />
   </div>
@@ -52,7 +53,7 @@ import UserProfileEditModal from "./../components/UserProfileEditModal";
 import UserProfileCard from "./../components/UserProfileCard";
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
-import userAPI from "./../apis/users";
+import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
@@ -130,7 +131,7 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        const { data } = await userAPI.getUserTweets({ userId });
+        const { data } = await usersAPI.getUserTweets({ userId });
         console.log(data);
         this.tweets = data;
       } catch (error) {
@@ -143,7 +144,7 @@ export default {
     },
     async fetchUser(userId) {
       try {
-        const { data } = await userAPI.getUser({ userId });
+        const { data } = await usersAPI.getUser({ userId });
         const {
           id,
           name,
@@ -177,15 +178,19 @@ export default {
     },
     async handleAfterSubmit(formData) {
       try {
-        const response = await userAPI.updateInfo({
+        const response = await usersAPI.updateInfo({
           userId: this.currentUser.id,
           formData,
         });
-        console.log("dd", response);
-        console.log(formData);
+        console.log(response);
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
         }
+        Toast.fire({
+          icon: "success",
+          title: "儲存成功！",
+        });
+        this.closeEditModal();
       } catch (error) {
         console.log(error);
         Toast.fire({

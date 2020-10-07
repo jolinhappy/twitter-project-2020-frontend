@@ -147,6 +147,7 @@ export default {
           throw new Error(data.message);
         }
         tweet.isLiked = true;
+        console.log(tweet);
         tweet.Likes.push({
           UserId: this.currentUser,
         });

@@ -54,6 +54,9 @@
 
 <script>
 import { emptyImageFilter } from "./../utils/mixins";
+import usersAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
+
 export default {
   mixins: [emptyImageFilter],
   props: {
@@ -76,21 +79,54 @@ export default {
     },
   },
   methods: {
-    addFollow(id) {
-      this.follows.map((follow) => {
-        if (follow.id === id) {
-          follow.isFollowed = true;
+    async addFollow(id) {
+      try {
+        const { data } = await usersAPI.addFollow({ id });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        return follow;
-      });
+        Toast.fire({
+          icon: "success",
+          title: "跟隨成功",
+        });
+        this.follows.map((follow) => {
+          if (follow.id === id) {
+            follow.isFollowed = true;
+          }
+          return follow;
+        });
+        console.log(id);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤，請稍後再試",
+        });
+      }
     },
-    deleteFollow(id) {
-      this.follows.map((follow) => {
-        if (follow.id === id) {
-          follow.isFollowed = false;
+    async deleteFollow(id) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ followingId: id });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        return follow;
-      });
+        Toast.fire({
+          icon: "success",
+          title: "成功取消跟隨",
+        });
+        this.follows.map((follow) => {
+          if (follow.id === id) {
+            follow.isFollowed = false;
+          }
+          return follow;
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤，請稍後再試",
+        });
+      }
     },
   },
 };

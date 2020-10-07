@@ -168,18 +168,23 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
+        console.log(data.UserId);
         this.tweets.splice(0, 0, {
-          // id: data.id,
+          id: data.id,
           description: this.description,
           createdAt: new Date(),
           User: {
-            // id: data.UserId,
+            id: data.UserId,
             name: this.currentUser.name,
             account: this.currentUser.account,
             avatar: this.currentUser.avatar,
           },
+          Likes: [],
         });
-        console.log(this.tweet.User.id);
+        Toast.fire({
+          icon: "success",
+          title: "送出熱騰騰的推文囉！",
+        });
         this.isProcessing = false;
         this.description = "";
       } catch (error) {
@@ -214,9 +219,12 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
+        Toast.fire({
+          icon: "success",
+          title: "送出熱騰騰的推文囉！",
+        });
         this.tweets.splice(0, 0, {
-          // id: data.id,
-          // userId: this.data.id,
+          id: data.id,
           createdAt: new Date(),
           description: newDescription,
           User: {
@@ -225,6 +233,7 @@ export default {
             account: this.currentUser.account,
             avatar: this.currentUser.avatar,
           },
+          Likes: [],
         });
         this.closeCreateModal();
         this.description = "";

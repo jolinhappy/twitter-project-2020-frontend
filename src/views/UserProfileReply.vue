@@ -129,6 +129,7 @@ export default {
     async fetchUserTweets(userId) {
       try {
         const { data } = await userAPI.getUserRepliedTweets({ userId });
+        console.log("dd", data);
         this.tweets = data.map((tweet) => {
           return {
             ...tweet,
