@@ -186,9 +186,7 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        console.log(this.followers.length);
         const { data } = await usersAPI.getUserTweets({ userId });
-        console.log(data);
         this.tweets = data;
       } catch (error) {
         console.log(error);
@@ -205,7 +203,6 @@ export default {
           title: "跟隨成功",
         });
         this.isFollowed = true;
-        console.log(id);
         this.followers.push({});
       } catch (error) {
         console.log(error);

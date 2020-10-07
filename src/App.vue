@@ -1,10 +1,33 @@
 <template>
   <div id="twitter">
     <main role="main" class="main">
-      <router-view />
+      <router-view v-if="isReload" />
     </main>
   </div>
 </template>
+
+<script>
+export default {
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  data() {
+    return {
+      isReload: true,
+    };
+  },
+  methods: {
+    reload() {
+      this.isReload = false;
+      this.$nextTick(() => {
+        this.isReload = true;
+      });
+    },
+  },
+};
+</script>
 
 <style>
 html,

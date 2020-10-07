@@ -5,7 +5,7 @@
     <div class="main-profile">
       <UserProfileCard
         @showEditModal="showEditModal"
-        :user="user"
+        :initial-user="user"
         :initial-followers="followers"
         :initial-followings="followings"
         :isMyself="isMyself"
@@ -19,7 +19,11 @@
       />
     </div>
     <div class="follow-top">
-      <FollowTopList :pageMode="pageMode" :tweets="tweets" />
+      <FollowTopList
+        :pageMode="pageMode"
+        :tweets="tweets"
+        :initial-is-followed="isFollowed"
+      />
     </div>
     <TweetCreateModal
       v-if="createModal"
@@ -36,7 +40,8 @@
     <UserProfileEditModal
       v-if="editModal"
       @after-click-close-edit="closeEditModal"
-      :initialUser="user"
+      :initial-user="user"
+      @after-submit="handleAfterSubmit"
     />
   </div>
 </template>
@@ -52,8 +57,9 @@ import UserProfileEditModal from "./../components/UserProfileEditModal";
 import UserProfileCard from "./../components/UserProfileCard";
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
-import userAPI from "./../apis/users";
+import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
   name: "UserProfileReply",
@@ -66,6 +72,9 @@ export default {
     UserProfileEditModal,
     UserProfileCard,
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       createModal: false,
@@ -75,7 +84,6 @@ export default {
       likePage: true,
       tweets: [],
       tweet: {},
-      currentUser: {},
       description: "",
       user: {
         id: -1,
@@ -98,6 +106,7 @@ export default {
     this.fetchUser(userId);
     next();
   },
+  inject: ["reload"],
   created() {
     const { id: userId } = this.$route.params;
     this.fetchUserTweets(userId);
@@ -128,8 +137,7 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        const { data } = await userAPI.getUserRepliedTweets({ userId });
-        console.log("dd", data);
+        const { data } = await usersAPI.getUserRepliedTweets({ userId });
         this.tweets = data.map((tweet) => {
           return {
             ...tweet,
@@ -152,7 +160,7 @@ export default {
     },
     async fetchUser(userId) {
       try {
-        const { data } = await userAPI.getUser({ userId });
+        const { data } = await usersAPI.getUser({ userId });
         const {
           id,
           name,
@@ -181,6 +189,35 @@ export default {
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍後再試",
+        });
+      }
+    },
+    async handleAfterSubmit(formData) {
+      try {
+        console.log(this.currentUser.id);
+        const res = await usersAPI.updateInfo({
+          userId: this.currentUser.id,
+          formData,
+        });
+        const { data } = await usersAPI.updateInfo({
+          userId: this.currentUser.id,
+          formData,
+        });
+        console.log(res);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        Toast.fire({
+          icon: "success",
+          title: "儲存成功！",
+        });
+        this.closeEditModal();
+        this.reload();
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法儲存資料，請稍後再試",
         });
       }
     },

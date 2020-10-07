@@ -10,7 +10,6 @@
         :initial-followings="followings"
         :is-myself="isMyself"
         :initial-is-followed="isFollowed"
-        ref="fetch"
       />
       <UserTweetsList
         @showReplyModal="showReplyModal"
@@ -95,6 +94,7 @@ export default {
       selectedPage: "profile",
     };
   },
+  inject: ["reload"],
   created() {
     const { id: userId } = this.$route.params;
     this.fetchUserTweets(userId);
@@ -178,19 +178,19 @@ export default {
     },
     async handleAfterSubmit(formData) {
       try {
-        const response = await usersAPI.updateInfo({
+        const { data } = await usersAPI.updateInfo({
           userId: this.currentUser.id,
           formData,
         });
-        console.log(response);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
         Toast.fire({
           icon: "success",
           title: "儲存成功！",
         });
         this.closeEditModal();
+        this.reload();
       } catch (error) {
         console.log(error);
         Toast.fire({
