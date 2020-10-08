@@ -82,6 +82,10 @@ export default {
       type: Object,
       required: true,
     },
+    currentUserData: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     ...mapState(["currentUser"]),

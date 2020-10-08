@@ -90,13 +90,13 @@
                 <label for="discription" class="discpription-label form-label"
                   >自我介紹</label
                 >
-                <input
+                <textarea
                   type="text"
                   class="form-input description-input"
                   name="introduction"
                   v-model="user.introduction"
                   @input="calculateIntroductionInput"
-                />
+                ></textarea>
               </div>
               <div class="description-word-count">
                 {{ introductionLength }}/160
@@ -359,7 +359,7 @@ export default {
 .detail-edit {
   width: 570px;
   height: 220px;
-  margin: 100px auto 0 auto;
+  margin: 90px auto 0 auto;
 }
 .form-label-group {
   width: 570px;
@@ -379,6 +379,7 @@ export default {
   padding-left: 10px;
   background-color: transparent;
   font-size: 20px;
+  word-break: break-all;
 }
 .form-label {
   width: 60px;
@@ -394,6 +395,8 @@ export default {
 }
 .description-input {
   height: 150px;
+  resize: none;
+  margin-top: 35px;
 }
 .name-word-count {
   margin-top: -18px;
@@ -401,7 +404,7 @@ export default {
 }
 .description-word-count {
   margin-top: -18px;
-  margin-left: 530px;
+  margin-left: 510px;
 }
 #cover-upload-input,
 #photo-upload-input {

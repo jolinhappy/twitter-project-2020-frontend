@@ -87,7 +87,7 @@
 import Sidebar from "./../components/Sidebar";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import tweetsAPI from "./../apis/tweets";
-import userAPI from "./../apis/users";
+import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
@@ -113,7 +113,7 @@ export default {
     };
   },
   created() {
-    this.fetchUserData();
+    this.fetchUserData(this.currentUser.id);
   },
   methods: {
     showCreateModal() {
@@ -125,11 +125,13 @@ export default {
     CreateFinish() {
       this.$router.push({ name: "tweets-home" });
     },
-    fetchUserData() {
-      this.id = this.currentUser.id;
-      this.account = this.currentUser.account;
-      this.name = this.currentUser.name;
-      this.email = this.currentUser.email;
+    async fetchUserData(id) {
+      const { data } = await usersAPI.getUser({ userId: id });
+      const { account, name, email } = data;
+      this.id = id;
+      this.account = account;
+      this.name = name;
+      this.email = email;
     },
     async handleSubmit() {
       try {
@@ -158,8 +160,7 @@ export default {
           password: this.password,
           checkPassword: this.checkPassword,
         };
-        const { data } = await userAPI.updateInfo({ userId, formData });
-        console.log(data);
+        const { data } = await usersAPI.updateInfo({ userId, formData });
         if (data.status !== "success") {
           if (data.message === "Account repeated.") {
             Toast.fire({

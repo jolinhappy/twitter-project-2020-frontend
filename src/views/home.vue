@@ -18,7 +18,7 @@
               :to="{ name: 'user-profile', params: { id: currentUser.id } }"
             >
               <img
-                :src="currentUser.avatar | emptyImage"
+                :src="this.currentUserData.avatar | emptyImage"
                 class="user-img"
                 alt=""
               />
@@ -82,6 +82,7 @@ import { Toast } from "./../utils/helpers";
 import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 import Spinner from "./../components/Spinner";
+import usersAPI from "./../apis/users";
 
 export default {
   name: "home",
@@ -106,18 +107,23 @@ export default {
       selectedPage: "home",
       isProcessing: false,
       isLoading: false,
+      currentUserData: {
+        id: "",
+        name: "",
+        account: "",
+        avatar: "",
+      },
     };
   },
   computed: {
     //從vuex拿取現在登入者的資料
     ...mapState(["currentUser"]),
   },
-  inject: ["reload"],
   created() {
     this.fetchUserTweets();
+    this.fetchUserData(this.currentUser.id);
   },
   beforeRouteUpdate(to, from, next) {
-    this.reload();
     next();
   },
   methods: {
@@ -133,6 +139,13 @@ export default {
     },
     closeReplyModal() {
       this.replyModal = false;
+    },
+    async fetchUserData(id) {
+      const { data } = await usersAPI.getUser({ userId: id });
+      const { account, name, avatar } = data;
+      this.currentUserData.account = account;
+      this.currentUserData.name = name;
+      this.currentUserData.avatar = avatar;
     },
     async fetchUserTweets() {
       try {

@@ -239,6 +239,7 @@ export default {
   flex: 1;
   font-size: 15px;
   font-weight: 500;
+  word-break: break-all;
 }
 .tweet-action,
 .tweet-reply,

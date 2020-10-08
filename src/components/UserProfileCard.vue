@@ -96,6 +96,7 @@
   </div>
 </template>
 
+
 <script>
 import UserNavTab from "./../components/UserNavTab";
 import { emptyImageFilter } from "./../utils/mixins";
@@ -264,12 +265,10 @@ export default {
 .title-content {
   margin-left: 25px;
 }
-
 .profile-image {
   width: 70px;
   height: 120px;
 }
-
 .name {
   font-size: 19px;
   font-weight: 900;
@@ -311,7 +310,6 @@ export default {
   border-radius: 50%;
   background: #999999;
 }
-
 .detail-info-part {
   width: 550px;
   height: 210px;
@@ -319,7 +317,6 @@ export default {
   flex-direction: column;
   margin-left: 20px;
 }
-
 .button-part {
   width: 600px;
   display: flex;
@@ -350,7 +347,6 @@ export default {
   color: white;
   border-radius: 100px;
 }
-
 .follow {
   width: 62px;
   height: 40px;
@@ -379,8 +375,8 @@ export default {
   font-size: 14px;
   font-weight: normal;
   margin-top: 10px;
+  word-break: break-all;
 }
-
 .follow-info {
   display: flex;
   font-size: 14px;
@@ -399,7 +395,6 @@ export default {
 .followers:hover {
   text-decoration: underline;
 }
-
 .followed:hover {
   border: 1px solid #ff6000;
   color: #ff6000;
