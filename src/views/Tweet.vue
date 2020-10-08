@@ -479,6 +479,7 @@ export default {
   font-size: 23px;
   font-weight: 500;
   height: auto;
+  word-break: break-all;
 }
 .create-time {
   font-size: 15px;

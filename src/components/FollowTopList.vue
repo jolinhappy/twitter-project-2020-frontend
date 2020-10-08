@@ -24,7 +24,7 @@
           >
             <div class="user-name">{{ user.name }}</div>
           </router-link>
-          <div class="user-account">{{ user.account }}</div>
+          <div class="user-account">@{{ user.account }}</div>
         </div>
         <div class="follow-btn">
           <button
