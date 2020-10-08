@@ -20,13 +20,17 @@
 
         <div class="user-tweet-content">
           <div class="tweet-info">
-            <div class="profile-image">
-              <img
-                :src="tweet.User.avatar | emptyImage"
-                class="user-img"
-                alt=""
-              />
-            </div>
+            <router-link
+              :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
+            >
+              <div class="profile-image">
+                <img
+                  :src="tweet.User.avatar | emptyImage"
+                  class="user-img"
+                  alt=""
+                />
+              </div>
+            </router-link>
             <div class="user-info">
               <router-link
                 :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
@@ -519,5 +523,8 @@ export default {
 .reply-icon:hover,
 .like-icon:hover {
   transform: scale(1.2, 1.2);
+}
+.user-img:hover {
+  transform: scale(1.1, 1.1);
 }
 </style>

@@ -1,39 +1,37 @@
 import { apiHelper } from '../utils/helpers'
 
-const getToken = () => localStorage.getItem('token')
-
 export default {
   getCurrentUser() {
-    return apiHelper.get('get_current_user', { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get('get_current_user')
   },
   getTopUsers() {
-    return apiHelper.get('/followships/top', { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get('/followships/top')
   },
   getUser({ userId }) {
-    return apiHelper.get(`/users/${userId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}`)
   },
   getUserTweets({ userId }) {
-    return apiHelper.get(`/users/${userId}/tweets`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}/tweets`)
   },
   getUserRepliedTweets({ userId }) {
-    return apiHelper.get(`/users/${userId}/replied_tweets`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}/replied_tweets`)
   },
   getUserLikedTweets({ userId }) {
-    return apiHelper.get(`/users/${userId}/likes`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}/likes`)
   },
   addFollow({ id }) {
-    return apiHelper.post('/followships', { id }, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.post('/followships', { id })
   },
   deleteFollow({ followingId }) {
-    return apiHelper.delete(`/followships/${followingId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.delete(`/followships/${followingId}`)
   },
   getFollowings({ userId }) {
-    return apiHelper.get(`/users/${userId}/followings`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}/followings`)
   },
   getFollowers({ userId }) {
-    return apiHelper.get(`/users/${userId}/followers`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.get(`/users/${userId}/followers`)
   },
   updateInfo({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}`, formData, { headers: { Authorization: `Bearer ${getToken()}` } })
+    return apiHelper.put(`/users/${userId}`, formData)
   }
 }

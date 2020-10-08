@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Spinner v-if="isLoading" />
     <!-- sidebar -->
     <Sidebar @showCreateModal="showCreateModal" :selectedPage="selectedPage" />
     <div class="account-setting">
@@ -90,11 +91,13 @@ import tweetsAPI from "./../apis/tweets";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import Spinner from "./../components/Spinner";
 
 export default {
   components: {
     Sidebar,
     TweetCreateModal,
+    Spinner,
   },
   computed: {
     ...mapState(["currentUser"]),
@@ -110,6 +113,7 @@ export default {
       password: "",
       checkPassword: "",
       isProcessing: false,
+      isLoading: false,
     };
   },
   created() {
@@ -126,12 +130,23 @@ export default {
       this.$router.push({ name: "tweets-home" });
     },
     async fetchUserData(id) {
-      const { data } = await usersAPI.getUser({ userId: id });
-      const { account, name, email } = data;
-      this.id = id;
-      this.account = account;
-      this.name = name;
-      this.email = email;
+      try {
+        this.isLoading = true;
+        const { data } = await usersAPI.getUser({ userId: id });
+        const { account, name, email } = data;
+        this.id = id;
+        this.account = account;
+        this.name = name;
+        this.email = email;
+        this.isLoading = false;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+        this.isLoading = false;
+      }
     },
     async handleSubmit() {
       try {

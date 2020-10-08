@@ -20,7 +20,12 @@
             :key="user.id"
           >
             <div class="cover-part">
-              <img :src="user.cover" class="cover-img" alt="cover" />
+              <img
+                :src="user.cover"
+                class="cover-img"
+                alt="cover"
+                v-if="user.cover"
+              />
             </div>
             <div class="user-img-part">
               <img
@@ -164,6 +169,7 @@ export default {
 .cover-img {
   width: 245px;
   height: 140px;
+  background: #999999;
 }
 .cover-img {
   object-fit: cover;
