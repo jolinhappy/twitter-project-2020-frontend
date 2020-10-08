@@ -271,6 +271,7 @@ export default {
   position: absolute;
   left: 550px;
   top: 220px;
+  object-fit: cover;
 }
 .user-main-img {
   width: 120px;

@@ -201,16 +201,10 @@ export default {
     },
     async handleAfterSubmit(formData) {
       try {
-        console.log(this.currentUser.id);
-        const res = await usersAPI.updateInfo({
-          userId: this.currentUser.id,
-          formData,
-        });
         const { data } = await usersAPI.updateInfo({
           userId: this.currentUser.id,
           formData,
         });
-        console.log(res);
         if (data.status !== "success") {
           throw new Error(data.message);
         }

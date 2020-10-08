@@ -120,4 +120,7 @@ input:invalid {
   height: auto;
   margin: 0 auto;
 }
+.user-img {
+  object-fit: cover;
+}
 </style>

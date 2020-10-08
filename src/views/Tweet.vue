@@ -92,7 +92,7 @@
       />
     </div>
     <div class="follow-top">
-      <FollowTopList />
+      <FollowTopList :initial-is-followed="isFollowed" />
     </div>
     <TweetCreateModal
       v-if="createModal"
@@ -152,6 +152,7 @@ export default {
       tweets: [],
       selectedPage: "",
       date: "",
+      isFollowed: "",
       isLoading: false,
     };
   },
@@ -334,12 +335,14 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        console.log(this.tweet);
         Toast.fire({
           icon: "success",
           title: "成功取消按讚！",
         });
+
         this.tweet.isLiked = false;
-        console.log(this.tweet.LikedUsers);
+
         this.tweet.Likes.splice(0, 1);
       } catch (error) {
         console.log(error);
