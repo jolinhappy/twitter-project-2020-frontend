@@ -111,6 +111,7 @@
 
 <script>
 import { emptyImageFilter } from "./../utils/mixins";
+import { Toast } from "./../utils/helpers";
 export default {
   mixins: [emptyImageFilter],
   props: {
@@ -176,6 +177,25 @@ export default {
       this.user.cover = "";
     },
     handleSubmit(e) {
+      if (this.name === "") {
+        Toast.fire({
+          icon: "warning",
+          title: "尚未填入名稱",
+        });
+        return;
+      } else if (this.user.name.length > 50) {
+        Toast.fire({
+          icon: "warning",
+          title: "名稱只限輸入50字",
+        });
+        return;
+      } else if (this.user.introduction.length > 50) {
+        Toast.fire({
+          icon: "warning",
+          title: "自我介紹只限輸入160個字",
+        });
+        return;
+      }
       const form = e.target;
       const formData = new FormData(form);
       this.$emit("after-submit", formData);

@@ -66,6 +66,21 @@ export default {
           checkPassword,
         });
         if (response.data.status === "error") {
+          if (response.data.message === "Already have the same account.") {
+            Toast.fire({
+              icon: "error",
+              title: "此帳號已被使用！",
+            });
+            this.isProcessing = false;
+            return;
+          } else if (response.data.message === "Email has been registered.") {
+            Toast.fire({
+              icon: "error",
+              title: "此信箱已被註冊！",
+            });
+            this.isProcessing = false;
+            return;
+          }
           throw new Error(response.data.status);
         }
         Toast.fire({

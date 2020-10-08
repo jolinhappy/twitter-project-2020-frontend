@@ -257,14 +257,6 @@ export default {
           });
           return;
         }
-
-        if (Comment.length > 140) {
-          Toast.fire({
-            icon: "warning",
-            title: "回覆字數限制140字以內，請減少輸入的字數",
-          });
-          return;
-        }
         const { data } = await tweetsAPI.replyTweet({
           tweetId,
           comment,

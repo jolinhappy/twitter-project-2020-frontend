@@ -100,6 +100,7 @@ router.beforeEach(async (to, from, next) => {
   //如果本地token和store裡面的token不同，重新用getCurrentUserAPI驗證身分
   if (token && token !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
+
   }
   const isAdmin = store.state.currentUser.isAdmin
   const pathWithoutAuthentication = ['user-login', 'user-regist', 'admin-login']

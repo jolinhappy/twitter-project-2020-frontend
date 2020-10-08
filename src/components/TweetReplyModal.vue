@@ -73,6 +73,7 @@
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
+import { Toast } from "../utils/helpers";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -92,6 +93,13 @@ export default {
   },
   methods: {
     handleReplySubmit() {
+      if (this.replyComment.length > 150) {
+        Toast.fire({
+          icon: "warning",
+          title: "回覆字數限制140字以內，請減少輸入的字數",
+        });
+        return;
+      }
       this.$emit("after-create-reply", {
         tweetId: this.tweet.id,
         comment: this.replyComment,
@@ -100,10 +108,10 @@ export default {
     clickToClose() {
       this.$emit("after-click-close-reply");
     },
-    calculateReplyInput() {
-      const introductionLength = this.user.introduction.length;
-      this.introductionLength = introductionLength;
-    },
+    // calculateReplyInput() {
+    //   const introductionLength = this.user.introduction.length;
+    //   this.introductionLength = introductionLength;
+    // },
     //用出現滾輪的欄高判斷是否調整textarea高
     autoTextAreaHeight(e) {
       //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高

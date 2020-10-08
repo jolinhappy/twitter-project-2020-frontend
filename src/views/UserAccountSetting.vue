@@ -139,6 +139,7 @@ export default {
             icon: "warning",
             title: "您有漏填的欄位喔！",
           });
+          this.isProcessing = false;
           return;
         }
         if (this.password !== this.checkPassword) {
@@ -146,6 +147,7 @@ export default {
             icon: "warning",
             title: "密碼與確認密碼不符",
           });
+          this.isProcessing = false;
           return;
         }
         const userId = this.id;
@@ -158,6 +160,21 @@ export default {
         };
         const { data } = await userAPI.updateInfo({ userId, formData });
         if (data.status !== "success") {
+          if (data.message === "Account repeated.") {
+            Toast.fire({
+              icon: "error",
+              title: "此帳號已被使用！",
+            });
+            this.isProcessing = false;
+            return;
+          } else if (data.message === "Email repeated.") {
+            Toast.fire({
+              icon: "error",
+              title: "此信箱已被使用！",
+            });
+            this.isProcessing = false;
+            return;
+          }
           throw new Error(data.message);
         }
         Toast.fire({
