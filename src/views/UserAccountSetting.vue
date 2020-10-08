@@ -159,6 +159,7 @@ export default {
           checkPassword: this.checkPassword,
         };
         const { data } = await userAPI.updateInfo({ userId, formData });
+        console.log(data);
         if (data.status !== "success") {
           if (data.message === "Account repeated.") {
             Toast.fire({
@@ -171,6 +172,13 @@ export default {
             Toast.fire({
               icon: "error",
               title: "此信箱已被使用！",
+            });
+            this.isProcessing = false;
+            return;
+          } else if (data.message === "Email and account repeated.") {
+            Toast.fire({
+              icon: "error",
+              title: "帳號及信箱已被使用！",
             });
             this.isProcessing = false;
             return;

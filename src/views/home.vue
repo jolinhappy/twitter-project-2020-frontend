@@ -112,8 +112,13 @@ export default {
     //從vuex拿取現在登入者的資料
     ...mapState(["currentUser"]),
   },
+  inject: ["reload"],
   created() {
     this.fetchUserTweets();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.reload();
+    next();
   },
   methods: {
     showCreateModal() {

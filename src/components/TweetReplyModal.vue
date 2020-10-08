@@ -93,10 +93,10 @@ export default {
   },
   methods: {
     handleReplySubmit() {
-      if (this.replyComment.length > 150) {
+      if (this.replyComment.length > 140) {
         Toast.fire({
           icon: "warning",
-          title: "回覆字數限制140字以內，請減少輸入的字數",
+          title: "哎呀！回覆只能輸入140個字喔！",
         });
         return;
       }
@@ -108,10 +108,6 @@ export default {
     clickToClose() {
       this.$emit("after-click-close-reply");
     },
-    // calculateReplyInput() {
-    //   const introductionLength = this.user.introduction.length;
-    //   this.introductionLength = introductionLength;
-    // },
     //用出現滾輪的欄高判斷是否調整textarea高
     autoTextAreaHeight(e) {
       //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高

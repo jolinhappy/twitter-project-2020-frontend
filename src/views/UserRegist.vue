@@ -65,6 +65,7 @@ export default {
           password,
           checkPassword,
         });
+        console.log(response);
         if (response.data.status === "error") {
           if (response.data.message === "Already have the same account.") {
             Toast.fire({

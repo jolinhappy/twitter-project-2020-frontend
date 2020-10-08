@@ -183,13 +183,22 @@ export default {
           title: "尚未填入名稱",
         });
         return;
+      } else if (
+        this.user.name.length > 50 &&
+        this.user.introduction.length > 160
+      ) {
+        Toast.fire({
+          icon: "warning",
+          title: "名稱和自我介紹都超過限制字數了！",
+        });
+        return;
       } else if (this.user.name.length > 50) {
         Toast.fire({
           icon: "warning",
           title: "名稱只限輸入50字",
         });
         return;
-      } else if (this.user.introduction.length > 50) {
+      } else if (this.user.introduction.length > 160) {
         Toast.fire({
           icon: "warning",
           title: "自我介紹只限輸入160個字",
