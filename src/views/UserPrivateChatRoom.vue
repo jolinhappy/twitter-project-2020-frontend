@@ -2,10 +2,10 @@
   <div class="container">
     <!-- sidebar -->
     <Sidebar :selected-page="selectedPage" />
-    <div class="online-users-part">
-      <div class="online-users-container">
-        <div class="user-list-title">
-          <p>上線使用者(0)</p>
+    <div class="history-chat-data-part">
+      <div class="history-chat-data-container">
+        <div class="history-data-list-title">
+          <p>訊息</p>
         </div>
         <!-- list- -->
         <div class="online-user">
@@ -18,14 +18,15 @@
               />
             </div>
           </router-link>
-          <div class="online-user-info">
+          <div class="chatted-user-info">
             <router-link to="#" class="user-name-link">
               <div class="user-name">username</div>
             </router-link>
             <div class="user-account">@user.account</div>
           </div>
+          <div class="history-chat-content">dweofkwofk owo fkeop...</div>
         </div>
-        <div class="online-user">
+        <!-- <div class="online-user">
           <router-link to="#" class="user-avatar-link">
             <div class="profile-image online-user-image">
               <img
@@ -58,13 +59,14 @@
             </router-link>
             <div class="user-account">@user.account</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="chat-room-part">
       <div class="chat-room-container">
         <div class="chat-room-title">
-          <p>公開聊天室</p>
+          <div class="title">公開聊天室</div>
+          <div class="accout">@apple</div>
         </div>
         <!-- chat -->
         <!-- <div class="chat-room"> -->
@@ -176,11 +178,11 @@ export default {
   },
   created: {
     created() {
-      this.fetchChattingData();
       // this.$socket.on("chat", (data) => {
       //   this.messagePush(data);
       //   console.log(data);
       // });
+      this.fetchChattingData();
       // this.$socket.on("", (data) => {
       //   this.messagePush(data);
       // });
@@ -203,9 +205,9 @@ export default {
     //     isMyself: true,
     //   };
     //   this.messagePush(data);
-    //   this.$socket.emit("chat", {
-    //     data,
-    //   });
+    //   // this.$socket.emit("chat", {
+    //   //   data,
+    //   // });
     //   this.inputMessage = "";
     // },
     // messagePush(data) {
@@ -248,20 +250,21 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
+  /* flex: 1; */
   flex-direction: row;
 }
-.online-users-part {
+.history-chat-data-part {
   width: 500px;
-  height: 100%;
+  height: auto;
   border-left: 1px solid #e6ecf0;
 }
 .chat-room-part {
   width: 50%;
-  height: 100%;
+  height: auto;
   flex: 1;
   border-left: 1px solid #e6ecf0;
 }
-.user-list-title,
+.history-data-list-title,
 .chat-room-title {
   font-size: 18px;
   font-weight: 700;
@@ -277,11 +280,6 @@ export default {
 }
 /* 
 onlineUsers-list */
-.online-users-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 .online-user {
   display: flex;
   align-items: center;
@@ -291,7 +289,7 @@ onlineUsers-list */
 .online-user:hover {
   background: #e6ece2;
 }
-.online-user-info {
+.chatted-user-info {
   width: 150px;
   display: flex;
   margin-left: 10px;
@@ -461,5 +459,3 @@ onlineUsers-list */
   border-radius: 50px;
 }
 </style>
-
-

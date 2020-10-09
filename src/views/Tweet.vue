@@ -402,9 +402,7 @@ export default {
 .back-img {
   width: 24px;
   height: 24px;
-  display: inline;
   margin: auto 15px;
-  margin-top: 15px;
 }
 .tweet-title {
   font-size: 18px;

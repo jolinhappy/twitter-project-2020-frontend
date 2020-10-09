@@ -27,16 +27,7 @@
             </div>
             <div class="sidebar-item">
               <router-link to="#" class="sidebar-link sidebar-info">
-                <img
-                  src="https://i.imgur.com/tS096bA.png"
-                  class="option"
-                  alt="user-notice"
-                />
-                <img
-                  src="https://i.imgur.com/I8IlDOt.png"
-                  class="option"
-                  alt="notice-unselected"
-                />
+                <font-awesome-icon icon="bell" class="option" />
                 <span>通知</span>
               </router-link>
             </div>
@@ -45,31 +36,13 @@
                 to="/users/chatting"
                 class="sidebar-link sidebar-info"
               >
-                <img
-                  src="https://i.imgur.com/tS096bA.png"
-                  class="option"
-                  alt="chat-room"
-                />
-                <img
-                  src="https://i.imgur.com/I8IlDOt.png"
-                  class="option"
-                  alt="chat-room-unselected"
-                />
+                <font-awesome-icon icon="envelope" class="option" />
                 <span>公開聊天室</span>
               </router-link>
             </div>
             <div class="sidebar-item">
               <router-link to="#" class="sidebar-link sidebar-info">
-                <img
-                  src="https://i.imgur.com/tS096bA.png"
-                  class="option"
-                  alt="private-message"
-                />
-                <img
-                  src="https://i.imgur.com/I8IlDOt.png"
-                  class="option"
-                  alt="private-message-unselected"
-                />
+                <font-awesome-icon icon="envelope" class="option" />
                 <span>私人訊息</span>
               </router-link>
             </div>
@@ -214,21 +187,18 @@ export default {
   width: 450px;
   height: 100%;
 }
-
 .logo {
   width: 30px;
   height: 30px;
   margin-top: 10px;
   margin-bottom: 30px;
 }
-
 .option {
   width: 24px;
   height: 24px;
   display: inline;
   margin: auto 0;
 }
-
 .sidebar-container {
   width: 235px;
   margin: 0 auto;
@@ -247,18 +217,15 @@ export default {
 .sidebar-list {
   flex: 1;
 }
-
 .sidebar-item {
   width: 214px;
   height: 60px;
 }
-
 .sidebar-link {
   height: 100%;
   display: flex;
   align-items: center;
 }
-
 .show-tweet-modal {
   width: 210px;
   height: 45px;
@@ -271,11 +238,9 @@ export default {
   margin-top: 10px;
   flex: 1;
 }
-
 .show-tweet-modal:hover {
   background-color: #f75000;
 }
-
 .logout-button {
   display: flex;
   margin-bottom: 15px;
@@ -284,7 +249,6 @@ export default {
 .logout-button:hover {
   color: #657786;
 }
-
 span {
   font-size: 18px;
   font-weight: bold;
@@ -292,7 +256,6 @@ span {
   margin: auto 0;
   margin-left: 20px;
 }
-
 .active {
   color: #ff6000;
 }
