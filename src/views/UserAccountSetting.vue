@@ -253,7 +253,6 @@ export default {
 <style scoped>
 .container {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
 }
@@ -274,10 +273,13 @@ export default {
   line-height: 55px;
   margin-left: 15px;
 }
-
+.account-setting-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  border-left: 1px solid #e6ecf0;
+}
 .form-part {
-  height: 100%;
-  flex: 1;
   border-left: 1px solid #e6ecf0;
   padding-top: 20px;
 }

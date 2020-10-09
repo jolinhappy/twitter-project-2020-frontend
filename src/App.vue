@@ -113,12 +113,13 @@ input:invalid {
   width: 100%;
   height: auto;
   display: flex;
+  min-height: 100vh;
 }
 
 .main {
   width: 100%;
-  height: auto;
   margin: 0 auto;
+  flex: 1;
 }
 .user-img {
   object-fit: cover;

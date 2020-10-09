@@ -26,6 +26,54 @@
               </router-link>
             </div>
             <div class="sidebar-item">
+              <router-link to="#" class="sidebar-link sidebar-info">
+                <img
+                  src="https://i.imgur.com/tS096bA.png"
+                  class="option"
+                  alt="user-notice"
+                />
+                <img
+                  src="https://i.imgur.com/I8IlDOt.png"
+                  class="option"
+                  alt="notice-unselected"
+                />
+                <span>通知</span>
+              </router-link>
+            </div>
+            <div class="sidebar-item">
+              <router-link
+                to="/users/chatting"
+                class="sidebar-link sidebar-info"
+              >
+                <img
+                  src="https://i.imgur.com/tS096bA.png"
+                  class="option"
+                  alt="chat-room"
+                />
+                <img
+                  src="https://i.imgur.com/I8IlDOt.png"
+                  class="option"
+                  alt="chat-room-unselected"
+                />
+                <span>公開聊天室</span>
+              </router-link>
+            </div>
+            <div class="sidebar-item">
+              <router-link to="#" class="sidebar-link sidebar-info">
+                <img
+                  src="https://i.imgur.com/tS096bA.png"
+                  class="option"
+                  alt="private-message"
+                />
+                <img
+                  src="https://i.imgur.com/I8IlDOt.png"
+                  class="option"
+                  alt="private-message-unselected"
+                />
+                <span>私人訊息</span>
+              </router-link>
+            </div>
+            <div class="sidebar-item">
               <router-link
                 :to="{ name: 'user-profile', params: { id: currentUser.id } }"
                 class="sidebar-link sidebar-info"
@@ -183,18 +231,20 @@ export default {
 
 .sidebar-container {
   width: 235px;
-  height: 100%;
   margin: 0 auto;
   padding-left: 50px;
-}
-.sidebar-options {
-  width: auto;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
+.sidebar-options {
+  width: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .sidebar-list {
-  height: auto;
   flex: 1;
 }
 

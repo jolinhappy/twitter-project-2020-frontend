@@ -40,6 +40,11 @@ const routes = [
     component: () => import('../views/UserAccountSetting.vue')
   },
   {
+    path: '/users/chatting',
+    name: 'user-chat-romm',
+    component: () => import('../views/UserChatRoom')
+  },
+  {
     path: '/users/:id/replies',
     name: 'user-replies',
     component: () => import('../views/UserProfileReply')
