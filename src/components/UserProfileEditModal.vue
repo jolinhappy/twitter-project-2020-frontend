@@ -298,7 +298,7 @@ export default {
   align-items: center;
   border-radius: 50%;
   position: absolute;
-  left: 550px;
+  left: 370px;
   top: 220px;
   object-fit: cover;
 }
