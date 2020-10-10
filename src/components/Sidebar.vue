@@ -25,12 +25,12 @@
                 <span>首頁</span>
               </router-link>
             </div>
-            <div class="sidebar-item">
+            <!-- <div class="sidebar-item">
               <router-link to="#" class="sidebar-link sidebar-info">
                 <font-awesome-icon icon="bell" class="option" />
                 <span>通知</span>
               </router-link>
-            </div>
+            </div> -->
             <div class="sidebar-item">
               <router-link
                 to="/users/chatting"
@@ -40,12 +40,12 @@
                 <span>公開聊天室</span>
               </router-link>
             </div>
-            <div class="sidebar-item">
+            <!-- <div class="sidebar-item">
               <router-link to="#" class="sidebar-link sidebar-info">
                 <font-awesome-icon icon="envelope" class="option" />
                 <span>私人訊息</span>
               </router-link>
-            </div>
+            </div> -->
             <div class="sidebar-item">
               <router-link
                 :to="{ name: 'user-profile', params: { id: currentUser.id } }"
@@ -176,6 +176,11 @@ export default {
     logout() {
       this.$store.commit("revokeAuthentication");
       this.$router.push("/login");
+    },
+    enterChatRoom() {
+      const id = this.currentUser.id;
+      console.log(id);
+      this.$emit("login", id);
     },
   },
 };

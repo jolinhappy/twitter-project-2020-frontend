@@ -86,13 +86,13 @@
             </div>
             <!-- 自己的訊息 -->
             <div v-for="user in userMessageData" :key="user.id">
-              <template v-if="user.data.isMyself">
+              <template v-if="currentUser.id === user.userId">
                 <div class="self-message">
                   <div class="self-content">
                     <div class="self-message-info">
                       <div class="self-message-container">
                         <div class="self-message-text">
-                          {{ user.data.message }}
+                          {{ user.message }}
                         </div>
                       </div>
                       <div class="self-submit-time">
@@ -118,7 +118,7 @@
                     <div class="other-message-info">
                       <div class="other-message-container">
                         <div class="other-message-text">
-                          {{ user.data.message }}
+                          {{ user.message }}
                         </div>
                       </div>
                       <div class="other-submit-time">
@@ -170,7 +170,6 @@
 
 <script>
 import Sidebar from "./../components/Sidebar";
-// import { emptyImageFilter } from "./../utils/mixins";
 import TweetCreateModal from "./../components/TweetCreateModal";
 import tweetsAPI from "./../apis/tweets";
 import usersAPI from "./../apis/users";
@@ -182,6 +181,7 @@ import {
   formDateNoYearFilter,
   formDateToTimeFilter,
 } from "./../utils/mixins";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   mixins: [emptyImageFilter, formDateNoYearFilter, formDateToTimeFilter],
@@ -190,8 +190,8 @@ export default {
     TweetCreateModal,
   },
   // sockets: {
-  //   welcome: (data) => {
-  //     "welceom", data;
+  //   connection() {
+  //     console.log("connected");
   //   },
   // },
   data() {
@@ -215,6 +215,13 @@ export default {
         account: "",
         avatar: "",
       },
+      nowChattingUserId: "",
+      data: {
+        id: "",
+        name: "",
+        message: "",
+        createdAt: "",
+      },
     };
   },
   computed: {
@@ -223,8 +230,16 @@ export default {
   },
 
   created() {
+    // this.login();
+    // this.sockets.connection();
     // this.fetchChattingData();
     this.fetchCurrentUserData(this.currentUser.id);
+    // this.$socket.on("connection", (id) => {
+    //   console.log("id", id);
+    // });
+    // this.$socket.on("login", (userId) => {
+    //   console.log("user", userId);
+    // });
     this.$socket.on("chat message", (data) => {
       console.log("dd", data);
       this.messagePush(data);
@@ -248,6 +263,9 @@ export default {
     //   } catch (error) {
     //     console.log(error);
     //   }
+    // },
+    // login() {
+    //   this.$socket.emit("login");
     // },
     async fetchCurrentUserData(id) {
       const { data } = await usersAPI.getUser({ userId: id });
@@ -288,24 +306,32 @@ export default {
       }
     },
     sendMessage() {
+      // const message = this.inputMessage;
       const data = {
-        name: "",
+        // id: uuidv4(),
+        userId: this.currentUser.id,
         message: this.inputMessage,
-        isMyself: true,
+        // createdAt: new Date(),
       };
-      // this.messagePush(data);
       this.$socket.emit("chat message", {
         data,
       });
       this.inputMessage = "";
     },
     messagePush(data) {
+      // console.log(data);
+      // console.log(this.currentUser.id);
+      // const ddd = this.currentUser.id;
+      // console.log("ddd1", ddd);
       this.userMessageData.push({
         ...data,
+        id: uuidv4(),
+        // userId: res.data.id,
+        // chatId: data.id,
+        // message: data.msg.message,
         createdAt: new Date(),
       });
     },
-
     //參考而已
     //     socket.on('message', async () => {
     //   const some1 = await fun1()

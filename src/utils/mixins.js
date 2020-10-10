@@ -39,7 +39,13 @@ export const formDateToTimeFilter = {
       const date = new Date(value);
       const hour = date.getHours();
       const afterhour = hour - 12;
-      const minute = date.getMinutes();
+      const todayMinute = date.getMinutes();
+      let minute = ''
+      if (todayMinute >= 10) {
+        minute += todayMinute
+      } else {
+        minute += '0' + todayMinute
+      }
       return hour > 12
         ? "下午" + afterhour + ":" + minute
         : "上午" + hour + ":" + minute;
