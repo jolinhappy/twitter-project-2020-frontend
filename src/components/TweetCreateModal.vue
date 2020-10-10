@@ -13,7 +13,7 @@
         <div class="tweet-create-container">
           <div class="profile-image">
             <img
-              :src="currentUser.avatar | emptyImage"
+              :src="this.currentUserData.avatar | emptyImage"
               class="user-img"
               alt=""
             />
@@ -52,6 +52,10 @@ export default {
     initialDescription: {
       type: String,
       required: true,
+    },
+    currentUserData: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {

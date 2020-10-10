@@ -60,6 +60,7 @@
       @after-click-close-create="closeCreateModal"
       :initial-description="description"
       @afterSubmit="creatTweetFromModal"
+      :currentUserData="currentUserData"
     />
     <TweetReplyModal
       v-if="replyModal"
@@ -121,7 +122,7 @@ export default {
   },
   created() {
     this.fetchUserTweets();
-    this.fetchUserData(this.currentUser.id);
+    this.fetchCurrentUserData(this.currentUser.id);
   },
   beforeRouteUpdate(to, from, next) {
     next();
@@ -140,7 +141,7 @@ export default {
     closeReplyModal() {
       this.replyModal = false;
     },
-    async fetchUserData(id) {
+    async fetchCurrentUserData(id) {
       const { data } = await usersAPI.getUser({ userId: id });
       const { account, name, avatar } = data;
       this.currentUserData.account = account;

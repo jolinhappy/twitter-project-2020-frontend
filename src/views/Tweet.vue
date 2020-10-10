@@ -103,6 +103,7 @@
       @after-click-close-create="closeCreateModal"
       :initial-description="description"
       @afterSubmit="creatTweetFromModal"
+      :currentUserData="currentUserData"
     />
     <TweetReplyModal
       v-if="replyModal"
@@ -129,6 +130,7 @@ import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import usersAPI from "./../apis/users";
 import Spinner from "./../components/Spinner";
 
 export default {
@@ -158,12 +160,19 @@ export default {
       date: "",
       isFollowed: "",
       isLoading: false,
+      currentUserData: {
+        id: "",
+        name: "",
+        account: "",
+        avatar: "",
+      },
     };
   },
   created() {
     const { id: tweetId } = this.$route.params;
     this.fetchTweet(tweetId);
     this.fetchReplies(tweetId);
+    this.fetchCurrentUserData(this.currentUser.id);
   },
   beforeRouteUpdate(to, from, next) {
     const { id: tweetId } = to.params;
@@ -187,6 +196,13 @@ export default {
     },
     closeReplyModal() {
       this.replyModal = false;
+    },
+    async fetchCurrentUserData(id) {
+      const { data } = await usersAPI.getUser({ userId: id });
+      const { account, name, avatar } = data;
+      this.currentUserData.account = account;
+      this.currentUserData.name = name;
+      this.currentUserData.avatar = avatar;
     },
     async fetchTweet(tweetId) {
       try {

@@ -72,16 +72,6 @@
 </template>
 
 <script>
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "dummy",
-    email: "123@hhhh.com",
-    avatar:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-  },
-  isAuthenticated: true,
-};
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
 import tweetsAPI from "./../apis/tweets";
@@ -123,22 +113,12 @@ export default {
       this.tweets = { ...this.tweets, ...newValue };
     },
   },
-  created() {
-    this.fetchCurrentUser();
-  },
   methods: {
     //tweet頁面底下留言功能暫時PASS，另外因為是comment不是description，回覆窗內文無法套用
     showReplyModal(tweet) {
       console.log(tweet);
       this.tweet = tweet;
       this.$emit("showReplyModal", this.tweet);
-    },
-    fetchCurrentUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
     },
     async addLike({ id, tweet }) {
       try {

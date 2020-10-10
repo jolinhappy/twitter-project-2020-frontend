@@ -26,6 +26,7 @@
       @after-click-close-create="closeCreateModal"
       :initial-description="description"
       @afterSubmit="creatTweetFromModal"
+      :currentUserData="currentUserData"
     />
     <TweetReplyModal
       v-if="replyModal"
@@ -96,6 +97,12 @@ export default {
       isFollowed: false,
       selectedPage: "profile",
       isLoading: false,
+      currentUserData: {
+        id: "",
+        name: "",
+        account: "",
+        avatar: "",
+      },
     };
   },
   inject: ["reload"],
@@ -104,6 +111,7 @@ export default {
     this.f;
     this.fetchUserTweets(userId);
     this.fetchUser(userId);
+    this.fetchCurrentUserData(this.currentUser.id);
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
@@ -133,6 +141,13 @@ export default {
     },
     closeEditModal() {
       this.editModal = false;
+    },
+    async fetchCurrentUserData(id) {
+      const { data } = await usersAPI.getUser({ userId: id });
+      const { account, name, avatar } = data;
+      this.currentUserData.account = account;
+      this.currentUserData.name = name;
+      this.currentUserData.avatar = avatar;
     },
     async fetchUserTweets(userId) {
       try {

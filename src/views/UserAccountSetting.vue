@@ -79,6 +79,7 @@
       @after-click-close-create="closeCreateModal"
       :initial-description="description"
       @afterSubmit="creatTweetFromModal"
+      :currentUserData="currentUserData"
     />
   </div>
 </template>
@@ -114,10 +115,17 @@ export default {
       checkPassword: "",
       isProcessing: false,
       isLoading: false,
+      currentUserData: {
+        id: "",
+        name: "",
+        account: "",
+        avatar: "",
+      },
     };
   },
   created() {
     this.fetchUserData(this.currentUser.id);
+    this.fetchCurrentUserData(this.currentUser.id);
   },
   methods: {
     showCreateModal() {
@@ -147,6 +155,13 @@ export default {
         });
         this.isLoading = false;
       }
+    },
+    async fetchCurrentUserData(id) {
+      const { data } = await usersAPI.getUser({ userId: id });
+      const { account, name, avatar } = data;
+      this.currentUserData.account = account;
+      this.currentUserData.name = name;
+      this.currentUserData.avatar = avatar;
     },
     async handleSubmit() {
       try {
@@ -257,9 +272,8 @@ export default {
   flex-direction: row;
 }
 .account-setting {
-  width: auto;
+  width: 100%;
   height: 100%;
-  flex: 1;
 }
 
 .setting-title {
@@ -277,7 +291,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  border-left: 1px solid #e6ecf0;
 }
 .form-part {
   border-left: 1px solid #e6ecf0;

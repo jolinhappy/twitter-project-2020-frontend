@@ -185,7 +185,6 @@ export default {
 /* sidebar */
 .sidebar {
   width: 450px;
-  height: 100%;
 }
 .logo {
   width: 30px;
@@ -196,25 +195,26 @@ export default {
 .option {
   width: 24px;
   height: 24px;
-  display: inline;
   margin: auto 0;
 }
 .sidebar-container {
   width: 235px;
   margin: 0 auto;
   padding-left: 50px;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 .sidebar-options {
   width: auto;
   min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 .sidebar-list {
+  height: 100%;
   flex: 1;
 }
 .sidebar-item {
