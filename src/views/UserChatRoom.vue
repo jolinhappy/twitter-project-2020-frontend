@@ -68,10 +68,7 @@
         </div>
         <!-- chat -->
         <!-- <div class="chat-room"> -->
-        <div
-          class="chat-content-container"
-          v-chat-scroll="{ always: false, smooth: true }"
-        >
+        <div class="chat-content-container" v-chat-scroll>
           <div class="chat-content">
             <!-- 上線離線訊息 -->
             <!-- <div class="system-message">
@@ -347,25 +344,20 @@ onlineUsers-list */
   flex-direction: column;
 }
 .chat-content-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 800px;
-  overflow: auto;
+  height: 650px;
+  overflow: scroll;
 }
 .chat-room-container {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  height: 800px;
+  height: 100%;
 }
 .chat-content {
   margin: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overflow: auto;
+  height: 750px;
 }
 .chat-input-part {
   width: 100%;
@@ -375,7 +367,7 @@ onlineUsers-list */
 }
 .input-container {
   display: flex;
-  width: 730px;
+  width: 100%;
   height: 35px;
   justify-content: center;
   margin: auto;
@@ -404,19 +396,21 @@ onlineUsers-list */
 
 /* 訊息輸入區 */
 .message-input {
-  width: 90%;
+  width: 85%;
   resize: none;
   border-radius: 30px;
   min-height: 25px;
   font-style: 15px;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  margin-top: 2.5px;
+  margin-bottom: 10px;
   padding: 10px 15px 6px;
   font-size: 15px;
   border: none;
   background: #f0f0f0;
 }
 .input {
+  width: 20px;
+  height: 20px;
   margin-top: 10px;
   color: #ff6000;
 }
