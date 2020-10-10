@@ -189,11 +189,16 @@ export default {
     Sidebar,
     TweetCreateModal,
   },
-  // sockets: {
-  //   connection() {
-  //     console.log("connected");
-  //   },
-  // },
+  sockets: {
+    // subscribe: {
+    //   history(data) {
+    //     console.log(data);
+    //   },
+    // },
+    history: (data) => {
+      console.log("data", data);
+    },
+  },
   data() {
     return {
       createModal: false,
@@ -230,20 +235,24 @@ export default {
   },
 
   created() {
+    this.getHistory();
+    // this.$socket.open();
+    // this.$socket.connect();
     // this.login();
     // this.sockets.connection();
     // this.fetchChattingData();
     this.fetchCurrentUserData(this.currentUser.id);
-    // this.$socket.on("connection", (id) => {
-    //   console.log("id", id);
-    // });
-    // this.$socket.on("login", (userId) => {
-    //   console.log("user", userId);
-    // });
-    this.$socket.on("chat message", (data) => {
-      console.log("dd", data);
-      this.messagePush(data);
+    this.$socket.on("connection", (id) => {
+      console.log("id", id);
     });
+    this.$socket.on("history", (data) => {
+      console.log("ee");
+      this.getHistory(data);
+    });
+    // this.$socket.on("chat message", (data) => {
+    //   console.log("dd", data);
+    //   this.messagePush(data);
+    // });
   },
 
   methods: {
@@ -311,9 +320,13 @@ export default {
         // id: uuidv4(),
         userId: this.currentUser.id,
         message: this.inputMessage,
+        avatar: this.currentUser.avatar,
         // createdAt: new Date(),
       };
       this.$socket.emit("chat message", {
+        data,
+      });
+      this.$socket.emit("history", {
         data,
       });
       this.inputMessage = "";
@@ -326,10 +339,17 @@ export default {
       this.userMessageData.push({
         ...data,
         id: uuidv4(),
-        // userId: res.data.id,
+        userId: this.currentUser.id,
         // chatId: data.id,
-        // message: data.msg.message,
+        message: data.msg.data.message,
         createdAt: new Date(),
+      });
+    },
+    getHistory() {
+      console.log("12345");
+      // this.$socket.emit("history");
+      this.$socket.on("history", (data) => {
+        console.log("ss", data);
       });
     },
     //參考而已

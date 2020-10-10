@@ -8,19 +8,19 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vue from 'vue'
 import VueChatScroll from 'vue-chat-scroll'
-// import VueSocketIO from 'vue-socket.io'
+import VueSocketIO from 'vue-socket.io'
 
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: 'https://simple-twitter-project.herokuapp.com',
-//   vuex: {
-//     store,
-//     actionPrefix: 'SOCKET_',
-//     mutationPrefix: 'SOCKET_'
-//   },
-//   // options: {path: '/'}
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'https://simple-twitter-project.herokuapp.com',
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  },
+  // options: {path: '/'}
 
-// }))
+}))
 
 const socket = io('https://simple-twitter-project.herokuapp.com');
 Vue.prototype.$socket = socket;
