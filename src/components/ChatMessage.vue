@@ -23,7 +23,7 @@
       <div class="other-message">
         <div class="other-content">
           <div class="profile-image other-image">
-            <img :src="user.msg.data.avatar" class="user-img" alt="" />
+            <img :src="user.msg.data.avatar | emptyImage" class="user-img" alt="" />
           </div>
           <div class="other-message-info">
             <div class="other-message-container">

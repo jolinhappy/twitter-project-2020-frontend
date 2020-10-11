@@ -141,11 +141,6 @@ export default {
     TweetCreateModal,
     ChatMessage,
   },
-  sockets: {
-    history: (data) => {
-      console.log("data", data);
-    },
-  },
   data() {
     return {
       createModal: false,
@@ -173,6 +168,10 @@ export default {
 
   created() {
     this.fetchCurrentUserData(this.currentUser.id);
+    this.$socket.on("history", (string) => {
+      console.log("124");
+      console.log("DATA", string);
+    });
     this.$socket.on("chat message", (data) => {
       this.messagePush(data);
     });
@@ -226,7 +225,13 @@ export default {
       }
     },
     sendMessage() {
-      // const message = this.inputMessage;
+      if (this.inputMessage < 1) {
+        Toast.fire({
+          icon: "warning",
+          title: "還未填入訊息內容喔！",
+        });
+        return;
+      }
       const data = {
         userId: this.currentUser.id,
         message: this.inputMessage,
@@ -243,7 +248,6 @@ export default {
     messagePush(data) {
       this.userMessageData.push(data);
     },
-
     //用出現滾輪的欄高判斷是否調整textarea高
     autoTextAreaHeight(e) {
       //如果textarea含滾輪滑動才可看見的欄高大於基本可是的欄高
