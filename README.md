@@ -19,3 +19,19 @@ npm install
 npm run serve
 ```
 
+## 環境建置與需求
+- axios: v0.20.0
+- moment: v2.29.0
+- sweetalert2: v10.3.5
+- vue: v2.6.12
+- vue-chat-scroll: v.1.4.0
+- vue-router: v3.4.5
+- vue-socket.io: v3.0.10
+- vuex: v3.5.1
+
+## 前端開發人員
+- [Phoebe Hsu](https://github.com/jolinhappy)
+
+## 後端開發人員
+- [LIN-CHANG-YI](https://github.com/LIN-CHANG-YI)
+- [Ezra Tsai](https://github.com/EzraTsai)
