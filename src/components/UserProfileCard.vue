@@ -5,7 +5,7 @@
         <img src="https://i.imgur.com/aPVTDn2.png" class="back-img" alt="" />
       </button>
       <div class="title-content">
-        <div class="name">{{ user.name }}</div>
+        <div class="name">{{ user.name | maxSlice }}</div>
         <div class="tweets-count">{{ tweets.length }}推文</div>
       </div>
     </div>
@@ -66,7 +66,7 @@
           </template>
         </div>
         <div class="name-info">
-          <div class="user-name">{{ user.name }}</div>
+          <div class="user-name">{{ user.name | maxSlice }}</div>
           <div class="user-account">@{{ user.account }}</div>
           <div class="introduction">{{ user.introduction }}</div>
         </div>
@@ -232,6 +232,12 @@ export default {
           title: "無法取消追蹤，請稍後再試",
         });
       }
+    },
+  },
+  filters: {
+    //多餘的名字字數以...顯示
+    maxSlice(name) {
+      return name.length > 37 ? name.slice(0, 37) + "..." : name;
     },
   },
 };

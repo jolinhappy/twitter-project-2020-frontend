@@ -16,7 +16,9 @@
           >
             <div class="user-name">{{ tweet.User.name | maxSlice }}</div>
           </router-link>
-          <div class="user-account">@{{ tweet.User.account }}</div>
+          <div class="user-account" v-show="tweet.User.name.length < 45">
+            @{{ tweet.User.account }}
+          </div>
           <div class="create-time">．{{ tweet.createdAt | fromNow }}</div>
         </div>
         <div class="tag-user" v-if="pageMode !== 'main'">
@@ -167,7 +169,7 @@ export default {
   filters: {
     //多餘的名字字數以...顯示
     maxSlice(name) {
-      return name.length > 40 ? name.slice(0, 40) + "..." : name;
+      return name.length > 45 ? name.slice(0, 45) + "..." : name;
     },
   },
 };
