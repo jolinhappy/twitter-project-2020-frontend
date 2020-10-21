@@ -81,6 +81,7 @@
                   class="form-input name-input"
                   v-model="user.name"
                   name="name"
+                  maxlength="50"
                   @input="calculateNameInput"
                   required
                 />
@@ -94,6 +95,7 @@
                   type="text"
                   class="form-input description-input"
                   name="introduction"
+                  maxlength="160"
                   v-model="user.introduction"
                   @input="calculateIntroductionInput"
                 ></textarea>
