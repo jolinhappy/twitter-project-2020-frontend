@@ -166,6 +166,22 @@ export default {
     async handleSubmit() {
       try {
         this.isProcessing = true;
+        if (this.account.length > 15) {
+          Toast.fire({
+            icon: "warning",
+            title: "帳號限定使用15個字",
+          });
+          this.isProcessing = false;
+          return;
+        }
+        if (this.name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "名字限定使用50個字",
+          });
+          this.isProcessing = false;
+          return;
+        }
         if (!this.account || !this.name || !this.email) {
           Toast.fire({
             icon: "warning",

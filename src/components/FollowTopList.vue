@@ -251,11 +251,17 @@ export default {
   font-size: 15px;
   font-weight: bold;
   color: #1c1c1c;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user-account {
   font-size: 15px;
   font-weight: bold;
   color: #657786;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user-img:hover {
   transform: scale(1.1, 1.1);

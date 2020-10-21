@@ -44,11 +44,12 @@ export default {
       try {
         this.isProcessing = true;
         const { account, name, email, password, checkPassword } = data;
-        if (account.length > 50) {
+        if (account.length > 15) {
           Toast.fire({
             icon: "warning",
-            title: "帳號限定使用50個字",
+            title: "帳號限定使用15個字",
           });
+          this.isProcessing = false;
           return;
         }
         if (name.length > 50) {
@@ -56,6 +57,7 @@ export default {
             icon: "warning",
             title: "名稱限定使用50個字",
           });
+          this.isProcessing = false;
           return;
         }
         if (!account || !name || !email || !password || !checkPassword) {
@@ -63,6 +65,7 @@ export default {
             icon: "warning",
             title: "請確認是否已填寫所有欄位",
           });
+          this.isProcessing = false;
           return;
         }
         if (password !== checkPassword) {
@@ -70,6 +73,7 @@ export default {
             icon: "warning",
             title: "密碼與確認密碼不符",
           });
+          this.isProcessing = false;
           return;
         }
         const response = await authorizationAPI.regist({

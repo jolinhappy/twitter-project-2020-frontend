@@ -14,7 +14,7 @@
             :to="{ name: 'user-profile', params: { id: tweet.User.id } }"
             class="user-name-link"
           >
-            <div class="user-name">{{ tweet.User.name }}</div>
+            <div class="user-name">{{ tweet.User.name | maxSlice }}</div>
           </router-link>
           <div class="user-account">@{{ tweet.User.account }}</div>
           <div class="create-time">．{{ tweet.createdAt | fromNow }}</div>
@@ -164,6 +164,12 @@ export default {
       }
     },
   },
+  filters: {
+    //多餘的名字字數以...顯示
+    maxSlice(name) {
+      return name.length > 40 ? name.slice(0, 40) + "..." : name;
+    },
+  },
 };
 </script>
 
@@ -201,6 +207,11 @@ export default {
 }
 .user-name-link:hover {
   text-decoration: underline;
+}
+.user-account {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user-account,
 .create-time {
