@@ -44,6 +44,20 @@ export default {
       try {
         this.isProcessing = true;
         const { account, name, email, password, checkPassword } = data;
+        if (account.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "帳號限定使用50個字",
+          });
+          return;
+        }
+        if (name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "名稱限定使用50個字",
+          });
+          return;
+        }
         if (!account || !name || !email || !password || !checkPassword) {
           Toast.fire({
             icon: "warning",
@@ -65,7 +79,6 @@ export default {
           password,
           checkPassword,
         });
-        console.log(response);
         if (response.data.status === "error") {
           if (response.data.message === "Already have the same account.") {
             Toast.fire({
